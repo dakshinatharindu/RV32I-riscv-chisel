@@ -15,11 +15,25 @@ class RegisterFile extends Module {
     val r_data2 = Output(SInt(32.W))
   })
 
-  val register_file = Reg(Vec(32, SInt(32.W)))
-  io.r_data1 := register_file(io.r_addr1)
-  io.r_data2 := register_file(io.r_addr2)
+  val register_file = RegInit(VecInit(Seq.fill(32)(0.S(32.W))))
+  when(io.r_addr1 === 0.U) {
+    io.r_data1 := 0.S
+  }.otherwise {
+    io.r_data1 := register_file(io.r_addr1)
+  }
 
-  when (io.w_en){
+  when(io.r_addr2 === 0.U) {
+    io.r_data2 := 0.S
+  }.otherwise {
+    io.r_data2 := register_file(io.r_addr2)
+  }
+
+  when(io.w_en) {
     register_file(io.w_addr) := io.w_data
   }
+}
+
+object RegisterFile extends App {
+  val s = getVerilogString(new RegisterFile())
+  println(s)
 }
