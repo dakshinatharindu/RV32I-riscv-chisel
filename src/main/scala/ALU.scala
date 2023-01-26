@@ -36,8 +36,8 @@ class ALU extends Module {
     is(add.U) { res := A + B }
     is(sub.U) { res := A - B }
     is(slt.U) { res := Mux(A < B, 1.S, 0.S) }
-    is(sll.U) { res := (A << shamt).asSInt }
-    is(sltu.U) { res := (A.asUInt < B.asUInt).asSInt }
+    is(sll.U) { res := A << shamt }
+    is(sltu.U) { res := Mux(A.asUInt < B.asUInt, 1.S, 0.S) }
     is(srl.U) { res := (A.asUInt >> shamt).asSInt }
     is(sra.U) { res := A >> shamt }
 

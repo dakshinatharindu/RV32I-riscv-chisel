@@ -9,7 +9,6 @@ import riscv.shared.Constants._
 class ALUTest extends AnyFlatSpec with ChiselScalatestTester {
   "ALU" should "pass" in {
     test(new ALU) { dut =>
-
       def alu(a: Int, b: Int, op: Int): Int = {
         op match {
           case 0 => a & b
@@ -30,7 +29,7 @@ class ALUTest extends AnyFlatSpec with ChiselScalatestTester {
         // dut.io.ALUOut.expect(alu(a, b, fun).S)
         println("Result is: " + dut.io.ALUOut.peek().toString)
       }
-      testOne(1,2,6)
+      testOne(-1, 30, 9)
     }
   }
 }
