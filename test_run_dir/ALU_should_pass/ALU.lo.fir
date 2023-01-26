@@ -1,0 +1,73 @@
+FIRRTL version 1.1.0
+circuit ALU :
+  module ALU :
+    input clock : Clock
+    input reset : UInt<1>
+    input io_ALUCtrl : UInt<4>
+    input io_A : SInt<32>
+    input io_B : SInt<32>
+    output io_ALUOut : SInt<32>
+    output io_eq : UInt<1>
+    output io_ge : UInt<1>
+    output io_geu : UInt<1>
+
+    node shamt = bits(io_B, 4, 0) @[ALU.scala 21:16]
+    node _eq_T = eq(io_A, io_B) @[ALU.scala 28:15]
+    node _eq_T_1 = mux(_eq_T, UInt<1>("h1"), UInt<1>("h0")) @[ALU.scala 28:12]
+    node _ge_T = gt(io_A, io_B) @[ALU.scala 29:15]
+    node _ge_T_1 = mux(_ge_T, UInt<1>("h1"), UInt<1>("h0")) @[ALU.scala 29:12]
+    node _geu_T = asUInt(io_A) @[ALU.scala 30:16]
+    node _geu_T_1 = asUInt(io_B) @[ALU.scala 30:27]
+    node _geu_T_2 = gt(_geu_T, _geu_T_1) @[ALU.scala 30:23]
+    node _geu_T_3 = mux(_geu_T_2, UInt<1>("h1"), UInt<1>("h0")) @[ALU.scala 30:13]
+    node _T = eq(UInt<1>("h0"), io_ALUCtrl) @[ALU.scala 32:22]
+    node _res_T = and(io_A, io_B) @[ALU.scala 33:26]
+    node _res_T_1 = asSInt(_res_T) @[ALU.scala 33:26]
+    node _T_1 = eq(UInt<1>("h1"), io_ALUCtrl) @[ALU.scala 32:22]
+    node _res_T_2 = or(io_A, io_B) @[ALU.scala 34:25]
+    node _res_T_3 = asSInt(_res_T_2) @[ALU.scala 34:25]
+    node _T_2 = eq(UInt<2>("h2"), io_ALUCtrl) @[ALU.scala 32:22]
+    node _res_T_4 = xor(io_A, io_B) @[ALU.scala 35:26]
+    node _res_T_5 = asSInt(_res_T_4) @[ALU.scala 35:26]
+    node _T_3 = eq(UInt<2>("h3"), io_ALUCtrl) @[ALU.scala 32:22]
+    node _res_T_6 = add(io_A, io_B) @[ALU.scala 36:26]
+    node _res_T_7 = tail(_res_T_6, 1) @[ALU.scala 36:26]
+    node _res_T_8 = asSInt(_res_T_7) @[ALU.scala 36:26]
+    node _T_4 = eq(UInt<3>("h4"), io_ALUCtrl) @[ALU.scala 32:22]
+    node _res_T_9 = sub(io_A, io_B) @[ALU.scala 37:26]
+    node _res_T_10 = tail(_res_T_9, 1) @[ALU.scala 37:26]
+    node _res_T_11 = asSInt(_res_T_10) @[ALU.scala 37:26]
+    node _T_5 = eq(UInt<3>("h5"), io_ALUCtrl) @[ALU.scala 32:22]
+    node _res_T_12 = lt(io_A, io_B) @[ALU.scala 38:30]
+    node _res_T_13 = mux(_res_T_12, asSInt(UInt<2>("h1")), asSInt(UInt<1>("h0"))) @[ALU.scala 38:27]
+    node _T_6 = eq(UInt<3>("h6"), io_ALUCtrl) @[ALU.scala 32:22]
+    node _res_T_14 = dshl(io_A, shamt) @[ALU.scala 39:27]
+    node _T_7 = eq(UInt<3>("h7"), io_ALUCtrl) @[ALU.scala 32:22]
+    node _res_T_15 = asUInt(io_A) @[ALU.scala 40:28]
+    node _res_T_16 = asUInt(io_B) @[ALU.scala 40:39]
+    node _res_T_17 = lt(_res_T_15, _res_T_16) @[ALU.scala 40:35]
+    node _res_T_18 = asSInt(_res_T_17) @[ALU.scala 40:47]
+    node _T_8 = eq(UInt<4>("h8"), io_ALUCtrl) @[ALU.scala 32:22]
+    node _res_T_19 = asUInt(io_A) @[ALU.scala 41:27]
+    node _res_T_20 = dshr(_res_T_19, shamt) @[ALU.scala 41:34]
+    node _res_T_21 = asSInt(_res_T_20) @[ALU.scala 41:44]
+    node _T_9 = eq(UInt<4>("h9"), io_ALUCtrl) @[ALU.scala 32:22]
+    node _res_T_22 = dshr(io_A, shamt) @[ALU.scala 42:26]
+    node _GEN_0 = mux(_T_9, _res_T_22, asSInt(UInt<32>("h0"))) @[ALU.scala 32:22 42:21 23:24]
+    node _GEN_1 = mux(_T_8, _res_T_21, _GEN_0) @[ALU.scala 32:22 41:21]
+    node _GEN_2 = mux(_T_7, _res_T_18, _GEN_1) @[ALU.scala 32:22 40:22]
+    node _GEN_3 = mux(_T_6, _res_T_14, _GEN_2) @[ALU.scala 32:22 39:21]
+    node _GEN_4 = mux(_T_5, _res_T_13, _GEN_3) @[ALU.scala 32:22 38:21]
+    node _GEN_5 = mux(_T_4, _res_T_11, _GEN_4) @[ALU.scala 32:22 37:21]
+    node _GEN_6 = mux(_T_3, _res_T_8, _GEN_5) @[ALU.scala 32:22 36:21]
+    node _GEN_7 = mux(_T_2, _res_T_5, _GEN_6) @[ALU.scala 32:22 35:21]
+    node _GEN_8 = mux(_T_1, _res_T_3, _GEN_7) @[ALU.scala 32:22 34:20]
+    node _GEN_9 = mux(_T, _res_T_1, _GEN_8) @[ALU.scala 32:22 33:21]
+    node res = asSInt(bits(_GEN_9, 31, 0)) @[ALU.scala 23:24]
+    node eq = _eq_T_1 @[ALU.scala 24:23 28:6]
+    node ge = _ge_T_1 @[ALU.scala 25:23 29:6]
+    node geu = _geu_T_3 @[ALU.scala 26:24 30:7]
+    io_ALUOut <= res @[ALU.scala 45:13]
+    io_eq <= eq @[ALU.scala 46:9]
+    io_ge <= ge @[ALU.scala 47:9]
+    io_geu <= geu @[ALU.scala 48:10]
