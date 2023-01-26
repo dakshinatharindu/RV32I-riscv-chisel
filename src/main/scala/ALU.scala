@@ -40,6 +40,7 @@ class ALU extends Module {
     is(sltu.U) { res := Mux(A.asUInt < B.asUInt, 1.S, 0.S) }
     is(srl.U) { res := (A.asUInt >> shamt).asSInt }
     is(sra.U) { res := A >> shamt }
+    is (jalr.U){res:= (A+B) & ~1.S}
 
   }
   io.ALUOut := res
@@ -48,6 +49,7 @@ class ALU extends Module {
   io.geu := geu
 }
 
-// object ALU extends App {
-//   (new chisel3.stage.ChiselStage).emitVerilog(new ALU())
-// }
+object ALU extends App {
+  val s = getVerilogString(new ALU())
+  println(s)
+}
