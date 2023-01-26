@@ -23,8 +23,3 @@ class RegisterFile extends Module {
     register_file(io.w_addr) := io.w_data
   }
 }
-
-object RegisterFile extends App {
-  val s = getVerilogString(new RegisterFile())
-  println(s)
-}
