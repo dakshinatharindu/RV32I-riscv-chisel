@@ -13,8 +13,12 @@ object Constants {
   val sltu = 0x7 // 1001
   val srl = 0x8 // 1010
   val sra = 0x9 // 1011
+
+  // Instruction Format
+  val R = 0x0 // 00100
+  val I = 0x1 // 00100
+  val S = 0x2 // 01000
+  val B = 0x3 // 11000
+  val U = 0x4 // 01101
+  val J = 0x5 // 11011
 }
-// the following does NOT result in an unsigned shift
-// // res := (a.asUInt >> 1).asSInt
-// // work around
-// res := (a >> 1) & 0x7fffffff.S
