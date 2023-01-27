@@ -6,9 +6,9 @@ import org.scalatest.flatspec.AnyFlatSpec
 
 import riscv.shared.Constants._
 
-class FormatTest extends AnyFlatSpec with ChiselScalatestTester {
-  "FormatTest" should "pass" in {
-    test(new FormatGen) { dut =>
+class ControlUnitTest extends AnyFlatSpec with ChiselScalatestTester {
+  "DecoderTest" should "pass" in {
+    test(new Decoder) { dut =>
       val opcodes = Seq(
         "b0110011".U,
         "b0010011".U,
@@ -26,7 +26,21 @@ class FormatTest extends AnyFlatSpec with ChiselScalatestTester {
         dut.io.opcode.poke(opcodes(i))
         dut.io.format.expect(expects(i))
       }
+    }
+  }
 
+  "ALUControlTest" should "pass" in {
+    test(new ALUControl) { dut =>
+      dut.io.subFormat.poke(I_.U)
+      dut.io.funcCode.poke("b0101".U)
+      println(dut.io.ALUCtrl.expect(srl.U))
+    }
+  }
+
+  "ControlUnitTest" should "pass" in {
+    test(new ControlUnit) { dut =>
+      dut.io.instr.poke("b0000000_00000_00000_000_00000_0110111".U)
+      println(dut.io.ALUCtrl.peek().toString)
     }
   }
 }

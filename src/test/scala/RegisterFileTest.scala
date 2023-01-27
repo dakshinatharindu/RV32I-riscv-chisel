@@ -7,18 +7,18 @@ import org.scalatest.flatspec.AnyFlatSpec
 import riscv.shared.Constants._
 
 class RegisterFileTest extends AnyFlatSpec with ChiselScalatestTester {
-  "ImmGenTest" should "pass" in {
+  "RegisterFileTest" should "pass" in {
     test(new RegisterFile) { c =>
       def readExpect(addr: Int, value: Int): Unit = {
-        c.io.r_addr1.poke(addr.U)
-        c.io.r_data1.expect(value.S)
+        c.io.readAddr1.poke(addr.U)
+        c.io.readData1.expect(value.S)
       }
       def write(addr: Int, value: Int): Unit = {
-        c.io.w_en.poke(true.B)
-        c.io.w_data.poke(value.S)
-        c.io.w_addr.poke(addr.U)
+        c.io.writeEn.poke(true.B)
+        c.io.writeData.poke(value.S)
+        c.io.writeAddr.poke(addr.U)
         c.clock.step(1)
-        c.io.w_en.poke(false.B)
+        c.io.writeEn.poke(false.B)
       }
       // everything should be 0 on init
       for (i <- 0 until 32) {

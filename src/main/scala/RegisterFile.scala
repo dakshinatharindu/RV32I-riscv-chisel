@@ -6,34 +6,34 @@ import riscv.shared.Constants._
 
 class RegisterFile extends Module {
   val io = IO(new Bundle {
-    val r_addr1 = Input(UInt(5.W))
-    val r_addr2 = Input(UInt(5.W))
-    val w_addr = Input(UInt(5.W))
-    val w_data = Input(SInt(32.W))
-    val w_en = Input(Bool())
-    val r_data1 = Output(SInt(32.W))
-    val r_data2 = Output(SInt(32.W))
+    val readAddr1 = Input(UInt(5.W))
+    val readAddr2 = Input(UInt(5.W))
+    val writeAddr = Input(UInt(5.W))
+    val writeData = Input(SInt(32.W))
+    val writeEn = Input(Bool())
+    val readData1 = Output(SInt(32.W))
+    val readData2 = Output(SInt(32.W))
   })
 
-  val register_file = RegInit(VecInit(Seq.fill(32)(0.S(32.W))))
-  when(io.r_addr1 === 0.U) {
-    io.r_data1 := 0.S
+  val registerFile = RegInit(VecInit(Seq.fill(32)(0.S(32.W))))
+  when(io.readAddr1 === 0.U) {
+    io.readData1 := 0.S
   }.otherwise {
-    io.r_data1 := register_file(io.r_addr1)
+    io.readData1 := registerFile(io.readAddr1)
   }
 
-  when(io.r_addr2 === 0.U) {
-    io.r_data2 := 0.S
+  when(io.readAddr2 === 0.U) {
+    io.readData2 := 0.S
   }.otherwise {
-    io.r_data2 := register_file(io.r_addr2)
+    io.readData2 := registerFile(io.readAddr2)
   }
 
-  when(io.w_en) {
-    register_file(io.w_addr) := io.w_data
+  when(io.writeEn) {
+    registerFile(io.writeAddr) := io.writeData
   }
 }
 
-object RegisterFile extends App {
-  val s = getVerilogString(new RegisterFile())
-  println(s)
-}
+// object RegisterFile extends App {
+//   val s = getVerilogString(new RegisterFile())
+//   println(s)
+// }
