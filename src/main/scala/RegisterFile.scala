@@ -2,6 +2,7 @@ package riscv
 
 import chisel3._
 import chisel3.util._
+import chisel3.stage._
 import riscv.shared.Constants._
 
 class RegisterFile extends Module {
@@ -34,6 +35,8 @@ class RegisterFile extends Module {
 }
 
 // object RegisterFile extends App {
-//   val s = getVerilogString(new RegisterFile())
-//   println(s)
+//   val myverilog = (new ChiselStage).emitVerilog(
+//     new RegisterFile,
+//     Array("--target-dir", "verilog/")
+//   )
 // }

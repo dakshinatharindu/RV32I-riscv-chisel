@@ -29,7 +29,7 @@ class ALUTest extends AnyFlatSpec with ChiselScalatestTester {
         // dut.io.ALUOut.expect(alu(a, b, fun).S)
         println("Result is: " + dut.io.ALUOut.peek().toString)
       }
-      testOne(1, 2, 10)
+      testOne(1020, -256, sub)
     }
   }
 }

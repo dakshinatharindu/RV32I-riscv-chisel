@@ -2,6 +2,7 @@ package riscv
 
 import chisel3._
 import chisel3.util._
+import chisel3.stage._
 import scala.annotation.switch
 import riscv.shared.Constants._
 
@@ -11,9 +12,9 @@ class ALU extends Module {
     val A = Input(SInt(32.W))
     val B = Input(SInt(32.W))
     val ALUOut = Output(SInt(32.W))
-    val eq = Output(UInt(1.W))
-    val ge = Output(UInt(1.W))
-    val geu = Output(UInt(1.W))
+    val eq = Output(Bool())
+    val ge = Output(Bool())
+    val geu = Output(Bool())
   })
 
   val A = io.A
@@ -21,13 +22,10 @@ class ALU extends Module {
   val shamt = B(4, 0)
 
   val res = WireDefault(0.S(32.W))
-  val eq = WireDefault(0.U(1.W))
-  val ge = WireDefault(0.U(1.W))
-  val geu = WireDefault(0.U(1.W))
 
-  eq := Mux(A === B, 1.U, 0.U)
-  ge := Mux(A > B, 1.U, 0.U)
-  geu := Mux(A.asUInt > B.asUInt, 1.U, 0.U)
+  io.eq := Mux(A === B, true.B, false.B)
+  io.ge := Mux(A >= B, true.B, false.B)
+  io.geu := Mux(A.asUInt >= B.asUInt, true.B, false.B)
 
   switch(io.ALUCtrl) {
     is(and.U) { res := A & B }
@@ -45,12 +43,11 @@ class ALU extends Module {
 
   }
   io.ALUOut := res
-  io.eq := eq
-  io.ge := ge
-  io.geu := geu
 }
 
-// object ALU extends App {
-//   val s = getVerilogString(new ALU())
-//   println(s)
-// }
+object ALU extends App {
+  val myverilog = (new ChiselStage).emitVerilog(
+    new ALU,
+    Array("--target-dir", "verilog/")
+  )
+}

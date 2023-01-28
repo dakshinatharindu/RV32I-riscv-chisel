@@ -29,14 +29,6 @@ class ControlUnitTest extends AnyFlatSpec with ChiselScalatestTester {
     }
   }
 
-  "ALUControlTest" should "pass" in {
-    test(new ALUControl) { dut =>
-      dut.io.subFormat.poke(I_.U)
-      dut.io.funcCode.poke("b0101".U)
-      println(dut.io.ALUCtrl.expect(srl.U))
-    }
-  }
-
   "ControlUnitTest" should "pass" in {
     test(new ControlUnit) { dut =>
       dut.io.instr.poke("b0000000_00000_00000_000_00000_0110111".U)

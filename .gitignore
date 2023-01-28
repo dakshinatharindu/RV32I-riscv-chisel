@@ -33,5 +33,5 @@ metals.sbt
 
 
 test_run_dir/
-*.v
 .scalafmt.conf
+verilog/
