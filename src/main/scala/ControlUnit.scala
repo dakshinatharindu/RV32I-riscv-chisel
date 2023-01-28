@@ -220,9 +220,9 @@ class ControlUnit extends Module {
 
 }
 
-object ControlUnit extends App {
-  val myverilog = (new ChiselStage).emitVerilog(
-    new ControlUnit,
-    Array("--target-dir", "verilog/")
-  )
-}
+// object ControlUnit extends App {
+//   val myverilog = (new ChiselStage).emitVerilog(
+//     new ControlUnit,
+//     Array("--target-dir", "verilog/")
+//   )
+// }

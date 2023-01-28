@@ -59,19 +59,19 @@ class PcALUMemMux extends Module {
   val io = IO(new Bundle {
     val pcAluMem = Input(Bool())
     val aluMem = Input(SInt(32.W))
-    val pcImm = Input(SInt(32.W))
+    val pcImm = Input(UInt(32.W))
     val out = Output(SInt(32.W))
   })
 
-  io.out := Mux(io.pcAluMem, io.aluMem, io.pcImm)
+  io.out := Mux(io.pcAluMem, io.aluMem, io.pcImm.asSInt)
 }
 
 class PcImmMux extends Module {
   val io = IO(new Bundle {
     val pcImm = Input(Bool())
-    val pcPc4 = Input(SInt(32.W))
-    val branch = Input(SInt(32.W))
-    val out = Output(SInt(32.W))
+    val pcPc4 = Input(UInt(32.W))
+    val branch = Input(UInt(32.W))
+    val out = Output(UInt(32.W))
   })
 
   io.out := Mux(io.pcImm, io.branch, io.pcPc4)
@@ -80,9 +80,9 @@ class PcImmMux extends Module {
 class ImmBranchMux extends Module {
   val io = IO(new Bundle {
     val immBranch = Input(Bool())
-    val pc4 = Input(SInt(32.W))
-    val branch = Input(SInt(32.W))
-    val out = Output(SInt(32.W))
+    val pc4 = Input(UInt(32.W))
+    val branch = Input(UInt(32.W))
+    val out = Output(UInt(32.W))
   })
 
   io.out := Mux(io.immBranch, io.branch, io.pc4)
@@ -91,18 +91,18 @@ class ImmBranchMux extends Module {
 class ALUBranchMux extends Module {
   val io = IO(new Bundle {
     val aluBranch = Input(Bool())
-    val pc4Branch = Input(SInt(32.W))
+    val pc4Branch = Input(UInt(32.W))
     val ALUOut = Input(SInt(32.W))
-    val out = Output(SInt(32.W))
+    val out = Output(UInt(32.W))
   })
 
-  io.out := Mux(io.aluBranch, io.ALUOut, io.pc4Branch)
+  io.out := Mux(io.aluBranch, io.ALUOut.asUInt, io.pc4Branch)
 }
 
 
-object PC extends App {
-  val myverilog = (new ChiselStage).emitVerilog(
-    new PC,
-    Array("--target-dir", "verilog/")
-  )
-}
+// object PC extends App {
+//   val myverilog = (new ChiselStage).emitVerilog(
+//     new PC,
+//     Array("--target-dir", "verilog/")
+//   )
+// }

@@ -27,9 +27,9 @@ class ALUTest extends AnyFlatSpec with ChiselScalatestTester {
         dut.io.B.poke(b.S)
         dut.io.ALUCtrl.poke(fun.U)
         // dut.io.ALUOut.expect(alu(a, b, fun).S)
-        println("Result is: " + dut.io.ALUOut.peek().toString)
+        println("Result is: " + dut.io.eq.peek().toString)
       }
-      testOne(1020, -256, sub)
+      testOne(-256, -256, sub)
     }
   }
 }
