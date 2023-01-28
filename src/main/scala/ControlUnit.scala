@@ -220,32 +220,6 @@ class ControlUnit extends Module {
 
 }
 
-class Decoder extends Module {
-  val io = IO(new Bundle {
-    val opcode = Input(UInt(7.W))
-    val format = Output(UInt(3.W))
-  })
-
-  val op = io.opcode(6, 2)
-  val res = WireDefault(0.U(3.W))
-
-  when(op === R_.U) {
-    res := R.U
-  }.elsewhen(op === I_.U | op === I_jalr.U | op === I_load.U) {
-    res := I.U
-  }.elsewhen(op === S_.U) {
-    res := S.U
-  }.elsewhen(op === B_.U) {
-    res := B.U
-  }.elsewhen(op === U_lui.U | op === U_auipc.U) {
-    res := U.U
-  }.elsewhen(op === J_jal.U) {
-    res := J.U
-  }
-
-  io.format := res
-}
-
 object ControlUnit extends App {
   val myverilog = (new ChiselStage).emitVerilog(
     new ControlUnit,

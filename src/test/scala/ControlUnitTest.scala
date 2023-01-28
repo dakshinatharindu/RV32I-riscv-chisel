@@ -7,32 +7,22 @@ import org.scalatest.flatspec.AnyFlatSpec
 import riscv.shared.Constants._
 
 class ControlUnitTest extends AnyFlatSpec with ChiselScalatestTester {
-  "DecoderTest" should "pass" in {
-    test(new Decoder) { dut =>
-      val opcodes = Seq(
-        "b0110011".U,
-        "b0010011".U,
-        "b0000011".U,
-        "b1100111".U,
-        "b0100011".U,
-        "b1100011".U,
-        "b0110111".U,
-        "b0010111".U,
-        "b1101111".U
-      )
-      val expects = Seq(R.U, I.U, I.U, I.U, S.U, B.U, U.U, U.U, J.U)
-
-      for (i <- 0 until opcodes.length) {
-        dut.io.opcode.poke(opcodes(i))
-        dut.io.format.expect(expects(i))
-      }
-    }
-  }
 
   "ControlUnitTest" should "pass" in {
     test(new ControlUnit) { dut =>
-      dut.io.instr.poke("b0000000_00000_00000_000_00000_0110111".U)
-      println(dut.io.ALUCtrl.peek().toString)
+      dut.io.instr.poke("b0000000_00000_00000_101_00000_0110011".U)
+      dut.io.eq.poke(false.B)
+      println("format " + dut.io.format.peek().toString)
+      println("ALUCtrl " + dut.io.ALUCtrl.peek().toString)
+      println("regWrite " + dut.io.regWrite.peek().toString)
+      println("memWrite " + dut.io.memWrite.peek().toString)
+      println("memRead " + dut.io.memRead.peek().toString)
+      println("rs2Imm " + dut.io.rs2Imm.peek().toString)
+      println("aluMem " + dut.io.aluMem.peek().toString)
+      println("pcAluMem " + dut.io.pcAluMem.peek().toString)
+      println("pcImm " + dut.io.pcImm.peek().toString)
+      println("immBranch " + dut.io.immBranch.peek().toString)
+      println("aluBranch " + dut.io.aluBranch.peek().toString)
     }
   }
 }
