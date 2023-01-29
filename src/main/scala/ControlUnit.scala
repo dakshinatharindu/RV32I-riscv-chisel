@@ -30,6 +30,8 @@ class ControlUnit extends Module {
   val subFormat = opcode(6, 2)
   val funcCode = func7(5) ## func3
 
+  val loadBuffer = RegInit(false.B)
+
   val ALUCtrl = WireDefault(0.U(4.W))
   val format = WireDefault(0.U(3.W))
   val regWrite = WireDefault(false.B)
@@ -71,8 +73,9 @@ class ControlUnit extends Module {
     }
 
     is(I_.U) {
+      loadBuffer := false.B
       rs2Imm := true.B
-      aluMem := false.B
+      aluMem := Mux(loadBuffer, true.B, false.B)
       pcAluMem := true.B
       immBranch := false.B
       aluBranch := false.B
@@ -102,6 +105,7 @@ class ControlUnit extends Module {
     }
 
     is(I_load.U) {
+      loadBuffer := true.B
       rs2Imm := true.B
       aluMem := true.B
       pcAluMem := true.B
@@ -220,9 +224,9 @@ class ControlUnit extends Module {
 
 }
 
-// object ControlUnit extends App {
-//   val myverilog = (new ChiselStage).emitVerilog(
-//     new ControlUnit,
-//     Array("--target-dir", "verilog/")
-//   )
-// }
+object ControlUnit extends App {
+  val myverilog = (new ChiselStage).emitVerilog(
+    new ControlUnit,
+    Array("--target-dir", "verilog/")
+  )
+}
