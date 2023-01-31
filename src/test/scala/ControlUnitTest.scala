@@ -12,7 +12,7 @@ class ControlUnitTest extends AnyFlatSpec with ChiselScalatestTester {
     test(new ControlUnit) { dut =>
 
 
-      dut.io.instr.poke("b0000000_00000_00000_000_00000_0000011".U)
+      dut.io.instr.poke("b0000000_00011_00000_000_00001_00100111".U)
       dut.io.eq.poke(false.B)
       println("format " + dut.io.format.peek().toString)
       println("ALUCtrl " + dut.io.ALUCtrl.peek().toString)
@@ -26,37 +26,6 @@ class ControlUnitTest extends AnyFlatSpec with ChiselScalatestTester {
       println("immBranch " + dut.io.immBranch.peek().toString)
       println("aluBranch " + dut.io.aluBranch.peek().toString)
 
-      dut.clock.step()
-
-      dut.io.instr.poke("b0000000_00000_00000_000_00000_0010011".U)
-      dut.io.eq.poke(false.B)
-      println("format " + dut.io.format.peek().toString)
-      println("ALUCtrl " + dut.io.ALUCtrl.peek().toString)
-      println("regWrite " + dut.io.regWrite.peek().toString)
-      println("memWrite " + dut.io.memWrite.peek().toString)
-      println("memRead " + dut.io.memRead.peek().toString)
-      println("rs2Imm " + dut.io.rs2Imm.peek().toString)
-      println("aluMem " + dut.io.aluMem.peek().toString)
-      println("pcAluMem " + dut.io.pcAluMem.peek().toString)
-      println("pcImm " + dut.io.pcImm.peek().toString)
-      println("immBranch " + dut.io.immBranch.peek().toString)
-      println("aluBranch " + dut.io.aluBranch.peek().toString)
-
-       dut.clock.step()
-
-      dut.io.instr.poke("b0000000_00000_00000_000_00000_0010011".U)
-      dut.io.eq.poke(false.B)
-      println("format " + dut.io.format.peek().toString)
-      println("ALUCtrl " + dut.io.ALUCtrl.peek().toString)
-      println("regWrite " + dut.io.regWrite.peek().toString)
-      println("memWrite " + dut.io.memWrite.peek().toString)
-      println("memRead " + dut.io.memRead.peek().toString)
-      println("rs2Imm " + dut.io.rs2Imm.peek().toString)
-      println("aluMem " + dut.io.aluMem.peek().toString)
-      println("pcAluMem " + dut.io.pcAluMem.peek().toString)
-      println("pcImm " + dut.io.pcImm.peek().toString)
-      println("immBranch " + dut.io.immBranch.peek().toString)
-      println("aluBranch " + dut.io.aluBranch.peek().toString)
     }
   }
 }

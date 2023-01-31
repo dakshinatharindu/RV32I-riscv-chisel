@@ -10,7 +10,9 @@ class Core extends Module {
   val io = IO(new Bundle {
     val instr = Input(UInt(32.W))
     val memReadData = Input(SInt(32.W))
+    val instrAddrs = Output(UInt(32.W))
     val ALUOut = Output(SInt(32.W))
+    val memWriteData = Output(SInt(32.W))
     val memRead = Output(Bool())
     val memWrite = Output(Bool())
   })
@@ -81,6 +83,9 @@ class Core extends Module {
   io.memRead := controlUnit.io.memRead
   io.memWrite := controlUnit.io.memWrite
   io.ALUOut := alu.io.ALUOut
+  io.instrAddrs := pc.io.outAddr
+  io.memWriteData := registerFile.io.readData2
+
 }
 
 object Core extends App {

@@ -45,9 +45,3 @@ class ALU extends Module {
   io.ALUOut := res
 }
 
-// object ALU extends App {
-//   val myverilog = (new ChiselStage).emitVerilog(
-//     new ALU,
-//     Array("--target-dir", "verilog/")
-//   )
-// }
