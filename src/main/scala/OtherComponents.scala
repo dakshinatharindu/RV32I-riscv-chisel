@@ -99,6 +99,16 @@ class ALUBranchMux extends Module {
   io.out := Mux(io.aluBranch, io.ALUOut.asUInt, io.pc4Branch)
 }
 
+class PcStallMux extends Module {
+  val io = IO(new Bundle {
+    val stall = Input(Bool())
+    val next = Input(UInt(32.W))
+    val current = Input(UInt(32.W))
+    val out = Output(UInt(32.W))
+  })
+
+  io.out := Mux(io.stall, io.next, io.current)
+}
 
 // object PC extends App {
 //   val myverilog = (new ChiselStage).emitVerilog(

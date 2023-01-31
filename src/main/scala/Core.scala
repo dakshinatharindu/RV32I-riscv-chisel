@@ -10,6 +10,7 @@ class Core extends Module {
   val io = IO(new Bundle {
     val instr = Input(UInt(32.W))
     val memReadData = Input(SInt(32.W))
+    val loadValid = Input(Bool())
     val instrAddrs = Output(UInt(32.W))
     val ALUOut = Output(SInt(32.W))
     val memWriteData = Output(SInt(32.W))
@@ -30,11 +31,13 @@ class Core extends Module {
   val aluMemMux = Module(new ALUMemMux)
   val immBranchMux = Module(new ImmBranchMux)
   val aluBranchMux = Module(new ALUBranchMux)
+  val pcStall = Module(new PcStallMux)
 
   controlUnit.io.instr := io.instr
   controlUnit.io.eq := alu.io.eq
   controlUnit.io.ge := alu.io.ge
   controlUnit.io.geu := alu.io.geu
+  controlUnit.io.loadValid := io.loadValid
 
   registerFile.io.readAddr1 := io.instr(19, 15)
   registerFile.io.readAddr2 := io.instr(24, 20)
@@ -49,7 +52,7 @@ class Core extends Module {
   immGen.io.in := io.instr
   immGen.io.format := controlUnit.io.format
 
-  pc.io.inAddr := aluBranchMux.io.out
+  pc.io.inAddr := pcStall.io.out
 
   pcIncrementer.io.pc := pc.io.outAddr
 
@@ -80,10 +83,14 @@ class Core extends Module {
   aluBranchMux.io.ALUOut := alu.io.ALUOut
   aluBranchMux.io.pc4Branch := immBranchMux.io.out
 
+  pcStall.io.stall := controlUnit.io.loadStall
+  pcStall.io.current := pc.io.outAddr
+  pcStall.io.next := aluBranchMux.io.out
+
   io.memRead := controlUnit.io.memRead
   io.memWrite := controlUnit.io.memWrite
   io.ALUOut := alu.io.ALUOut
-  io.instrAddrs := pc.io.outAddr
+  io.instrAddrs := pc.io.outAddr >> 2.U
   io.memWriteData := registerFile.io.readData2
 
 }
