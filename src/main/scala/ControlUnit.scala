@@ -229,6 +229,7 @@ class ControlUnit extends Module {
   io.aluBranch := aluBranch
   io.ALUCtrl := ALUCtrl
   io.format := format
+  io.loadStall := loadStall
 
 }
 
