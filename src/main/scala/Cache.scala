@@ -11,6 +11,12 @@ class CacheLine extends Bundle {
   val tag = UInt(5.W)
   val line = Vec(8, UInt(32.W))
 }
+class VictimCacheLine extends Bundle {
+  val record = UInt(4.W)
+  val validBit = Bool()
+  val tag = UInt(5.W)
+  val line = Vec(8, UInt(32.W))
+}
 
 class L1 extends Module {
   val io = IO(new Bundle {
@@ -65,29 +71,55 @@ class L1 extends Module {
     }
     cache(cacheLine).line(io.addrs(4, 2)) := cacheData
   }
-  
+
 }
 
-// class VC extends Module {
-//   val io = IO(new Bundle {
-//     val addrs = Input(UInt(12.W))
-//     val writeData = Input(UInt(32.W))
-//     val storeType = Input(UInt(2.W))
-//     val wen = Input(Bool())
-//     val readData = Output(UInt(32.W))
-//     val hit = Output(Bool())
-//   })
+class VC extends Module {
+  val io = IO(new Bundle {
+    val addrs = Input(UInt(16.W))
+    val writeBlock = Input(UInt(256.W))
+    val wen = Input(Bool())
+    val readBlock = Output(UInt(256.W))
+    val hit = Output(Bool())
+  })
 
-//   val victimCache = RegInit(VecInit(Seq.fill(16)(0.U(37.W))))
+  val victimCache = RegInit(
+    VecInit(Seq.fill(16)(0.U.asTypeOf(new VictimCacheLine)))
+  )
 
-//   val tag = io.addrs
-//   val inx = victimCache.indexWhere(x => io.addrs(11, 8))
+  val tag = io.addrs(15, 11)
+  val inx = victimCache.indexWhere(x => x.tag === tag)
+  val hit =
+    Mux(inx < 15.U, true.B, Mux(victimCache(15.U).tag === tag, true.B, false.B))
+  val max =
+    victimCache.map(x => x.record).reduceLeft((x, y) => Mux(x > y, x, y))
+  val maxIdx = victimCache.indexWhere(x => x.record === max)
+  io.hit := hit
 
-// }
+  when(hit) {
+    io.readBlock := victimCache(inx).line.asUInt
+  }.otherwise {
+    io.readBlock := victimCache(maxIdx).line.asUInt
+  }
 
-object L1 extends App {
+  val res = WireDefault(0.U(256.W))
+  when(io.wen) {
+    when(hit) {
+      for (j <- 0 to 7) {
+        victimCache(inx).line(j.U) := io.writeBlock((j + 1) * 32 - 1, j * 32)
+      }
+    }.otherwise {
+      for (j <- 0 to 7) {
+        victimCache(maxIdx).line(j.U) := io.writeBlock((j + 1) * 32 - 1, j * 32)
+      }
+    }
+  }
+
+}
+
+object VC extends App {
   val myverilog = (new ChiselStage).emitVerilog(
-    new L1,
+    new VC,
     Array("--target-dir", "verilog/")
   )
 }
