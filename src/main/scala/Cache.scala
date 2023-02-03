@@ -6,56 +6,84 @@ import chisel3.stage._
 import riscv.shared.Constants._
 import os.read
 
+class CacheLine extends Bundle {
+  val validBit = Bool()
+  val tag = UInt(5.W)
+  val line = Vec(8, UInt(32.W))
+}
+
 class L1 extends Module {
   val io = IO(new Bundle {
-    val addrs = Input(UInt(12.W))
-    val writeData = Input(UInt(32.W))
+    val addrs = Input(UInt(16.W))
+    val cpuWriteData = Input(UInt(32.W))
+    val cpuReadData = Output(UInt(32.W))
     val storeType = Input(UInt(2.W))
-    val wen = Input(Bool())
-    val readData = Output(UInt(32.W))
+    val cpuWriteEn = Input(Bool())
+
+    val readBlock = Output(UInt(256.W))
+    val writeBlock = Input(UInt(256.W))
+    val blockWriteEn = Input(Bool())
+
     val hit = Output(Bool())
   })
 
-  val cache = RegInit(VecInit(Seq.fill(64)(0.U(37.W))))
+  val cache = RegInit(VecInit(Seq.fill(64)(0.U.asTypeOf(new CacheLine))))
+
   // reading
-  val cacheLine = io.addrs(7, 2)
-  val validBit = cache(cacheLine)(36)
-  val tag = cache(cacheLine)(35, 32)
-  val hit = (validBit === 1.U) & (tag === io.addrs(11, 8))
-  io.readData := cache(cacheLine)(31, 0)
+  val cacheLine = io.addrs(10, 5)
+  val validBit = cache(cacheLine).validBit
+  val tag = io.addrs(15, 11)
+  val hit = (validBit === 1.U) & (tag === cache(cacheLine).tag)
+  io.cpuReadData := cache(cacheLine).line(io.addrs(4, 2))
+  io.readBlock := cache(cacheLine).line.asUInt
   io.hit := hit
 
-  // writing
-  val cacheData = WireDefault(0.U(37.W))
-  when(io.wen & hit) {
+  // // writing
+
+  when(io.blockWriteEn) {
+    cache(cacheLine).validBit := true.B
+    cache(cacheLine).tag := tag
+    for (j <- 0 to 7) {
+      cache(cacheLine).line(j.U) := io.writeBlock((j + 1) * 32 - 1, j * 32)
+    }
+
+  }
+
+  val cacheData = WireDefault(0.U(32.W))
+  val temp = cache(cacheLine).line(io.addrs(4, 2))
+  when(io.cpuWriteEn & hit) {
     switch(io.storeType) {
       is("b00".U) {
-        cacheData := 1.U ## io.addrs(11, 8) ## cache(cacheLine)(31, 8) ## io
-          .writeData(7, 0)
+        cacheData := temp(31, 8) ## io.cpuWriteData(7, 0)
       }
       is("b01".U) {
-        cacheData := 1.U ## io.addrs(11, 8) ## cache(cacheLine)(31, 16) ## io
-          .writeData(15, 0)
+        cacheData := temp(31, 16) ## io.cpuWriteData(15, 0)
       }
       is("b10".U) {
-        cacheData := 1.U ## io.addrs(11, 8) ## io.writeData
+        cacheData := io.cpuWriteData
       }
     }
-  }.elsewhen(io.wen) {
-    cacheData := 1.U ## io.addrs(11, 8) ## io.writeData
+    cache(cacheLine).line(io.addrs(4, 2)) := cacheData
   }
-  cache(cacheLine) := cacheData
-
+  
 }
 
-class VC extends Module {
-  val io = IO(new Bundle {
-    val addrs = Input(UInt(12.W))
+// class VC extends Module {
+//   val io = IO(new Bundle {
+//     val addrs = Input(UInt(12.W))
+//     val writeData = Input(UInt(32.W))
+//     val storeType = Input(UInt(2.W))
+//     val wen = Input(Bool())
+//     val readData = Output(UInt(32.W))
+//     val hit = Output(Bool())
+//   })
 
-    val readData = Output(UInt(32.W))
-    val hit = Output(Bool())
-  })
-}
+//   val victimCache = RegInit(VecInit(Seq.fill(16)(0.U(37.W))))
+
+//   val tag = io.addrs
+//   val inx = victimCache.indexWhere(x => io.addrs(11, 8))
+
+// }
 
 object L1 extends App {
   val myverilog = (new ChiselStage).emitVerilog(
