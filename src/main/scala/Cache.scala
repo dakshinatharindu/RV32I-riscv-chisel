@@ -79,6 +79,7 @@ class VC extends Module {
     val addrs = Input(UInt(16.W))
     val writeBlock = Input(UInt(256.W))
     val wen = Input(Bool())
+    val read = Input(Bool())
     val readBlock = Output(UInt(256.W))
     val hit = Output(Bool())
   })
@@ -90,27 +91,33 @@ class VC extends Module {
   val tag = io.addrs(15, 11)
   val inx = victimCache.indexWhere(x => x.tag === tag)
   val hit =
-    Mux(inx < 15.U, true.B, Mux(victimCache(15.U).tag === tag, true.B, false.B))
-  val max =
-    victimCache.map(x => x.record).reduceLeft((x, y) => Mux(x > y, x, y))
-  val maxIdx = victimCache.indexWhere(x => x.record === max)
+    Mux(inx < 15.U, true.B, Mux(victimCache(15.U).tag === tag, true.B, false.B)) & victimCache(inx).validBit
+  val min =
+    victimCache.map(x => x.record).reduceLeft((x, y) => Mux(x < y, x, y))
+  val minIdx = victimCache.indexWhere(x => x.record === min)
   io.hit := hit
 
   when(hit) {
     io.readBlock := victimCache(inx).line.asUInt
+    when(io.read) { victimCache(inx).record := victimCache(inx).record + 1.U }
   }.otherwise {
-    io.readBlock := victimCache(maxIdx).line.asUInt
+    io.readBlock := victimCache(minIdx).line.asUInt
   }
 
-  val res = WireDefault(0.U(256.W))
   when(io.wen) {
     when(hit) {
+      victimCache(inx).validBit := true.B
+      victimCache(inx).tag := tag
+      victimCache(inx).record := 0.U
       for (j <- 0 to 7) {
         victimCache(inx).line(j.U) := io.writeBlock((j + 1) * 32 - 1, j * 32)
       }
     }.otherwise {
+      victimCache(minIdx).validBit := true.B
+      victimCache(minIdx).tag := tag
+      victimCache(minIdx).record := 0.U
       for (j <- 0 to 7) {
-        victimCache(maxIdx).line(j.U) := io.writeBlock((j + 1) * 32 - 1, j * 32)
+        victimCache(minIdx).line(j.U) := io.writeBlock((j + 1) * 32 - 1, j * 32)
       }
     }
   }
