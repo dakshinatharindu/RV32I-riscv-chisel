@@ -11,7 +11,7 @@ class ControlUnit extends Module {
     val eq = Input(Bool())
     val ge = Input(Bool())
     val geu = Input(Bool())
-    val loadValid = Input(Bool())
+    val valid = Input(Bool())
     val format = Output(UInt(3.W))
     val ALUCtrl = Output(UInt(4.W))
     val regWrite = Output(Bool())
@@ -23,7 +23,7 @@ class ControlUnit extends Module {
     val pcImm = Output(Bool())
     val immBranch = Output(Bool())
     val aluBranch = Output(Bool())
-    val loadStall = Output(Bool())
+    val stall = Output(Bool())
     val storeType = Output(UInt(2.W))
   })
 
@@ -44,7 +44,7 @@ class ControlUnit extends Module {
   val pcImm = WireDefault(false.B)
   val immBranch = WireDefault(false.B)
   val aluBranch = WireDefault(false.B)
-  val loadStall = WireDefault(false.B)
+  val stall = WireDefault(false.B)
 
   switch(subFormat) {
     is(R_.U) {
@@ -53,7 +53,7 @@ class ControlUnit extends Module {
       pcAluMem := true.B
       immBranch := false.B
       aluBranch := false.B
-      loadStall := true.B
+      stall := true.B
 
       regWrite := true.B
       memRead := false.B
@@ -81,7 +81,7 @@ class ControlUnit extends Module {
       pcAluMem := true.B
       immBranch := false.B
       aluBranch := false.B
-      loadStall := true.B
+      stall := true.B
 
       regWrite := true.B
       memRead := false.B
@@ -113,7 +113,7 @@ class ControlUnit extends Module {
       pcAluMem := true.B
       immBranch := false.B
       aluBranch := false.B
-      loadStall := Mux(io.loadValid, true.B, false.B)
+      stall := Mux(io.valid, true.B, false.B)
 
       regWrite := true.B
       memRead := true.B
@@ -128,7 +128,7 @@ class ControlUnit extends Module {
       pcImm := false.B
       pcAluMem := false.B
       aluBranch := true.B
-      loadStall := true.B
+      stall := true.B
 
       regWrite := true.B
       memRead := false.B
@@ -143,7 +143,7 @@ class ControlUnit extends Module {
       rs2Imm := true.B
       immBranch := false.B
       aluBranch := false.B
-      loadStall := true.B
+      stall := Mux(io.valid, true.B, false.B)
 
       regWrite := false.B
       memRead := false.B
@@ -165,7 +165,7 @@ class ControlUnit extends Module {
         is(BGEU.U) { immBranch := Mux(io.geu, true.B, false.B) }
       }
       aluBranch := false.B
-      loadStall := true.B
+      stall := true.B
 
       regWrite := false.B
       memRead := false.B
@@ -180,7 +180,7 @@ class ControlUnit extends Module {
       pcAluMem := true.B
       immBranch := false.B
       aluBranch := false.B
-      loadStall := true.B
+      stall := true.B
 
       regWrite := true.B
       memRead := false.B
@@ -196,7 +196,7 @@ class ControlUnit extends Module {
       pcImm := true.B
       immBranch := false.B
       aluBranch := false.B
-      loadStall := true.B
+      stall := true.B
 
       regWrite := true.B
       memRead := false.B
@@ -209,7 +209,7 @@ class ControlUnit extends Module {
       pcImm := false.B
       immBranch := true.B
       aluBranch := false.B
-      loadStall := true.B
+      stall := true.B
 
       regWrite := true.B
       memRead := false.B
@@ -230,7 +230,7 @@ class ControlUnit extends Module {
   io.aluBranch := aluBranch
   io.ALUCtrl := ALUCtrl
   io.format := format
-  io.loadStall := loadStall
+  io.stall := stall
   io.storeType := func3(1,0)
 
 }

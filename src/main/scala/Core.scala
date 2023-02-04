@@ -10,7 +10,7 @@ class Core extends Module {
   val io = IO(new Bundle {
     val instr = Input(UInt(32.W))
     val memReadData = Input(UInt(32.W))
-    val loadValid = Input(Bool())
+    val valid = Input(Bool())
     val instrAddrs = Output(UInt(32.W))
     val ALUOut = Output(SInt(32.W))
     val memWriteData = Output(SInt(32.W))
@@ -39,7 +39,7 @@ class Core extends Module {
   controlUnit.io.eq := alu.io.eq
   controlUnit.io.ge := alu.io.ge
   controlUnit.io.geu := alu.io.geu
-  controlUnit.io.loadValid := io.loadValid
+  controlUnit.io.valid := io.valid
 
   registerFile.io.readAddr1 := io.instr(19, 15)
   registerFile.io.readAddr2 := io.instr(24, 20)
@@ -85,7 +85,7 @@ class Core extends Module {
   aluBranchMux.io.ALUOut := alu.io.ALUOut
   aluBranchMux.io.pc4Branch := immBranchMux.io.out
 
-  pcStall.io.stall := controlUnit.io.loadStall
+  pcStall.io.stall := controlUnit.io.stall
   pcStall.io.current := pc.io.outAddr
   pcStall.io.next := aluBranchMux.io.out
 
