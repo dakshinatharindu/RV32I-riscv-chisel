@@ -24,6 +24,7 @@ class ControlUnit extends Module {
     val immBranch = Output(Bool())
     val aluBranch = Output(Bool())
     val loadStall = Output(Bool())
+    val storeType = Output(UInt(2.W))
   })
 
   val opcode = io.instr(6, 0)
@@ -230,6 +231,7 @@ class ControlUnit extends Module {
   io.ALUCtrl := ALUCtrl
   io.format := format
   io.loadStall := loadStall
+  io.storeType := func3(1,0)
 
 }
 
