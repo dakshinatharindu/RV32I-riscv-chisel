@@ -11,12 +11,6 @@ class CacheLine extends Bundle {
   val tag = UInt(5.W)
   val line = Vec(8, UInt(32.W))
 }
-class VictimCacheLine extends Bundle {
-  val record = UInt(4.W)
-  val validBit = Bool()
-  val tag = UInt(5.W)
-  val line = Vec(8, UInt(32.W))
-}
 
 class L1 extends Module {
   val io = IO(new Bundle {
@@ -74,59 +68,46 @@ class L1 extends Module {
 
 }
 
-class VC extends Module {
+class Cache extends Module {
   val io = IO(new Bundle {
+    val inMemRead = Input(Bool())
+    val inMemWrite = Input(Bool())
     val addrs = Input(UInt(16.W))
-    val writeBlock = Input(UInt(256.W))
-    val wen = Input(Bool())
-    val read = Input(Bool())
+    val cpuWriteData = Input(UInt(32.W))
+    val cpuReadData = Output(UInt(32.W))
+    val storeType = Input(UInt(2.W))
+    val valid = Output(Bool())
     val readBlock = Output(UInt(256.W))
-    val hit = Output(Bool())
+    val writeBlock = Input(UInt(256.W))
+    val outMemRead = Output(Bool())
+    val outMemWrite = Output(Bool())
   })
 
-  val victimCache = RegInit(
-    VecInit(Seq.fill(16)(0.U.asTypeOf(new VictimCacheLine)))
-  )
+  val cache = Module(new L1)
+  val cacheControl = Module(new CacheControl)
 
-  val tag = io.addrs(15, 11)
-  val inx = victimCache.indexWhere(x => x.tag === tag)
-  val hit =
-    Mux(inx < 15.U, true.B, Mux(victimCache(15.U).tag === tag, true.B, false.B)) & victimCache(inx).validBit
-  val min =
-    victimCache.map(x => x.record).reduceLeft((x, y) => Mux(x < y, x, y))
-  val minIdx = victimCache.indexWhere(x => x.record === min)
-  io.hit := hit
+  cache.io.addrs := io.addrs
+  cache.io.cpuWriteData := io.cpuWriteData
+  cache.io.storeType := io.storeType
+  cache.io.cpuWriteEn := cacheControl.io.cacheEn
+  cache.io.writeBlock := io.writeBlock
+  cache.io.blockWriteEn := cacheControl.io.blockWriteEn
 
-  when(hit) {
-    io.readBlock := victimCache(inx).line.asUInt
-    when(io.read) { victimCache(inx).record := victimCache(inx).record + 1.U }
-  }.otherwise {
-    io.readBlock := victimCache(minIdx).line.asUInt
-  }
+  cacheControl.io.inMemRead := io.inMemRead
+  cacheControl.io.inMemWrite := io.inMemWrite
+  cacheControl.io.hit := cache.io.hit
 
-  when(io.wen) {
-    when(hit) {
-      victimCache(inx).validBit := true.B
-      victimCache(inx).tag := tag
-      victimCache(inx).record := 0.U
-      for (j <- 0 to 7) {
-        victimCache(inx).line(j.U) := io.writeBlock((j + 1) * 32 - 1, j * 32)
-      }
-    }.otherwise {
-      victimCache(minIdx).validBit := true.B
-      victimCache(minIdx).tag := tag
-      victimCache(minIdx).record := 0.U
-      for (j <- 0 to 7) {
-        victimCache(minIdx).line(j.U) := io.writeBlock((j + 1) * 32 - 1, j * 32)
-      }
-    }
-  }
+  io.cpuReadData := cache.io.cpuWriteData
+  io.valid := cacheControl.io.valid
+  io.readBlock := cache.io.readBlock
+  io.outMemRead := cacheControl.io.outMemRead
+  io.outMemWrite := cacheControl.io.outMemWrite
 
 }
 
-object VC extends App {
+object Cache extends App {
   val myverilog = (new ChiselStage).emitVerilog(
-    new VC,
+    new Cache,
     Array("--target-dir", "verilog/")
   )
 }
