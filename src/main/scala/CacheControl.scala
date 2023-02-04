@@ -27,7 +27,7 @@ class CacheControl extends Module {
 
   when(io.inMemRead | io.inMemWrite) {
     when(io.hit) {
-      valid := io.inMemRead
+      valid := true.B
       cacheEn := io.inMemWrite
     }.otherwise {
       switch(state) {

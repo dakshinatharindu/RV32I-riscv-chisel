@@ -97,7 +97,7 @@ class Cache extends Module {
   cacheControl.io.inMemWrite := io.inMemWrite
   cacheControl.io.hit := cache.io.hit
 
-  io.cpuReadData := cache.io.cpuWriteData
+  io.cpuReadData := cache.io.cpuReadData
   io.valid := cacheControl.io.valid
   io.readBlock := cache.io.readBlock
   io.outMemRead := cacheControl.io.outMemRead
