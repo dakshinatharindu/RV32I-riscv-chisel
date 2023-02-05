@@ -9,8 +9,8 @@ class Processor extends Module {
   val io = IO(new Bundle {
     val instr = Input(UInt(32.W))
     val memReadBlock = Input(UInt(256.W))
-    val memAdrrs = Output(UInt(16.W))
-    val instrAddrs = Output(UInt(32.W))
+    val memAdrrs = Output(UInt(11.W))
+    val instrAddrs = Output(UInt(9.W))
     val memWriteBlock = Output(UInt(256.W))
     val memRead = Output(Bool())
     val memWrite = Output(Bool())
@@ -25,7 +25,7 @@ class Processor extends Module {
 
   cacheCore.io.inMemRead := core.io.memRead
   cacheCore.io.inMemWrite := core.io.memWrite
-  cacheCore.io.addrs := core.io.ALUOut.asUInt
+  cacheCore.io.addrs := core.io.ALUOut.asUInt(15, 0)
   cacheCore.io.cpuWriteData := core.io.memWriteData
   cacheCore.io.storeType := core.io.storeType
   cacheCore.io.writeBlock := io.memReadBlock
@@ -34,7 +34,7 @@ class Processor extends Module {
   io.memWriteBlock := cacheCore.io.readBlock
   io.memRead := cacheCore.io.outMemRead
   io.memWrite := cacheCore.io.outMemWrite
-  io.memAdrrs := core.io.ALUOut.asUInt(15, 0)
+  io.memAdrrs := core.io.ALUOut.asUInt(15, 5)
 
 }
 

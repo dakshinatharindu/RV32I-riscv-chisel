@@ -11,7 +11,7 @@ class Core extends Module {
     val instr = Input(UInt(32.W))
     val memReadData = Input(UInt(32.W))
     val valid = Input(Bool())
-    val instrAddrs = Output(UInt(32.W))
+    val instrAddrs = Output(UInt(9.W))
     val ALUOut = Output(SInt(32.W))
     val memWriteData = Output(UInt(32.W))
     val memRead = Output(Bool())
@@ -95,7 +95,7 @@ class Core extends Module {
   io.memRead := controlUnit.io.memRead
   io.memWrite := controlUnit.io.memWrite
   io.ALUOut := alu.io.ALUOut
-  io.instrAddrs := pc.io.outAddr >> 2.U
+  io.instrAddrs := (pc.io.outAddr >> 2.U)(8,0)
   io.memWriteData := registerFile.io.readData2.asUInt
   io.storeType := controlUnit.io.storeType
 
