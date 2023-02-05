@@ -34,7 +34,7 @@ class Processor extends Module {
   io.memWriteBlock := cacheCore.io.readBlock
   io.memRead := cacheCore.io.outMemRead
   io.memWrite := cacheCore.io.outMemWrite
-  io.memAdrrs := core.io.ALUOut.asUInt(15, 5)
+  io.memAdrrs := cacheCore.io.bufferAddrs
 
 }
 
