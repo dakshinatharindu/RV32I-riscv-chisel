@@ -31,7 +31,7 @@ class L1 extends Module {
 
   val cache = RegInit(VecInit(Seq.fill(64)(0.U.asTypeOf(new CacheLine))))
   val dataBuffer = RegInit(0.U(256.W))
-  val addrsBuffer = RegInit(0.U(16.W))
+  val addrsBuffer = RegInit(0.U(11.W))
   // reading
   val cacheLine = io.addrs(10, 5)
   val validBit = cache(cacheLine).validBit
