@@ -40,3 +40,7 @@ processor/greybox_tmp/
 processor/incremental_db/
 processor/output_files/
 processor/simulation/   
+processor/cr_ie_info.json
+assembler/AssemblyCodes.txt
+.gitignore
+assembler/InstrInit.mif
