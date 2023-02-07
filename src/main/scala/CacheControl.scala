@@ -16,6 +16,7 @@ class CacheControl extends Module {
     val blockWriteEn = Output(Bool())
     val outMemRead = Output(Bool())
     val outMemWrite = Output(Bool())
+    val sel = Output(Bool())
   })
 
   val state = RegInit(false.B)
@@ -24,6 +25,7 @@ class CacheControl extends Module {
   val outMemRead = WireDefault(false.B)
   val outMemWrite = WireDefault(false.B)
   val blockWriteEn = WireDefault(false.B)
+  val sel = WireDefault(false.B)
 
   when(io.inMemRead | io.inMemWrite) {
     when(io.hit) {
@@ -33,14 +35,16 @@ class CacheControl extends Module {
       switch(state) {
         is(false.B) {
           outMemRead := true.B
-          outMemWrite := true.B
+          outMemWrite := false.B
           blockWriteEn := false.B
+          sel := false.B
           state := true.B
         }
         is(true.B) {
           outMemRead := false.B
-          outMemWrite := false.B
+          outMemWrite := true.B
           blockWriteEn := true.B
+          sel := true.B
           state := false.B
         }
       }
@@ -51,6 +55,7 @@ class CacheControl extends Module {
     outMemRead := false.B
     outMemWrite := false.B
     blockWriteEn := false.B
+    sel := false.B
     state := false.B
   }
 
@@ -59,6 +64,7 @@ class CacheControl extends Module {
   io.outMemWrite := outMemWrite
   io.cacheEn := cacheEn
   io.blockWriteEn := blockWriteEn
+  io.sel := sel
 }
 
 object CacheControl extends App {

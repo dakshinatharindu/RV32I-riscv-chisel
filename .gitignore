@@ -35,3 +35,12 @@ metals.sbt
 test_run_dir/
 .scalafmt.conf
 verilog/
+processor/db/
+processor/greybox_tmp/
+processor/incremental_db/
+processor/output_files/
+processor/simulation/   
+processor/cr_ie_info.json
+assembler/AssemblyCodes.txt
+.gitignore
+assembler/InstrInit.mif

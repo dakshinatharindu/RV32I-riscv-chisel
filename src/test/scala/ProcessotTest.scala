@@ -6,14 +6,15 @@ import org.scalatest.flatspec.AnyFlatSpec
 
 import riscv.shared.Constants._
 
-class CoreTest extends AnyFlatSpec with ChiselScalatestTester {
+class ProcessorTest extends AnyFlatSpec with ChiselScalatestTester {
 
-  "CoreTest" should "pass" in {
-    test(new Core) { dut =>
-      dut.io.instr.poke("h6C00093".U)
+  "ProcessorTest" should "pass" in {
+    test(new Processor) { dut =>
+      dut.io.instr.poke("h7000093".U)
       dut.clock.step()
       dut.io.instr.poke("h00112e23".U)
-      dut.io.valid.poke(true.B)
+      dut.clock.step()
+      dut.clock.step()
       dut.clock.step()
       dut.io.instr.poke("h00812c23".U)
       dut.clock.step()
@@ -28,10 +29,8 @@ class CoreTest extends AnyFlatSpec with ChiselScalatestTester {
       dut.io.instr.poke("hfef42423".U)
       dut.clock.step()
       dut.io.instr.poke("hfe842583".U)
-      dut.io.memReadData.poke("h2".U)
       dut.clock.step()
       dut.io.instr.poke("hfec42503".U)
-      dut.io.memReadData.poke("h5".U)
       dut.clock.step()
       dut.io.instr.poke("h024000ef".U)
       dut.clock.step()
@@ -72,28 +71,30 @@ class CoreTest extends AnyFlatSpec with ChiselScalatestTester {
       dut.io.instr.poke("h00078513".U)
       dut.clock.step()
       dut.io.instr.poke("h01c12083".U)
-      dut.io.memReadData.poke("d108".U)
       dut.clock.step()
       dut.io.instr.poke("h01812403".U)
-      dut.io.memReadData.poke("h0".U)
       dut.clock.step()
       dut.io.instr.poke("h02010113".U)
       dut.clock.step()
       dut.io.instr.poke("h00008067".U)
       dut.clock.step()
-      // dut.io.instr.poke("h40000F13".U)
+      dut.io.instr.poke("h40000F13".U)
+      dut.clock.step()
+      dut.io.instr.poke("h0400F2F03".U)
+      dut.clock.step()
       // dut.clock.step()
-      // dut.io.instr.poke("h0400F2F03".U)
       // dut.clock.step()
       // dut.io.instr.poke("h00000FEF".U)
       // dut.clock.step()
 
-      println("ALUOut " + dut.io.ALUOut.peek().toString)
+      println("instrAddrs " + dut.io.instrAddrs.peek().toString)
+      println("memAdrrs " + dut.io.memAdrrs.peek().toString)
+      println("memWriteBlock " + dut.io.memWriteBlock.peek().toString)
       println("memRead " + dut.io.memRead.peek().toString)
       println("memWrite " + dut.io.memWrite.peek().toString)
-      println("outAddr " + dut.io.instrAddrs.peek().toString)
-      println("memWriteData " + dut.io.memWriteData.peek().toString)
+      
 
     }
   }
 }
+
