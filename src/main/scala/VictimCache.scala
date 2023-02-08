@@ -18,6 +18,7 @@ class VictimCache extends Module {
     val inData = Input(UInt(256.W))
     val inAddrs = Input(UInt(16.W))
     val storeAddrs = Input(UInt(11.W))
+    val inValid = Input(Bool())
     val outData = Output(UInt(256.W))
     val outAddrs = Output(UInt(11.W))
     val vhit = Output(Bool())
@@ -32,11 +33,11 @@ class VictimCache extends Module {
   val addrsBuffer = RegInit(0.U(11.W))
 
   val tag = io.inAddrs(15, 5)
-  val inx = victimCache.indexWhere(x => x.tag === tag)
+  val inx = victimCache.indexWhere(x => ((x.tag === tag) & (x.validBit)))
   val hit =
-    Mux(inx < 15.U, true.B, Mux(victimCache(15.U).tag === tag, true.B, false.B))
+    Mux(inx < 3.U, true.B, Mux(victimCache(3.U).tag === tag, true.B, false.B))
   val validBit = victimCache(inx).validBit
-  val vhit = (validBit === 1.U) & hit
+  val vhit = validBit & hit
 
   io.outAddrs := addrsBuffer
   io.outData := dataBuffer
@@ -44,7 +45,7 @@ class VictimCache extends Module {
 
   when(vhit) {
     when(io.en) {
-      victimCache(inx).validBit := true.B
+      victimCache(inx).validBit := io.inValid
       victimCache(inx).tag := io.storeAddrs
       for (j <- 0 to 7) {
         victimCache(inx).line(j.U) := io.inData((j + 1) * 32 - 1, j * 32)
@@ -54,7 +55,7 @@ class VictimCache extends Module {
     addrsBuffer := victimCache(inx).tag
   }.otherwise {
     when(io.en) {
-      victimCache(replaceReg).validBit := true.B
+      victimCache(replaceReg).validBit := io.inValid
       victimCache(replaceReg).tag := io.storeAddrs
       for (j <- 0 to 7) {
         victimCache(replaceReg).line(j.U) := io.inData((j + 1) * 32 - 1, j * 32)
