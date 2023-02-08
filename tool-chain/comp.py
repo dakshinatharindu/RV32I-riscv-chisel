@@ -21,23 +21,33 @@ mem.write("BEGIN\n")
 # Instruction to load the cache content after execution
 mem.write("0 : 00200F93;\n")  # addi 31 0 2
 mem.write("1 : 00800093;\n")  # addi 1 0 8
-mem.write("2 : FFFF8F93;\n")  # addi 1 0 8
-mem.write("3 : 000F9863;\n")  # bne 31 0 16
-mem.write("4 : 40000F93;\n")  # addi 31 0 1024
-mem.write("5 : 400FA003;\n")  # lw 0 31 1024
-mem.write("6 : 0000006F;\n")  # jal 0 0
+mem.write("2 : FFFF8F93;\n")  # addi 31 31 -1
+mem.write("3 : 020F9C63;\n")  # bne 31 0 16
+mem.write("4 : 40000F13;\n")  # addi 30 0 1024
+mem.write("5 : 01EF0F33;\n")  # add 30 30 30
+mem.write("6 : 000F0FB3;\n")  # add 31 30 0
+mem.write("7 : 000FA003;\n")  # lw 0 31 0
+mem.write("8 : 01FF0FB3;\n")  # add 31 30 31
+mem.write("9 : 000FA003;\n")  # lw 0 31 0
+mem.write("a : 01FF0FB3;\n")  # add 31 30 31
+mem.write("b : 000FA003;\n")  # lw 0 31 0
+mem.write("c : 01FF0FB3;\n")  # add 31 30 31
+mem.write("d : 000FA003;\n")  # lw 0 31 0
+mem.write("e : 01FF0FB3;\n")  # add 31 30 31
+mem.write("f : 000FA003;\n")  # lw 0 31 0
+mem.write("10 : 0000006F;\n")  # jal 0 0
 
 i = 0
 for i, line in enumerate(assembly):
     if i < 8:
         continue
     instr = line.strip().split()[1]
-    mem.write(hex(i-1)[2:] + " : " + instr + ";\n")
+    mem.write(hex(i+9)[2:] + " : " + instr + ";\n")
 
 
 numberOfInstr = i - 6
 
-mem.write("[{}..{}] : 0;\n".format(hex(numberOfInstr+6)[2:], "1FF"))
+mem.write("[{}..{}] : 0;\n".format(hex(numberOfInstr+16)[2:], "1FF"))
 mem.write("END;\n")
 mem.close()
 assembly.close()
