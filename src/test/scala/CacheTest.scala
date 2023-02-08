@@ -43,7 +43,13 @@ class CacheTest extends AnyFlatSpec with ChiselScalatestTester {
       dut.io.writeBlock.poke(5.U(256.W))
       dut.clock.step()
       dut.clock.step()
+      dut.io.inMemRead.poke(false.B)
+      dut.io.inMemWrite.poke(true.B)
+      dut.io.cpuWriteData.poke(34.U)
+      dut.io.storeType.poke(0.U)
       dut.clock.step()
+      dut.io.inMemRead.poke(true.B)
+      dut.io.inMemWrite.poke(false.B)
       dut.io.addrs.poke("b00010_000000_00000".U)
       dut.io.writeBlock.poke(7.U(256.W))
       dut.clock.step()
@@ -70,11 +76,6 @@ class CacheTest extends AnyFlatSpec with ChiselScalatestTester {
       println("outMemWrite : " + dut.io.outMemWrite.peek().toString)
       println("cpuReadData : " + dut.io.cpuReadData.peek().toString)
       println("readBlock : " + dut.io.readBlock.peek().toString)
-      println("tempVcen : " + dut.io.tempVcen.peek().toString)
-      println("tempvalid : " + dut.io.tempvalid.peek().toString)
-      println("tempadd : " + dut.io.tempadd.peek().toString)
-      println("tempdata : " + dut.io.tempdata.peek().toString)
-      println("tempvhit : " + dut.io.tempvhit.peek().toString)
     }
   }
 }

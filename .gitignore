@@ -44,3 +44,4 @@ processor/cr_ie_info.json
 assembler/AssemblyCodes.txt
 .gitignore
 assembler/InstrInit.mif
+processor/rv32i.qws

@@ -90,12 +90,6 @@ class Cache extends Module {
     val outMemRead = Output(Bool())
     val outMemWrite = Output(Bool())
     val outAddrs = Output(UInt(11.W))
-
-    val tempVcen = Output(Bool())
-    val tempvalid = Output(Bool())
-    val tempadd = Output(UInt(11.W))
-    val tempdata = Output(UInt(256.W))
-    val tempvhit = Output(Bool())
   })
 
   val cache = Module(new L1)
@@ -137,11 +131,6 @@ class Cache extends Module {
   io.outMemWrite := cacheControl.io.outMemWrite
   io.outAddrs := dataSelector.io.out
 
-  io.tempVcen := cacheControl.io.vcEn
-  io.tempadd := cache.io.bufferAddrs
-  io.tempvalid := cache.io.outValid
-  io.tempdata := cache.io.readBlock
-  io.tempvhit := vc.io.vhit
 }
 
 class AddresSelector extends Module {
