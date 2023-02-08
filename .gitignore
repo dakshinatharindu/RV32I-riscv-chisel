@@ -45,3 +45,8 @@ assembler/AssemblyCodes.txt
 .gitignore
 assembler/InstrInit.mif
 processor/rv32i.qws
+tool-chain/assembly.txt
+tool-chain/g.hex
+.gitignore
+tool-chain/InstrInit.mif
+tool-chain/K_1.elf
