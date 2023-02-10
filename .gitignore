@@ -52,3 +52,5 @@ tool-chain/InstrInit.mif
 tool-chain/K_1.elf
 testbench/obj_dir/
 testbench/-
+tool-chain/code
+testbench/verilatorInstr.txt
