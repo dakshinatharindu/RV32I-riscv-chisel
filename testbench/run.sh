@@ -1,3 +1,4 @@
-verilator -Wall --cc ../verilog/Core.v --exe Core.cpp &>-
-make -C obj_dir -f VCore.mk &>-
-obj_dir/VCore
+rm -r obj_dir
+verilator -Wall --cc ../verilog/Processor.v --exe Processor.cpp &>-
+make -C obj_dir -f VProcessor.mk &>-
+obj_dir/VProcessor

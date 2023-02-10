@@ -39,6 +39,24 @@ mem.write("e : 01FF0FB3;\n")  # add 31 30 31
 mem.write("f : 000FA003;\n")  # lw 0 31 0
 mem.write("10 : 0000006F;\n")  # jal 0 0
 
+verilatorInstr.write("00200F93\n")  # addi 31 0 2
+verilatorInstr.write("00800093\n")  # addi 1 0 8
+verilatorInstr.write("FFFF8F93\n")  # addi 31 31 -1
+verilatorInstr.write("020F9C63\n")  # bne 31 0 16
+verilatorInstr.write("40000F13\n")  # addi 30 0 1024
+verilatorInstr.write("01EF0F33\n")  # add 30 30 30
+verilatorInstr.write("000F0FB3\n")  # add 31 30 0
+verilatorInstr.write("000FA003\n")  # lw 0 31 0
+verilatorInstr.write("01FF0FB3\n")  # add 31 30 31
+verilatorInstr.write("000FA003\n")  # lw 0 31 0
+verilatorInstr.write("01FF0FB3\n")  # add 31 30 31
+verilatorInstr.write("000FA003\n")  # lw 0 31 0
+verilatorInstr.write("01FF0FB3\n")  # add 31 30 31
+verilatorInstr.write("000FA003\n")  # lw 0 31 0
+verilatorInstr.write("01FF0FB3\n")  # add 31 30 31
+verilatorInstr.write("000FA003\n")  # lw 0 31 0
+verilatorInstr.write("0000006F\n")  # jal 0 0
+
 i = 0
 for i, line in enumerate(assembly):
     if i < 8:
