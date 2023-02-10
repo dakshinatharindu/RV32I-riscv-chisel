@@ -15527,7 +15527,7 @@ module Cache(
   assign io_readBlock = vc_io_outData; // @[Cache.scala 129:16]
   assign io_outMemRead = cacheControl_io_outMemRead; // @[Cache.scala 130:17]
   assign io_outMemWrite = cacheControl_io_outMemWrite; // @[Cache.scala 131:18]
-  assign io_outAddrs = dataSelector_io_out; // @[Cache.scala 132:15]
+  assign io_outAddrs = selector_io_out; // @[Cache.scala 132:15]
   assign cache_clock = clock;
   assign cache_reset = reset;
   assign cache_io_addrs = io_addrs; // @[Cache.scala 101:18]

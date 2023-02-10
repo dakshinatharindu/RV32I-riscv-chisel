@@ -17,8 +17,8 @@ wire         io_memWrite;
 
 
 SlowClock counter(clock, q);
-assign slowClock = q[10];
-assign led = q[10];
+assign slowClock = q[5];
+assign led = q[5];
 assign reset_led = ~reset;
 Processor processor(slowClock,
  ~reset,io_instr,
