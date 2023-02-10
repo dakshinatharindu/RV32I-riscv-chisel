@@ -11,7 +11,8 @@ class ControlUnit extends Module {
     val eq = Input(Bool())
     val ge = Input(Bool())
     val geu = Input(Bool())
-    val valid = Input(Bool())
+    val cpu_wait = Input(Bool())
+    val cpu_ready = Input(Bool())
     val format = Output(UInt(3.W))
     val ALUCtrl = Output(UInt(4.W))
     val regWrite = Output(Bool())
@@ -32,6 +33,7 @@ class ControlUnit extends Module {
   val func3 = io.instr(14, 12)
   val subFormat = opcode(6, 2)
   val funcCode = func7(5) ## func3
+  
 
   val ALUCtrl = WireDefault(0.U(4.W))
   val format = WireDefault(0.U(3.W))
@@ -45,6 +47,7 @@ class ControlUnit extends Module {
   val immBranch = WireDefault(false.B)
   val aluBranch = WireDefault(false.B)
   val stall = WireDefault(false.B)
+  val storeType = WireDefault(0.U(2.W))
 
   switch(subFormat) {
     is(R_.U) {
@@ -113,7 +116,7 @@ class ControlUnit extends Module {
       pcAluMem := true.B
       immBranch := false.B
       aluBranch := false.B
-      stall := Mux(io.valid, true.B, false.B)
+      stall := Mux(io.cpu_ready, true.B, false.B)
 
       regWrite := true.B
       memRead := true.B
@@ -143,7 +146,7 @@ class ControlUnit extends Module {
       rs2Imm := true.B
       immBranch := false.B
       aluBranch := false.B
-      stall := Mux(io.valid, true.B, false.B)
+      stall := Mux(io.cpu_wait, false.B, true.B)
 
       regWrite := false.B
       memRead := false.B
@@ -231,7 +234,13 @@ class ControlUnit extends Module {
   io.ALUCtrl := ALUCtrl
   io.format := format
   io.stall := stall
-  io.storeType := func3(1,0)
+
+  switch(func3(1,0)){
+    is("b00".U) {storeType := "b01".U}
+    is("b01".U) {storeType := "b10".U}
+    is("b10".U) {storeType := "b11".U}
+  }
+  io.storeType := Mux(io.memRead | io.memWrite, storeType, "b00".U)
 
 }
 

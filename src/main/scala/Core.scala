@@ -10,11 +10,12 @@ class Core extends Module {
   val io = IO(new Bundle {
     val instr = Input(UInt(32.W))
     val memReadData = Input(UInt(32.W))
-    val valid = Input(Bool())
+    val cpu_wait = Input(Bool())
+    val cpu_ready = Input(Bool())
     val instrAddrs = Output(UInt(9.W))
     val ALUOut = Output(SInt(32.W))
     val memWriteData = Output(UInt(32.W))
-    val memRead = Output(Bool())
+    // val memRead = Output(Bool())
     val memWrite = Output(Bool())
     val storeType = Output(UInt(2.W))
   })
@@ -39,7 +40,8 @@ class Core extends Module {
   controlUnit.io.eq := alu.io.eq
   controlUnit.io.ge := alu.io.ge
   controlUnit.io.geu := alu.io.geu
-  controlUnit.io.valid := io.valid
+  controlUnit.io.cpu_ready := io.cpu_ready
+  controlUnit.io.cpu_wait := io.cpu_wait
 
   registerFile.io.readAddr1 := io.instr(19, 15)
   registerFile.io.readAddr2 := io.instr(24, 20)
@@ -92,10 +94,10 @@ class Core extends Module {
   loadSelector.io.func3 := io.instr(14, 12)
   loadSelector.io.inData := io.memReadData
 
-  io.memRead := controlUnit.io.memRead
+  // io.memRead := controlUnit.io.memRead
   io.memWrite := controlUnit.io.memWrite
   io.ALUOut := alu.io.ALUOut
-  io.instrAddrs := (pc.io.outAddr >> 2.U)(8,0)
+  io.instrAddrs := (pc.io.outAddr >> 2.U) (8, 0)
   io.memWriteData := registerFile.io.readData2.asUInt
   io.storeType := controlUnit.io.storeType
 

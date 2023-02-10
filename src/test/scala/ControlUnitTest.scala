@@ -12,8 +12,7 @@ class ControlUnitTest extends AnyFlatSpec with ChiselScalatestTester {
     test(new ControlUnit) { dut =>
 
 
-      dut.io.instr.poke("b0000000_00011_00000_000_00001_00100111".U)
-      dut.io.eq.poke(false.B)
+      dut.io.instr.poke("b00000000100000000000000010010011".U)
       println("format " + dut.io.format.peek().toString)
       println("ALUCtrl " + dut.io.ALUCtrl.peek().toString)
       println("regWrite " + dut.io.regWrite.peek().toString)
@@ -25,6 +24,7 @@ class ControlUnitTest extends AnyFlatSpec with ChiselScalatestTester {
       println("pcImm " + dut.io.pcImm.peek().toString)
       println("immBranch " + dut.io.immBranch.peek().toString)
       println("aluBranch " + dut.io.aluBranch.peek().toString)
+      println("storeType " + dut.io.storeType.peek().toString)
 
     }
   }
