@@ -11,6 +11,8 @@ os.system(flag+'objdump  K_1.elf -d >  assembly.txt')
 
 assembly = open("assembly.txt", 'r')
 mem = open("InstrInit.mif", 'w')
+verilatorInstr = open("../testbench/verilatorInstr.txt", 'w')
+
 mem.write("DEPTH = 512;\n")
 mem.write("WIDTH = 32;\n")
 mem.write("ADDRESS_RADIX = HEX;\n")
@@ -43,6 +45,7 @@ for i, line in enumerate(assembly):
         continue
     instr = line.strip().split()[1]
     mem.write(hex(i+9)[2:] + " : " + instr + ";\n")
+    verilatorInstr.write(instr + "\n")
 
 
 numberOfInstr = i - 6
