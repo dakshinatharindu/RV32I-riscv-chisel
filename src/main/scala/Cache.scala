@@ -129,7 +129,7 @@ class Cache extends Module {
   io.readBlock := vc.io.outData
   io.outMemRead := cacheControl.io.outMemRead
   io.outMemWrite := cacheControl.io.outMemWrite
-  io.outAddrs := dataSelector.io.out
+  io.outAddrs := selector.io.out
 
 }
 
