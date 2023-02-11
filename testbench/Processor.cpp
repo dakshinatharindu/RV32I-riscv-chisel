@@ -1,10 +1,9 @@
 #include <stdlib.h>
-
 #include <bitset>
 #include <fstream>
+#include <iomanip>
 #include <iostream>
 #include <vector>
-
 #include "VProcessor.h"
 #include "verilated.h"
 
@@ -13,17 +12,27 @@ int main(int argc, char **argv) {
     VProcessor *tb = new VProcessor;
 
     const char *filename = "verilatorInstr.txt";
+    std::fstream assemblyFile;
+    assemblyFile.open("verilatorAssemblyInstr.txt", std::ios::in);
     unsigned int instr;
     bool finished = false;
     int clockCount = 0;
     int cache[64][8] = {0};
     std::vector<unsigned int> instructions;
+    std::vector<std::string> assemblyInstructions;
     unsigned int instrAddrs = 0;
 
     std::ifstream infile(filename, std::fstream::in);
-
     while (infile >> std::hex >> instr) {
         instructions.push_back(instr);
+    }
+
+    if (assemblyFile.is_open()) {
+        std::string assm;
+        while (getline(assemblyFile, assm)) {
+            assemblyInstructions.push_back(assm);
+        }
+        assemblyFile.close();
     }
 
     tb->reset = 0;
@@ -34,17 +43,22 @@ int main(int argc, char **argv) {
     tb->eval();
     while (!Verilated::gotFinish()) {
         clockCount++;
-        std::cout << std::hex << instructions[instrAddrs] << std::endl;
+        std::cout << std::setfill('0') << std::setw(8) << std::hex
+                  << instructions[instrAddrs] << "\t"
+                  << assemblyInstructions[instrAddrs] << std::endl;
         tb->io_instr = instructions[instrAddrs];
         tb->clock = 0;
         tb->eval();
 
         printf("clock count :%d\n", clockCount);
         printf("memAdrrs :%d\n", tb->io_memAdrrs);
-        printf("Next Instr. Addrs. :%d\n", tb->io_instrAddrs);
+        printf("Instr. Addrs. :%d\n", tb->io_instrAddrs);
         printf("MemRead :%d\n", tb->io_memRead);
         printf("MemWrite :%d\n", tb->io_memWrite);
         printf("ALUOUT :%d\n", tb->Processor__DOT__core__DOT__alu__DOT___GEN_11);
+        printf("ALCTRL :%d\n", tb->Processor__DOT__core__DOT__controlUnit_io_ALUCtrl);
+        // printf("ALCTRL :%d\n", tb->);
+        printf("Immediate :%d\n", (int)(std::bitset<32>(tb->Processor__DOT__core__DOT__immGen_io_out)).to_ulong());
         printf("memWriteBlock : ");
         for (int i = 0; i < 8; i++) {
             printf("%d ", tb->io_memWriteBlock[i]);
@@ -2120,7 +2134,7 @@ int main(int argc, char **argv) {
             break;
         }
         instrAddrs = tb->io_instrAddrs;
-        usleep(20);
+        // usleep(20);
     }
     delete tb;
     exit(EXIT_SUCCESS);

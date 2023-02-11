@@ -12,6 +12,7 @@ os.system(flag+'objdump  K_1.elf -d >  assembly.txt')
 assembly = open("assembly.txt", 'r')
 mem = open("InstrInit.mif", 'w')
 verilatorInstr = open("../testbench/verilatorInstr.txt", 'w')
+verilatorAssemblyInstr = open("../testbench/verilatorAssemblyInstr.txt", 'w')
 
 mem.write("DEPTH = 512;\n")
 mem.write("WIDTH = 32;\n")
@@ -57,13 +58,32 @@ verilatorInstr.write("01FF0FB3\n")  # add 31 30 31
 verilatorInstr.write("000FA003\n")  # lw 0 31 0
 verilatorInstr.write("0000006F\n")  # jal 0 0
 
+verilatorAssemblyInstr.write("addi 31 0 2\n")  # addi 31 0 2
+verilatorAssemblyInstr.write("addi 1 0 8\n")  # addi 1 0 8
+verilatorAssemblyInstr.write("addi 31 31 -1\n")  # addi 31 31 -1
+verilatorAssemblyInstr.write("bne 31 0 16\n")  # bne 31 0 16
+verilatorAssemblyInstr.write("addi 30 0 1024\n")  # addi 30 0 1024
+verilatorAssemblyInstr.write("add 30 30 30\n")  # add 30 30 30
+verilatorAssemblyInstr.write("add 31 30 0\n")  # add 31 30 0
+verilatorAssemblyInstr.write("lw 0 31 0\n")  # lw 0 31 0
+verilatorAssemblyInstr.write("add 31 30 31\n")  # add 31 30 31
+verilatorAssemblyInstr.write("lw 0 31 0\n")  # lw 0 31 0
+verilatorAssemblyInstr.write("add 31 30 31\n")  # add 31 30 31
+verilatorAssemblyInstr.write("lw 0 31 0\n")  # lw 0 31 0
+verilatorAssemblyInstr.write("add 31 30 31\n")  # add 31 30 31
+verilatorAssemblyInstr.write("lw 0 31 0\n")  # lw 0 31 0
+verilatorAssemblyInstr.write("add 31 30 31\n")  # add 31 30 31
+verilatorAssemblyInstr.write("lw 0 31 0\n")  # lw 0 31 0
+verilatorAssemblyInstr.write("jal 0 0\n")  # jal 0 0
+
 i = 0
 for i, line in enumerate(assembly):
     if i < 8:
         continue
-    instr = line.strip().split()[1]
-    mem.write(hex(i+9)[2:] + " : " + instr + ";\n")
-    verilatorInstr.write(instr + "\n")
+    instr = line.strip().split()
+    mem.write(hex(i+9)[2:] + " : " + instr[1] + ";\n")
+    verilatorInstr.write(instr[1] + "\n")
+    verilatorAssemblyInstr.write(" ".join(instr[2:]) + "\n")
 
 
 numberOfInstr = i - 6

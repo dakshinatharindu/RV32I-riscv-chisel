@@ -54,3 +54,4 @@ testbench/obj_dir/
 testbench/-
 tool-chain/code
 testbench/verilatorInstr.txt
+testbench/verilatorAssemblyInstr.txt
