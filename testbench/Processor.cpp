@@ -43,7 +43,8 @@ int main(int argc, char **argv) {
     tb->eval();
     while (!Verilated::gotFinish()) {
         clockCount++;
-        std::cout << std::setfill('0') << std::setw(8) << std::hex
+        printf("----------------------------------------------------------\n");
+        std::cout << "\t\t" << std::setfill('0') << std::setw(8) << std::hex
                   << instructions[instrAddrs] << "\t"
                   << assemblyInstructions[instrAddrs] << std::endl;
         tb->io_instr = instructions[instrAddrs];
@@ -51,14 +52,26 @@ int main(int argc, char **argv) {
         tb->eval();
 
         printf("clock count :%d\n", clockCount);
-        printf("memAdrrs :%d\n", tb->io_memAdrrs);
         printf("Instr. Addrs. :%d\n", tb->io_instrAddrs);
-        printf("MemRead :%d\n", tb->io_memRead);
-        printf("MemWrite :%d\n", tb->io_memWrite);
-        printf("ALUOUT :%d\n", tb->Processor__DOT__core__DOT__alu__DOT___GEN_11);
-        printf("ALCTRL :%d\n", tb->Processor__DOT__core__DOT__controlUnit_io_ALUCtrl);
-        // printf("ALCTRL :%d\n", tb->);
+        printf("\n");
+        printf("ALUCTRL :%d\n", tb->Processor__DOT__core__DOT__controlUnit_io_ALUCtrl);
+        printf("ALUOUT/cacheAddrs :%d\n", tb->Processor__DOT__core__DOT__alu__DOT___GEN_11);
+        printf("ALU equal :%d\n", tb->Processor__DOT__core__DOT__alu_io_eq);
+        printf("ALU greaterThanEqual :%d\n", tb->Processor__DOT__core__DOT__alu_io_ge);
+        printf("ALU greaterThanEqualUnsigned :%d\n", tb->Processor__DOT__core__DOT__alu_io_geu);
+        printf("\n");
         printf("Immediate :%d\n", (int)(std::bitset<32>(tb->Processor__DOT__core__DOT__immGen_io_out)).to_ulong());
+        printf("RegWrite Data :%d\n", (int)(std::bitset<32>(tb->Processor__DOT__core__DOT__pcAluMemMux_io_out)).to_ulong());
+        printf("RegRead Data1 :%d\n", (int)(std::bitset<32>(tb->Processor__DOT__core__DOT__registerFile_io_readData1)).to_ulong());
+        printf("RegRead Data2 :%d\n", (int)(std::bitset<32>(tb->Processor__DOT__core__DOT__registerFile_io_readData2)).to_ulong());
+        printf("\n");
+        printf("CacheRead Data :%d\n", (int)(std::bitset<32>(tb->Processor__DOT__cacheCore__DOT__cache_io_cpuReadData)).to_ulong());
+        printf("cacheRead :%d\n", tb->Processor__DOT__core__DOT__controlUnit_io_memRead);
+        printf("cacheWrite :%d\n", tb->Processor__DOT__core__DOT__controlUnit_io_memWrite);
+        printf("\n");
+        printf("mainMemAdrrs :%d\n", tb->io_memAdrrs);
+        printf("mainMemRead :%d\n", tb->io_memRead);
+        printf("mainMemWrite :%d\n", tb->io_memWrite);
         printf("memWriteBlock : ");
         for (int i = 0; i < 8; i++) {
             printf("%d ", tb->io_memWriteBlock[i]);
@@ -2116,6 +2129,7 @@ int main(int argc, char **argv) {
             } else
                 finished = true;
         }
+        printf("\n----------------------------------------------------------\n");
         printf("\n\n");
 
         tb->clock = 1;
@@ -2129,8 +2143,10 @@ int main(int argc, char **argv) {
                 for (int i = 0; i < 8; i++) {
                     printf("%d\t", cache[j][i]);
                 }
-                std::cout << std::endl;
+                std::cout <<std::endl;
+                
             }
+            printf("----------------------------------------------------------\n");
             break;
         }
         instrAddrs = tb->io_instrAddrs;
