@@ -767,18 +767,42 @@ module PcStallMux(
 endmodule
 module LoadSelector(
   input  [2:0]  io_func3,
+  input  [1:0]  io_byteSel,
   input  [31:0] io_inData,
   output [31:0] io_outData
 );
-  wire [7:0] _res_T_1 = io_inData[7:0]; // @[LoadSelector.scala 19:43]
-  wire [15:0] _res_T_3 = io_inData[15:0]; // @[LoadSelector.scala 20:44]
-  wire [31:0] _res_T_7 = {24'h0,io_inData[7:0]}; // @[LoadSelector.scala 22:58]
-  wire [31:0] _res_T_10 = {16'h0,io_inData[15:0]}; // @[LoadSelector.scala 23:59]
-  wire [31:0] _GEN_0 = 3'h5 == io_func3 ? $signed(_res_T_10) : $signed(32'sh0); // @[LoadSelector.scala 18:20 16:24 23:24]
-  wire [31:0] _GEN_1 = 3'h4 == io_func3 ? $signed(_res_T_7) : $signed(_GEN_0); // @[LoadSelector.scala 18:20 22:24]
-  wire [31:0] _GEN_2 = 3'h2 == io_func3 ? $signed(io_inData) : $signed(_GEN_1); // @[LoadSelector.scala 18:20 21:24]
-  wire [31:0] _GEN_3 = 3'h1 == io_func3 ? $signed({{16{_res_T_3[15]}},_res_T_3}) : $signed(_GEN_2); // @[LoadSelector.scala 18:20 20:24]
-  assign io_outData = 3'h0 == io_func3 ? $signed({{24{_res_T_1[7]}},_res_T_1}) : $signed(_GEN_3); // @[LoadSelector.scala 18:20 19:24]
+  wire  _T_1 = 2'h0 == io_byteSel; // @[LoadSelector.scala 21:26]
+  wire [7:0] _res_T_1 = io_inData[7:0]; // @[LoadSelector.scala 22:46]
+  wire  _T_2 = 2'h1 == io_byteSel; // @[LoadSelector.scala 21:26]
+  wire [7:0] _res_T_3 = io_inData[15:8]; // @[LoadSelector.scala 23:47]
+  wire  _T_3 = 2'h2 == io_byteSel; // @[LoadSelector.scala 21:26]
+  wire [7:0] _res_T_5 = io_inData[23:16]; // @[LoadSelector.scala 24:48]
+  wire  _T_4 = 2'h3 == io_byteSel; // @[LoadSelector.scala 21:26]
+  wire [7:0] _res_T_7 = io_inData[31:24]; // @[LoadSelector.scala 25:48]
+  wire [31:0] _GEN_0 = 2'h3 == io_byteSel ? $signed({{24{_res_T_7[7]}},_res_T_7}) : $signed(32'sh0); // @[LoadSelector.scala 17:24 21:26 25:27]
+  wire [31:0] _GEN_1 = 2'h2 == io_byteSel ? $signed({{24{_res_T_5[7]}},_res_T_5}) : $signed(_GEN_0); // @[LoadSelector.scala 21:26 24:27]
+  wire [31:0] _GEN_2 = 2'h1 == io_byteSel ? $signed({{24{_res_T_3[7]}},_res_T_3}) : $signed(_GEN_1); // @[LoadSelector.scala 21:26 23:27]
+  wire [31:0] _GEN_3 = 2'h0 == io_byteSel ? $signed({{24{_res_T_1[7]}},_res_T_1}) : $signed(_GEN_2); // @[LoadSelector.scala 21:26 22:27]
+  wire  _res_T_9 = ~io_byteSel[1]; // @[LoadSelector.scala 30:23]
+  wire [15:0] _res_T_11 = io_inData[15:0]; // @[LoadSelector.scala 31:26]
+  wire [15:0] _res_T_13 = io_inData[31:16]; // @[LoadSelector.scala 32:27]
+  wire [15:0] _res_T_14 = _res_T_9 ? $signed(_res_T_11) : $signed(_res_T_13); // @[LoadSelector.scala 29:17]
+  wire [31:0] _res_T_18 = {24'h0,io_inData[7:0]}; // @[LoadSelector.scala 38:61]
+  wire [31:0] _res_T_21 = {24'h0,io_inData[15:8]}; // @[LoadSelector.scala 39:62]
+  wire [31:0] _res_T_24 = {24'h0,io_inData[23:16]}; // @[LoadSelector.scala 40:63]
+  wire [31:0] _res_T_27 = {24'h0,io_inData[31:24]}; // @[LoadSelector.scala 41:63]
+  wire [31:0] _GEN_4 = _T_4 ? $signed(_res_T_27) : $signed(32'sh0); // @[LoadSelector.scala 17:24 37:26 41:27]
+  wire [31:0] _GEN_5 = _T_3 ? $signed(_res_T_24) : $signed(_GEN_4); // @[LoadSelector.scala 37:26 40:27]
+  wire [31:0] _GEN_6 = _T_2 ? $signed(_res_T_21) : $signed(_GEN_5); // @[LoadSelector.scala 37:26 39:27]
+  wire [31:0] _GEN_7 = _T_1 ? $signed(_res_T_18) : $signed(_GEN_6); // @[LoadSelector.scala 37:26 38:27]
+  wire [31:0] _res_T_32 = {16'h0,io_inData[15:0]}; // @[LoadSelector.scala 47:41]
+  wire [31:0] _res_T_35 = {16'h0,io_inData[31:16]}; // @[LoadSelector.scala 48:42]
+  wire [31:0] _res_T_36 = _res_T_9 ? $signed(_res_T_32) : $signed(_res_T_35); // @[LoadSelector.scala 45:17]
+  wire [31:0] _GEN_8 = 3'h5 == io_func3 ? $signed(_res_T_36) : $signed(32'sh0); // @[LoadSelector.scala 19:20 45:11 17:24]
+  wire [31:0] _GEN_9 = 3'h4 == io_func3 ? $signed(_GEN_7) : $signed(_GEN_8); // @[LoadSelector.scala 19:20]
+  wire [31:0] _GEN_10 = 3'h2 == io_func3 ? $signed(io_inData) : $signed(_GEN_9); // @[LoadSelector.scala 19:20 35:24]
+  wire [31:0] _GEN_11 = 3'h1 == io_func3 ? $signed({{16{_res_T_14[15]}},_res_T_14}) : $signed(_GEN_10); // @[LoadSelector.scala 19:20 29:11]
+  assign io_outData = 3'h0 == io_func3 ? $signed(_GEN_3) : $signed(_GEN_11); // @[LoadSelector.scala 19:20]
 endmodule
 module Core(
   input         clock,
@@ -868,9 +892,10 @@ module Core(
   wire [31:0] pcStall_io_current; // @[Core.scala 35:23]
   wire [31:0] pcStall_io_out; // @[Core.scala 35:23]
   wire [2:0] loadSelector_io_func3; // @[Core.scala 36:28]
+  wire [1:0] loadSelector_io_byteSel; // @[Core.scala 36:28]
   wire [31:0] loadSelector_io_inData; // @[Core.scala 36:28]
   wire [31:0] loadSelector_io_outData; // @[Core.scala 36:28]
-  wire [31:0] _io_instrAddrs_T = {{2'd0}, pc_io_outAddr[31:2]}; // @[Core.scala 98:35]
+  wire [31:0] _io_instrAddrs_T = {{2'd0}, pc_io_outAddr[31:2]}; // @[Core.scala 99:35]
   ControlUnit controlUnit ( // @[Core.scala 22:27]
     .io_instr(controlUnit_io_instr),
     .io_eq(controlUnit_io_eq),
@@ -975,15 +1000,16 @@ module Core(
   );
   LoadSelector loadSelector ( // @[Core.scala 36:28]
     .io_func3(loadSelector_io_func3),
+    .io_byteSel(loadSelector_io_byteSel),
     .io_inData(loadSelector_io_inData),
     .io_outData(loadSelector_io_outData)
   );
-  assign io_instrAddrs = _io_instrAddrs_T[8:0]; // @[Core.scala 98:42]
-  assign io_ALUOut = alu_io_ALUOut; // @[Core.scala 97:13]
-  assign io_memWriteData = registerFile_io_readData2; // @[Core.scala 99:48]
-  assign io_memRead = controlUnit_io_memRead; // @[Core.scala 95:14]
-  assign io_memWrite = controlUnit_io_memWrite; // @[Core.scala 96:15]
-  assign io_storeType = controlUnit_io_storeType; // @[Core.scala 100:16]
+  assign io_instrAddrs = _io_instrAddrs_T[8:0]; // @[Core.scala 99:42]
+  assign io_ALUOut = alu_io_ALUOut; // @[Core.scala 98:13]
+  assign io_memWriteData = registerFile_io_readData2; // @[Core.scala 100:48]
+  assign io_memRead = controlUnit_io_memRead; // @[Core.scala 96:14]
+  assign io_memWrite = controlUnit_io_memWrite; // @[Core.scala 97:15]
+  assign io_storeType = controlUnit_io_storeType; // @[Core.scala 101:16]
   assign controlUnit_io_instr = io_instr; // @[Core.scala 38:24]
   assign controlUnit_io_eq = alu_io_eq; // @[Core.scala 39:21]
   assign controlUnit_io_ge = alu_io_ge; // @[Core.scala 40:21]
@@ -1029,7 +1055,8 @@ module Core(
   assign pcStall_io_next = aluBranchMux_io_out; // @[Core.scala 90:19]
   assign pcStall_io_current = pc_io_outAddr; // @[Core.scala 89:22]
   assign loadSelector_io_func3 = io_instr[14:12]; // @[Core.scala 92:36]
-  assign loadSelector_io_inData = io_memReadData; // @[Core.scala 93:26]
+  assign loadSelector_io_byteSel = alu_io_ALUOut[1:0]; // @[Core.scala 93:43]
+  assign loadSelector_io_inData = io_memReadData; // @[Core.scala 94:26]
 endmodule
 module L1(
   input          clock,
@@ -2463,23 +2490,23 @@ module L1(
   wire [4:0] _GEN_126 = 6'h3e == cacheLine ? cache_62_tag : _GEN_125; // @[Cache.scala 40:{39,39}]
   wire [4:0] _GEN_127 = 6'h3f == cacheLine ? cache_63_tag : _GEN_126; // @[Cache.scala 40:{39,39}]
   wire  hit = _GEN_63 & tag == _GEN_127; // @[Cache.scala 40:32]
-  wire  _GEN_3972 = 6'h0 == cacheLine; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_3973 = 3'h1 == io_addrs[4:2]; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_3976 = 6'h0 == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_3977 = 3'h1 == io_addrs[4:2]; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_129 = 6'h0 == cacheLine & 3'h1 == io_addrs[4:2] ? cache_0_line_1 : cache_0_line_0; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_3975 = 3'h2 == io_addrs[4:2]; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_3979 = 3'h2 == io_addrs[4:2]; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_130 = 6'h0 == cacheLine & 3'h2 == io_addrs[4:2] ? cache_0_line_2 : _GEN_129; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_3977 = 3'h3 == io_addrs[4:2]; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_3981 = 3'h3 == io_addrs[4:2]; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_131 = 6'h0 == cacheLine & 3'h3 == io_addrs[4:2] ? cache_0_line_3 : _GEN_130; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_3979 = 3'h4 == io_addrs[4:2]; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_3983 = 3'h4 == io_addrs[4:2]; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_132 = 6'h0 == cacheLine & 3'h4 == io_addrs[4:2] ? cache_0_line_4 : _GEN_131; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_3981 = 3'h5 == io_addrs[4:2]; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_3985 = 3'h5 == io_addrs[4:2]; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_133 = 6'h0 == cacheLine & 3'h5 == io_addrs[4:2] ? cache_0_line_5 : _GEN_132; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_3983 = 3'h6 == io_addrs[4:2]; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_3987 = 3'h6 == io_addrs[4:2]; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_134 = 6'h0 == cacheLine & 3'h6 == io_addrs[4:2] ? cache_0_line_6 : _GEN_133; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_3985 = 3'h7 == io_addrs[4:2]; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_3989 = 3'h7 == io_addrs[4:2]; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_135 = 6'h0 == cacheLine & 3'h7 == io_addrs[4:2] ? cache_0_line_7 : _GEN_134; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_3986 = 6'h1 == cacheLine; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_3987 = 3'h0 == io_addrs[4:2]; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_3990 = 6'h1 == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_3991 = 3'h0 == io_addrs[4:2]; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_136 = 6'h1 == cacheLine & 3'h0 == io_addrs[4:2] ? cache_1_line_0 : _GEN_135; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_137 = 6'h1 == cacheLine & 3'h1 == io_addrs[4:2] ? cache_1_line_1 : _GEN_136; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_138 = 6'h1 == cacheLine & 3'h2 == io_addrs[4:2] ? cache_1_line_2 : _GEN_137; // @[Cache.scala 41:{18,18}]
@@ -2488,7 +2515,7 @@ module L1(
   wire [31:0] _GEN_141 = 6'h1 == cacheLine & 3'h5 == io_addrs[4:2] ? cache_1_line_5 : _GEN_140; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_142 = 6'h1 == cacheLine & 3'h6 == io_addrs[4:2] ? cache_1_line_6 : _GEN_141; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_143 = 6'h1 == cacheLine & 3'h7 == io_addrs[4:2] ? cache_1_line_7 : _GEN_142; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4002 = 6'h2 == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4006 = 6'h2 == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_144 = 6'h2 == cacheLine & 3'h0 == io_addrs[4:2] ? cache_2_line_0 : _GEN_143; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_145 = 6'h2 == cacheLine & 3'h1 == io_addrs[4:2] ? cache_2_line_1 : _GEN_144; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_146 = 6'h2 == cacheLine & 3'h2 == io_addrs[4:2] ? cache_2_line_2 : _GEN_145; // @[Cache.scala 41:{18,18}]
@@ -2497,7 +2524,7 @@ module L1(
   wire [31:0] _GEN_149 = 6'h2 == cacheLine & 3'h5 == io_addrs[4:2] ? cache_2_line_5 : _GEN_148; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_150 = 6'h2 == cacheLine & 3'h6 == io_addrs[4:2] ? cache_2_line_6 : _GEN_149; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_151 = 6'h2 == cacheLine & 3'h7 == io_addrs[4:2] ? cache_2_line_7 : _GEN_150; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4018 = 6'h3 == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4022 = 6'h3 == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_152 = 6'h3 == cacheLine & 3'h0 == io_addrs[4:2] ? cache_3_line_0 : _GEN_151; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_153 = 6'h3 == cacheLine & 3'h1 == io_addrs[4:2] ? cache_3_line_1 : _GEN_152; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_154 = 6'h3 == cacheLine & 3'h2 == io_addrs[4:2] ? cache_3_line_2 : _GEN_153; // @[Cache.scala 41:{18,18}]
@@ -2506,7 +2533,7 @@ module L1(
   wire [31:0] _GEN_157 = 6'h3 == cacheLine & 3'h5 == io_addrs[4:2] ? cache_3_line_5 : _GEN_156; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_158 = 6'h3 == cacheLine & 3'h6 == io_addrs[4:2] ? cache_3_line_6 : _GEN_157; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_159 = 6'h3 == cacheLine & 3'h7 == io_addrs[4:2] ? cache_3_line_7 : _GEN_158; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4034 = 6'h4 == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4038 = 6'h4 == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_160 = 6'h4 == cacheLine & 3'h0 == io_addrs[4:2] ? cache_4_line_0 : _GEN_159; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_161 = 6'h4 == cacheLine & 3'h1 == io_addrs[4:2] ? cache_4_line_1 : _GEN_160; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_162 = 6'h4 == cacheLine & 3'h2 == io_addrs[4:2] ? cache_4_line_2 : _GEN_161; // @[Cache.scala 41:{18,18}]
@@ -2515,7 +2542,7 @@ module L1(
   wire [31:0] _GEN_165 = 6'h4 == cacheLine & 3'h5 == io_addrs[4:2] ? cache_4_line_5 : _GEN_164; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_166 = 6'h4 == cacheLine & 3'h6 == io_addrs[4:2] ? cache_4_line_6 : _GEN_165; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_167 = 6'h4 == cacheLine & 3'h7 == io_addrs[4:2] ? cache_4_line_7 : _GEN_166; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4050 = 6'h5 == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4054 = 6'h5 == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_168 = 6'h5 == cacheLine & 3'h0 == io_addrs[4:2] ? cache_5_line_0 : _GEN_167; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_169 = 6'h5 == cacheLine & 3'h1 == io_addrs[4:2] ? cache_5_line_1 : _GEN_168; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_170 = 6'h5 == cacheLine & 3'h2 == io_addrs[4:2] ? cache_5_line_2 : _GEN_169; // @[Cache.scala 41:{18,18}]
@@ -2524,7 +2551,7 @@ module L1(
   wire [31:0] _GEN_173 = 6'h5 == cacheLine & 3'h5 == io_addrs[4:2] ? cache_5_line_5 : _GEN_172; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_174 = 6'h5 == cacheLine & 3'h6 == io_addrs[4:2] ? cache_5_line_6 : _GEN_173; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_175 = 6'h5 == cacheLine & 3'h7 == io_addrs[4:2] ? cache_5_line_7 : _GEN_174; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4066 = 6'h6 == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4070 = 6'h6 == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_176 = 6'h6 == cacheLine & 3'h0 == io_addrs[4:2] ? cache_6_line_0 : _GEN_175; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_177 = 6'h6 == cacheLine & 3'h1 == io_addrs[4:2] ? cache_6_line_1 : _GEN_176; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_178 = 6'h6 == cacheLine & 3'h2 == io_addrs[4:2] ? cache_6_line_2 : _GEN_177; // @[Cache.scala 41:{18,18}]
@@ -2533,7 +2560,7 @@ module L1(
   wire [31:0] _GEN_181 = 6'h6 == cacheLine & 3'h5 == io_addrs[4:2] ? cache_6_line_5 : _GEN_180; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_182 = 6'h6 == cacheLine & 3'h6 == io_addrs[4:2] ? cache_6_line_6 : _GEN_181; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_183 = 6'h6 == cacheLine & 3'h7 == io_addrs[4:2] ? cache_6_line_7 : _GEN_182; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4082 = 6'h7 == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4086 = 6'h7 == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_184 = 6'h7 == cacheLine & 3'h0 == io_addrs[4:2] ? cache_7_line_0 : _GEN_183; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_185 = 6'h7 == cacheLine & 3'h1 == io_addrs[4:2] ? cache_7_line_1 : _GEN_184; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_186 = 6'h7 == cacheLine & 3'h2 == io_addrs[4:2] ? cache_7_line_2 : _GEN_185; // @[Cache.scala 41:{18,18}]
@@ -2542,7 +2569,7 @@ module L1(
   wire [31:0] _GEN_189 = 6'h7 == cacheLine & 3'h5 == io_addrs[4:2] ? cache_7_line_5 : _GEN_188; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_190 = 6'h7 == cacheLine & 3'h6 == io_addrs[4:2] ? cache_7_line_6 : _GEN_189; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_191 = 6'h7 == cacheLine & 3'h7 == io_addrs[4:2] ? cache_7_line_7 : _GEN_190; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4098 = 6'h8 == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4102 = 6'h8 == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_192 = 6'h8 == cacheLine & 3'h0 == io_addrs[4:2] ? cache_8_line_0 : _GEN_191; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_193 = 6'h8 == cacheLine & 3'h1 == io_addrs[4:2] ? cache_8_line_1 : _GEN_192; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_194 = 6'h8 == cacheLine & 3'h2 == io_addrs[4:2] ? cache_8_line_2 : _GEN_193; // @[Cache.scala 41:{18,18}]
@@ -2551,7 +2578,7 @@ module L1(
   wire [31:0] _GEN_197 = 6'h8 == cacheLine & 3'h5 == io_addrs[4:2] ? cache_8_line_5 : _GEN_196; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_198 = 6'h8 == cacheLine & 3'h6 == io_addrs[4:2] ? cache_8_line_6 : _GEN_197; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_199 = 6'h8 == cacheLine & 3'h7 == io_addrs[4:2] ? cache_8_line_7 : _GEN_198; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4114 = 6'h9 == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4118 = 6'h9 == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_200 = 6'h9 == cacheLine & 3'h0 == io_addrs[4:2] ? cache_9_line_0 : _GEN_199; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_201 = 6'h9 == cacheLine & 3'h1 == io_addrs[4:2] ? cache_9_line_1 : _GEN_200; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_202 = 6'h9 == cacheLine & 3'h2 == io_addrs[4:2] ? cache_9_line_2 : _GEN_201; // @[Cache.scala 41:{18,18}]
@@ -2560,7 +2587,7 @@ module L1(
   wire [31:0] _GEN_205 = 6'h9 == cacheLine & 3'h5 == io_addrs[4:2] ? cache_9_line_5 : _GEN_204; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_206 = 6'h9 == cacheLine & 3'h6 == io_addrs[4:2] ? cache_9_line_6 : _GEN_205; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_207 = 6'h9 == cacheLine & 3'h7 == io_addrs[4:2] ? cache_9_line_7 : _GEN_206; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4130 = 6'ha == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4134 = 6'ha == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_208 = 6'ha == cacheLine & 3'h0 == io_addrs[4:2] ? cache_10_line_0 : _GEN_207; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_209 = 6'ha == cacheLine & 3'h1 == io_addrs[4:2] ? cache_10_line_1 : _GEN_208; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_210 = 6'ha == cacheLine & 3'h2 == io_addrs[4:2] ? cache_10_line_2 : _GEN_209; // @[Cache.scala 41:{18,18}]
@@ -2569,7 +2596,7 @@ module L1(
   wire [31:0] _GEN_213 = 6'ha == cacheLine & 3'h5 == io_addrs[4:2] ? cache_10_line_5 : _GEN_212; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_214 = 6'ha == cacheLine & 3'h6 == io_addrs[4:2] ? cache_10_line_6 : _GEN_213; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_215 = 6'ha == cacheLine & 3'h7 == io_addrs[4:2] ? cache_10_line_7 : _GEN_214; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4146 = 6'hb == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4150 = 6'hb == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_216 = 6'hb == cacheLine & 3'h0 == io_addrs[4:2] ? cache_11_line_0 : _GEN_215; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_217 = 6'hb == cacheLine & 3'h1 == io_addrs[4:2] ? cache_11_line_1 : _GEN_216; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_218 = 6'hb == cacheLine & 3'h2 == io_addrs[4:2] ? cache_11_line_2 : _GEN_217; // @[Cache.scala 41:{18,18}]
@@ -2578,7 +2605,7 @@ module L1(
   wire [31:0] _GEN_221 = 6'hb == cacheLine & 3'h5 == io_addrs[4:2] ? cache_11_line_5 : _GEN_220; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_222 = 6'hb == cacheLine & 3'h6 == io_addrs[4:2] ? cache_11_line_6 : _GEN_221; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_223 = 6'hb == cacheLine & 3'h7 == io_addrs[4:2] ? cache_11_line_7 : _GEN_222; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4162 = 6'hc == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4166 = 6'hc == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_224 = 6'hc == cacheLine & 3'h0 == io_addrs[4:2] ? cache_12_line_0 : _GEN_223; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_225 = 6'hc == cacheLine & 3'h1 == io_addrs[4:2] ? cache_12_line_1 : _GEN_224; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_226 = 6'hc == cacheLine & 3'h2 == io_addrs[4:2] ? cache_12_line_2 : _GEN_225; // @[Cache.scala 41:{18,18}]
@@ -2587,7 +2614,7 @@ module L1(
   wire [31:0] _GEN_229 = 6'hc == cacheLine & 3'h5 == io_addrs[4:2] ? cache_12_line_5 : _GEN_228; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_230 = 6'hc == cacheLine & 3'h6 == io_addrs[4:2] ? cache_12_line_6 : _GEN_229; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_231 = 6'hc == cacheLine & 3'h7 == io_addrs[4:2] ? cache_12_line_7 : _GEN_230; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4178 = 6'hd == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4182 = 6'hd == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_232 = 6'hd == cacheLine & 3'h0 == io_addrs[4:2] ? cache_13_line_0 : _GEN_231; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_233 = 6'hd == cacheLine & 3'h1 == io_addrs[4:2] ? cache_13_line_1 : _GEN_232; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_234 = 6'hd == cacheLine & 3'h2 == io_addrs[4:2] ? cache_13_line_2 : _GEN_233; // @[Cache.scala 41:{18,18}]
@@ -2596,7 +2623,7 @@ module L1(
   wire [31:0] _GEN_237 = 6'hd == cacheLine & 3'h5 == io_addrs[4:2] ? cache_13_line_5 : _GEN_236; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_238 = 6'hd == cacheLine & 3'h6 == io_addrs[4:2] ? cache_13_line_6 : _GEN_237; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_239 = 6'hd == cacheLine & 3'h7 == io_addrs[4:2] ? cache_13_line_7 : _GEN_238; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4194 = 6'he == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4198 = 6'he == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_240 = 6'he == cacheLine & 3'h0 == io_addrs[4:2] ? cache_14_line_0 : _GEN_239; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_241 = 6'he == cacheLine & 3'h1 == io_addrs[4:2] ? cache_14_line_1 : _GEN_240; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_242 = 6'he == cacheLine & 3'h2 == io_addrs[4:2] ? cache_14_line_2 : _GEN_241; // @[Cache.scala 41:{18,18}]
@@ -2605,7 +2632,7 @@ module L1(
   wire [31:0] _GEN_245 = 6'he == cacheLine & 3'h5 == io_addrs[4:2] ? cache_14_line_5 : _GEN_244; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_246 = 6'he == cacheLine & 3'h6 == io_addrs[4:2] ? cache_14_line_6 : _GEN_245; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_247 = 6'he == cacheLine & 3'h7 == io_addrs[4:2] ? cache_14_line_7 : _GEN_246; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4210 = 6'hf == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4214 = 6'hf == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_248 = 6'hf == cacheLine & 3'h0 == io_addrs[4:2] ? cache_15_line_0 : _GEN_247; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_249 = 6'hf == cacheLine & 3'h1 == io_addrs[4:2] ? cache_15_line_1 : _GEN_248; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_250 = 6'hf == cacheLine & 3'h2 == io_addrs[4:2] ? cache_15_line_2 : _GEN_249; // @[Cache.scala 41:{18,18}]
@@ -2614,7 +2641,7 @@ module L1(
   wire [31:0] _GEN_253 = 6'hf == cacheLine & 3'h5 == io_addrs[4:2] ? cache_15_line_5 : _GEN_252; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_254 = 6'hf == cacheLine & 3'h6 == io_addrs[4:2] ? cache_15_line_6 : _GEN_253; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_255 = 6'hf == cacheLine & 3'h7 == io_addrs[4:2] ? cache_15_line_7 : _GEN_254; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4226 = 6'h10 == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4230 = 6'h10 == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_256 = 6'h10 == cacheLine & 3'h0 == io_addrs[4:2] ? cache_16_line_0 : _GEN_255; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_257 = 6'h10 == cacheLine & 3'h1 == io_addrs[4:2] ? cache_16_line_1 : _GEN_256; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_258 = 6'h10 == cacheLine & 3'h2 == io_addrs[4:2] ? cache_16_line_2 : _GEN_257; // @[Cache.scala 41:{18,18}]
@@ -2623,7 +2650,7 @@ module L1(
   wire [31:0] _GEN_261 = 6'h10 == cacheLine & 3'h5 == io_addrs[4:2] ? cache_16_line_5 : _GEN_260; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_262 = 6'h10 == cacheLine & 3'h6 == io_addrs[4:2] ? cache_16_line_6 : _GEN_261; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_263 = 6'h10 == cacheLine & 3'h7 == io_addrs[4:2] ? cache_16_line_7 : _GEN_262; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4242 = 6'h11 == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4246 = 6'h11 == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_264 = 6'h11 == cacheLine & 3'h0 == io_addrs[4:2] ? cache_17_line_0 : _GEN_263; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_265 = 6'h11 == cacheLine & 3'h1 == io_addrs[4:2] ? cache_17_line_1 : _GEN_264; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_266 = 6'h11 == cacheLine & 3'h2 == io_addrs[4:2] ? cache_17_line_2 : _GEN_265; // @[Cache.scala 41:{18,18}]
@@ -2632,7 +2659,7 @@ module L1(
   wire [31:0] _GEN_269 = 6'h11 == cacheLine & 3'h5 == io_addrs[4:2] ? cache_17_line_5 : _GEN_268; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_270 = 6'h11 == cacheLine & 3'h6 == io_addrs[4:2] ? cache_17_line_6 : _GEN_269; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_271 = 6'h11 == cacheLine & 3'h7 == io_addrs[4:2] ? cache_17_line_7 : _GEN_270; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4258 = 6'h12 == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4262 = 6'h12 == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_272 = 6'h12 == cacheLine & 3'h0 == io_addrs[4:2] ? cache_18_line_0 : _GEN_271; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_273 = 6'h12 == cacheLine & 3'h1 == io_addrs[4:2] ? cache_18_line_1 : _GEN_272; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_274 = 6'h12 == cacheLine & 3'h2 == io_addrs[4:2] ? cache_18_line_2 : _GEN_273; // @[Cache.scala 41:{18,18}]
@@ -2641,7 +2668,7 @@ module L1(
   wire [31:0] _GEN_277 = 6'h12 == cacheLine & 3'h5 == io_addrs[4:2] ? cache_18_line_5 : _GEN_276; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_278 = 6'h12 == cacheLine & 3'h6 == io_addrs[4:2] ? cache_18_line_6 : _GEN_277; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_279 = 6'h12 == cacheLine & 3'h7 == io_addrs[4:2] ? cache_18_line_7 : _GEN_278; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4274 = 6'h13 == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4278 = 6'h13 == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_280 = 6'h13 == cacheLine & 3'h0 == io_addrs[4:2] ? cache_19_line_0 : _GEN_279; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_281 = 6'h13 == cacheLine & 3'h1 == io_addrs[4:2] ? cache_19_line_1 : _GEN_280; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_282 = 6'h13 == cacheLine & 3'h2 == io_addrs[4:2] ? cache_19_line_2 : _GEN_281; // @[Cache.scala 41:{18,18}]
@@ -2650,7 +2677,7 @@ module L1(
   wire [31:0] _GEN_285 = 6'h13 == cacheLine & 3'h5 == io_addrs[4:2] ? cache_19_line_5 : _GEN_284; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_286 = 6'h13 == cacheLine & 3'h6 == io_addrs[4:2] ? cache_19_line_6 : _GEN_285; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_287 = 6'h13 == cacheLine & 3'h7 == io_addrs[4:2] ? cache_19_line_7 : _GEN_286; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4290 = 6'h14 == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4294 = 6'h14 == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_288 = 6'h14 == cacheLine & 3'h0 == io_addrs[4:2] ? cache_20_line_0 : _GEN_287; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_289 = 6'h14 == cacheLine & 3'h1 == io_addrs[4:2] ? cache_20_line_1 : _GEN_288; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_290 = 6'h14 == cacheLine & 3'h2 == io_addrs[4:2] ? cache_20_line_2 : _GEN_289; // @[Cache.scala 41:{18,18}]
@@ -2659,7 +2686,7 @@ module L1(
   wire [31:0] _GEN_293 = 6'h14 == cacheLine & 3'h5 == io_addrs[4:2] ? cache_20_line_5 : _GEN_292; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_294 = 6'h14 == cacheLine & 3'h6 == io_addrs[4:2] ? cache_20_line_6 : _GEN_293; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_295 = 6'h14 == cacheLine & 3'h7 == io_addrs[4:2] ? cache_20_line_7 : _GEN_294; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4306 = 6'h15 == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4310 = 6'h15 == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_296 = 6'h15 == cacheLine & 3'h0 == io_addrs[4:2] ? cache_21_line_0 : _GEN_295; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_297 = 6'h15 == cacheLine & 3'h1 == io_addrs[4:2] ? cache_21_line_1 : _GEN_296; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_298 = 6'h15 == cacheLine & 3'h2 == io_addrs[4:2] ? cache_21_line_2 : _GEN_297; // @[Cache.scala 41:{18,18}]
@@ -2668,7 +2695,7 @@ module L1(
   wire [31:0] _GEN_301 = 6'h15 == cacheLine & 3'h5 == io_addrs[4:2] ? cache_21_line_5 : _GEN_300; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_302 = 6'h15 == cacheLine & 3'h6 == io_addrs[4:2] ? cache_21_line_6 : _GEN_301; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_303 = 6'h15 == cacheLine & 3'h7 == io_addrs[4:2] ? cache_21_line_7 : _GEN_302; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4322 = 6'h16 == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4326 = 6'h16 == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_304 = 6'h16 == cacheLine & 3'h0 == io_addrs[4:2] ? cache_22_line_0 : _GEN_303; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_305 = 6'h16 == cacheLine & 3'h1 == io_addrs[4:2] ? cache_22_line_1 : _GEN_304; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_306 = 6'h16 == cacheLine & 3'h2 == io_addrs[4:2] ? cache_22_line_2 : _GEN_305; // @[Cache.scala 41:{18,18}]
@@ -2677,7 +2704,7 @@ module L1(
   wire [31:0] _GEN_309 = 6'h16 == cacheLine & 3'h5 == io_addrs[4:2] ? cache_22_line_5 : _GEN_308; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_310 = 6'h16 == cacheLine & 3'h6 == io_addrs[4:2] ? cache_22_line_6 : _GEN_309; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_311 = 6'h16 == cacheLine & 3'h7 == io_addrs[4:2] ? cache_22_line_7 : _GEN_310; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4338 = 6'h17 == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4342 = 6'h17 == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_312 = 6'h17 == cacheLine & 3'h0 == io_addrs[4:2] ? cache_23_line_0 : _GEN_311; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_313 = 6'h17 == cacheLine & 3'h1 == io_addrs[4:2] ? cache_23_line_1 : _GEN_312; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_314 = 6'h17 == cacheLine & 3'h2 == io_addrs[4:2] ? cache_23_line_2 : _GEN_313; // @[Cache.scala 41:{18,18}]
@@ -2686,7 +2713,7 @@ module L1(
   wire [31:0] _GEN_317 = 6'h17 == cacheLine & 3'h5 == io_addrs[4:2] ? cache_23_line_5 : _GEN_316; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_318 = 6'h17 == cacheLine & 3'h6 == io_addrs[4:2] ? cache_23_line_6 : _GEN_317; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_319 = 6'h17 == cacheLine & 3'h7 == io_addrs[4:2] ? cache_23_line_7 : _GEN_318; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4354 = 6'h18 == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4358 = 6'h18 == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_320 = 6'h18 == cacheLine & 3'h0 == io_addrs[4:2] ? cache_24_line_0 : _GEN_319; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_321 = 6'h18 == cacheLine & 3'h1 == io_addrs[4:2] ? cache_24_line_1 : _GEN_320; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_322 = 6'h18 == cacheLine & 3'h2 == io_addrs[4:2] ? cache_24_line_2 : _GEN_321; // @[Cache.scala 41:{18,18}]
@@ -2695,7 +2722,7 @@ module L1(
   wire [31:0] _GEN_325 = 6'h18 == cacheLine & 3'h5 == io_addrs[4:2] ? cache_24_line_5 : _GEN_324; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_326 = 6'h18 == cacheLine & 3'h6 == io_addrs[4:2] ? cache_24_line_6 : _GEN_325; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_327 = 6'h18 == cacheLine & 3'h7 == io_addrs[4:2] ? cache_24_line_7 : _GEN_326; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4370 = 6'h19 == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4374 = 6'h19 == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_328 = 6'h19 == cacheLine & 3'h0 == io_addrs[4:2] ? cache_25_line_0 : _GEN_327; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_329 = 6'h19 == cacheLine & 3'h1 == io_addrs[4:2] ? cache_25_line_1 : _GEN_328; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_330 = 6'h19 == cacheLine & 3'h2 == io_addrs[4:2] ? cache_25_line_2 : _GEN_329; // @[Cache.scala 41:{18,18}]
@@ -2704,7 +2731,7 @@ module L1(
   wire [31:0] _GEN_333 = 6'h19 == cacheLine & 3'h5 == io_addrs[4:2] ? cache_25_line_5 : _GEN_332; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_334 = 6'h19 == cacheLine & 3'h6 == io_addrs[4:2] ? cache_25_line_6 : _GEN_333; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_335 = 6'h19 == cacheLine & 3'h7 == io_addrs[4:2] ? cache_25_line_7 : _GEN_334; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4386 = 6'h1a == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4390 = 6'h1a == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_336 = 6'h1a == cacheLine & 3'h0 == io_addrs[4:2] ? cache_26_line_0 : _GEN_335; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_337 = 6'h1a == cacheLine & 3'h1 == io_addrs[4:2] ? cache_26_line_1 : _GEN_336; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_338 = 6'h1a == cacheLine & 3'h2 == io_addrs[4:2] ? cache_26_line_2 : _GEN_337; // @[Cache.scala 41:{18,18}]
@@ -2713,7 +2740,7 @@ module L1(
   wire [31:0] _GEN_341 = 6'h1a == cacheLine & 3'h5 == io_addrs[4:2] ? cache_26_line_5 : _GEN_340; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_342 = 6'h1a == cacheLine & 3'h6 == io_addrs[4:2] ? cache_26_line_6 : _GEN_341; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_343 = 6'h1a == cacheLine & 3'h7 == io_addrs[4:2] ? cache_26_line_7 : _GEN_342; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4402 = 6'h1b == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4406 = 6'h1b == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_344 = 6'h1b == cacheLine & 3'h0 == io_addrs[4:2] ? cache_27_line_0 : _GEN_343; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_345 = 6'h1b == cacheLine & 3'h1 == io_addrs[4:2] ? cache_27_line_1 : _GEN_344; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_346 = 6'h1b == cacheLine & 3'h2 == io_addrs[4:2] ? cache_27_line_2 : _GEN_345; // @[Cache.scala 41:{18,18}]
@@ -2722,7 +2749,7 @@ module L1(
   wire [31:0] _GEN_349 = 6'h1b == cacheLine & 3'h5 == io_addrs[4:2] ? cache_27_line_5 : _GEN_348; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_350 = 6'h1b == cacheLine & 3'h6 == io_addrs[4:2] ? cache_27_line_6 : _GEN_349; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_351 = 6'h1b == cacheLine & 3'h7 == io_addrs[4:2] ? cache_27_line_7 : _GEN_350; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4418 = 6'h1c == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4422 = 6'h1c == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_352 = 6'h1c == cacheLine & 3'h0 == io_addrs[4:2] ? cache_28_line_0 : _GEN_351; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_353 = 6'h1c == cacheLine & 3'h1 == io_addrs[4:2] ? cache_28_line_1 : _GEN_352; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_354 = 6'h1c == cacheLine & 3'h2 == io_addrs[4:2] ? cache_28_line_2 : _GEN_353; // @[Cache.scala 41:{18,18}]
@@ -2731,7 +2758,7 @@ module L1(
   wire [31:0] _GEN_357 = 6'h1c == cacheLine & 3'h5 == io_addrs[4:2] ? cache_28_line_5 : _GEN_356; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_358 = 6'h1c == cacheLine & 3'h6 == io_addrs[4:2] ? cache_28_line_6 : _GEN_357; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_359 = 6'h1c == cacheLine & 3'h7 == io_addrs[4:2] ? cache_28_line_7 : _GEN_358; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4434 = 6'h1d == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4438 = 6'h1d == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_360 = 6'h1d == cacheLine & 3'h0 == io_addrs[4:2] ? cache_29_line_0 : _GEN_359; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_361 = 6'h1d == cacheLine & 3'h1 == io_addrs[4:2] ? cache_29_line_1 : _GEN_360; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_362 = 6'h1d == cacheLine & 3'h2 == io_addrs[4:2] ? cache_29_line_2 : _GEN_361; // @[Cache.scala 41:{18,18}]
@@ -2740,7 +2767,7 @@ module L1(
   wire [31:0] _GEN_365 = 6'h1d == cacheLine & 3'h5 == io_addrs[4:2] ? cache_29_line_5 : _GEN_364; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_366 = 6'h1d == cacheLine & 3'h6 == io_addrs[4:2] ? cache_29_line_6 : _GEN_365; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_367 = 6'h1d == cacheLine & 3'h7 == io_addrs[4:2] ? cache_29_line_7 : _GEN_366; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4450 = 6'h1e == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4454 = 6'h1e == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_368 = 6'h1e == cacheLine & 3'h0 == io_addrs[4:2] ? cache_30_line_0 : _GEN_367; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_369 = 6'h1e == cacheLine & 3'h1 == io_addrs[4:2] ? cache_30_line_1 : _GEN_368; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_370 = 6'h1e == cacheLine & 3'h2 == io_addrs[4:2] ? cache_30_line_2 : _GEN_369; // @[Cache.scala 41:{18,18}]
@@ -2749,7 +2776,7 @@ module L1(
   wire [31:0] _GEN_373 = 6'h1e == cacheLine & 3'h5 == io_addrs[4:2] ? cache_30_line_5 : _GEN_372; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_374 = 6'h1e == cacheLine & 3'h6 == io_addrs[4:2] ? cache_30_line_6 : _GEN_373; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_375 = 6'h1e == cacheLine & 3'h7 == io_addrs[4:2] ? cache_30_line_7 : _GEN_374; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4466 = 6'h1f == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4470 = 6'h1f == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_376 = 6'h1f == cacheLine & 3'h0 == io_addrs[4:2] ? cache_31_line_0 : _GEN_375; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_377 = 6'h1f == cacheLine & 3'h1 == io_addrs[4:2] ? cache_31_line_1 : _GEN_376; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_378 = 6'h1f == cacheLine & 3'h2 == io_addrs[4:2] ? cache_31_line_2 : _GEN_377; // @[Cache.scala 41:{18,18}]
@@ -2758,7 +2785,7 @@ module L1(
   wire [31:0] _GEN_381 = 6'h1f == cacheLine & 3'h5 == io_addrs[4:2] ? cache_31_line_5 : _GEN_380; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_382 = 6'h1f == cacheLine & 3'h6 == io_addrs[4:2] ? cache_31_line_6 : _GEN_381; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_383 = 6'h1f == cacheLine & 3'h7 == io_addrs[4:2] ? cache_31_line_7 : _GEN_382; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4482 = 6'h20 == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4486 = 6'h20 == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_384 = 6'h20 == cacheLine & 3'h0 == io_addrs[4:2] ? cache_32_line_0 : _GEN_383; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_385 = 6'h20 == cacheLine & 3'h1 == io_addrs[4:2] ? cache_32_line_1 : _GEN_384; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_386 = 6'h20 == cacheLine & 3'h2 == io_addrs[4:2] ? cache_32_line_2 : _GEN_385; // @[Cache.scala 41:{18,18}]
@@ -2767,7 +2794,7 @@ module L1(
   wire [31:0] _GEN_389 = 6'h20 == cacheLine & 3'h5 == io_addrs[4:2] ? cache_32_line_5 : _GEN_388; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_390 = 6'h20 == cacheLine & 3'h6 == io_addrs[4:2] ? cache_32_line_6 : _GEN_389; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_391 = 6'h20 == cacheLine & 3'h7 == io_addrs[4:2] ? cache_32_line_7 : _GEN_390; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4498 = 6'h21 == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4502 = 6'h21 == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_392 = 6'h21 == cacheLine & 3'h0 == io_addrs[4:2] ? cache_33_line_0 : _GEN_391; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_393 = 6'h21 == cacheLine & 3'h1 == io_addrs[4:2] ? cache_33_line_1 : _GEN_392; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_394 = 6'h21 == cacheLine & 3'h2 == io_addrs[4:2] ? cache_33_line_2 : _GEN_393; // @[Cache.scala 41:{18,18}]
@@ -2776,7 +2803,7 @@ module L1(
   wire [31:0] _GEN_397 = 6'h21 == cacheLine & 3'h5 == io_addrs[4:2] ? cache_33_line_5 : _GEN_396; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_398 = 6'h21 == cacheLine & 3'h6 == io_addrs[4:2] ? cache_33_line_6 : _GEN_397; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_399 = 6'h21 == cacheLine & 3'h7 == io_addrs[4:2] ? cache_33_line_7 : _GEN_398; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4514 = 6'h22 == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4518 = 6'h22 == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_400 = 6'h22 == cacheLine & 3'h0 == io_addrs[4:2] ? cache_34_line_0 : _GEN_399; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_401 = 6'h22 == cacheLine & 3'h1 == io_addrs[4:2] ? cache_34_line_1 : _GEN_400; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_402 = 6'h22 == cacheLine & 3'h2 == io_addrs[4:2] ? cache_34_line_2 : _GEN_401; // @[Cache.scala 41:{18,18}]
@@ -2785,7 +2812,7 @@ module L1(
   wire [31:0] _GEN_405 = 6'h22 == cacheLine & 3'h5 == io_addrs[4:2] ? cache_34_line_5 : _GEN_404; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_406 = 6'h22 == cacheLine & 3'h6 == io_addrs[4:2] ? cache_34_line_6 : _GEN_405; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_407 = 6'h22 == cacheLine & 3'h7 == io_addrs[4:2] ? cache_34_line_7 : _GEN_406; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4530 = 6'h23 == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4534 = 6'h23 == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_408 = 6'h23 == cacheLine & 3'h0 == io_addrs[4:2] ? cache_35_line_0 : _GEN_407; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_409 = 6'h23 == cacheLine & 3'h1 == io_addrs[4:2] ? cache_35_line_1 : _GEN_408; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_410 = 6'h23 == cacheLine & 3'h2 == io_addrs[4:2] ? cache_35_line_2 : _GEN_409; // @[Cache.scala 41:{18,18}]
@@ -2794,7 +2821,7 @@ module L1(
   wire [31:0] _GEN_413 = 6'h23 == cacheLine & 3'h5 == io_addrs[4:2] ? cache_35_line_5 : _GEN_412; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_414 = 6'h23 == cacheLine & 3'h6 == io_addrs[4:2] ? cache_35_line_6 : _GEN_413; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_415 = 6'h23 == cacheLine & 3'h7 == io_addrs[4:2] ? cache_35_line_7 : _GEN_414; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4546 = 6'h24 == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4550 = 6'h24 == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_416 = 6'h24 == cacheLine & 3'h0 == io_addrs[4:2] ? cache_36_line_0 : _GEN_415; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_417 = 6'h24 == cacheLine & 3'h1 == io_addrs[4:2] ? cache_36_line_1 : _GEN_416; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_418 = 6'h24 == cacheLine & 3'h2 == io_addrs[4:2] ? cache_36_line_2 : _GEN_417; // @[Cache.scala 41:{18,18}]
@@ -2803,7 +2830,7 @@ module L1(
   wire [31:0] _GEN_421 = 6'h24 == cacheLine & 3'h5 == io_addrs[4:2] ? cache_36_line_5 : _GEN_420; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_422 = 6'h24 == cacheLine & 3'h6 == io_addrs[4:2] ? cache_36_line_6 : _GEN_421; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_423 = 6'h24 == cacheLine & 3'h7 == io_addrs[4:2] ? cache_36_line_7 : _GEN_422; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4562 = 6'h25 == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4566 = 6'h25 == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_424 = 6'h25 == cacheLine & 3'h0 == io_addrs[4:2] ? cache_37_line_0 : _GEN_423; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_425 = 6'h25 == cacheLine & 3'h1 == io_addrs[4:2] ? cache_37_line_1 : _GEN_424; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_426 = 6'h25 == cacheLine & 3'h2 == io_addrs[4:2] ? cache_37_line_2 : _GEN_425; // @[Cache.scala 41:{18,18}]
@@ -2812,7 +2839,7 @@ module L1(
   wire [31:0] _GEN_429 = 6'h25 == cacheLine & 3'h5 == io_addrs[4:2] ? cache_37_line_5 : _GEN_428; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_430 = 6'h25 == cacheLine & 3'h6 == io_addrs[4:2] ? cache_37_line_6 : _GEN_429; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_431 = 6'h25 == cacheLine & 3'h7 == io_addrs[4:2] ? cache_37_line_7 : _GEN_430; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4578 = 6'h26 == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4582 = 6'h26 == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_432 = 6'h26 == cacheLine & 3'h0 == io_addrs[4:2] ? cache_38_line_0 : _GEN_431; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_433 = 6'h26 == cacheLine & 3'h1 == io_addrs[4:2] ? cache_38_line_1 : _GEN_432; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_434 = 6'h26 == cacheLine & 3'h2 == io_addrs[4:2] ? cache_38_line_2 : _GEN_433; // @[Cache.scala 41:{18,18}]
@@ -2821,7 +2848,7 @@ module L1(
   wire [31:0] _GEN_437 = 6'h26 == cacheLine & 3'h5 == io_addrs[4:2] ? cache_38_line_5 : _GEN_436; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_438 = 6'h26 == cacheLine & 3'h6 == io_addrs[4:2] ? cache_38_line_6 : _GEN_437; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_439 = 6'h26 == cacheLine & 3'h7 == io_addrs[4:2] ? cache_38_line_7 : _GEN_438; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4594 = 6'h27 == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4598 = 6'h27 == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_440 = 6'h27 == cacheLine & 3'h0 == io_addrs[4:2] ? cache_39_line_0 : _GEN_439; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_441 = 6'h27 == cacheLine & 3'h1 == io_addrs[4:2] ? cache_39_line_1 : _GEN_440; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_442 = 6'h27 == cacheLine & 3'h2 == io_addrs[4:2] ? cache_39_line_2 : _GEN_441; // @[Cache.scala 41:{18,18}]
@@ -2830,7 +2857,7 @@ module L1(
   wire [31:0] _GEN_445 = 6'h27 == cacheLine & 3'h5 == io_addrs[4:2] ? cache_39_line_5 : _GEN_444; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_446 = 6'h27 == cacheLine & 3'h6 == io_addrs[4:2] ? cache_39_line_6 : _GEN_445; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_447 = 6'h27 == cacheLine & 3'h7 == io_addrs[4:2] ? cache_39_line_7 : _GEN_446; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4610 = 6'h28 == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4614 = 6'h28 == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_448 = 6'h28 == cacheLine & 3'h0 == io_addrs[4:2] ? cache_40_line_0 : _GEN_447; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_449 = 6'h28 == cacheLine & 3'h1 == io_addrs[4:2] ? cache_40_line_1 : _GEN_448; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_450 = 6'h28 == cacheLine & 3'h2 == io_addrs[4:2] ? cache_40_line_2 : _GEN_449; // @[Cache.scala 41:{18,18}]
@@ -2839,7 +2866,7 @@ module L1(
   wire [31:0] _GEN_453 = 6'h28 == cacheLine & 3'h5 == io_addrs[4:2] ? cache_40_line_5 : _GEN_452; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_454 = 6'h28 == cacheLine & 3'h6 == io_addrs[4:2] ? cache_40_line_6 : _GEN_453; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_455 = 6'h28 == cacheLine & 3'h7 == io_addrs[4:2] ? cache_40_line_7 : _GEN_454; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4626 = 6'h29 == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4630 = 6'h29 == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_456 = 6'h29 == cacheLine & 3'h0 == io_addrs[4:2] ? cache_41_line_0 : _GEN_455; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_457 = 6'h29 == cacheLine & 3'h1 == io_addrs[4:2] ? cache_41_line_1 : _GEN_456; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_458 = 6'h29 == cacheLine & 3'h2 == io_addrs[4:2] ? cache_41_line_2 : _GEN_457; // @[Cache.scala 41:{18,18}]
@@ -2848,7 +2875,7 @@ module L1(
   wire [31:0] _GEN_461 = 6'h29 == cacheLine & 3'h5 == io_addrs[4:2] ? cache_41_line_5 : _GEN_460; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_462 = 6'h29 == cacheLine & 3'h6 == io_addrs[4:2] ? cache_41_line_6 : _GEN_461; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_463 = 6'h29 == cacheLine & 3'h7 == io_addrs[4:2] ? cache_41_line_7 : _GEN_462; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4642 = 6'h2a == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4646 = 6'h2a == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_464 = 6'h2a == cacheLine & 3'h0 == io_addrs[4:2] ? cache_42_line_0 : _GEN_463; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_465 = 6'h2a == cacheLine & 3'h1 == io_addrs[4:2] ? cache_42_line_1 : _GEN_464; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_466 = 6'h2a == cacheLine & 3'h2 == io_addrs[4:2] ? cache_42_line_2 : _GEN_465; // @[Cache.scala 41:{18,18}]
@@ -2857,7 +2884,7 @@ module L1(
   wire [31:0] _GEN_469 = 6'h2a == cacheLine & 3'h5 == io_addrs[4:2] ? cache_42_line_5 : _GEN_468; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_470 = 6'h2a == cacheLine & 3'h6 == io_addrs[4:2] ? cache_42_line_6 : _GEN_469; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_471 = 6'h2a == cacheLine & 3'h7 == io_addrs[4:2] ? cache_42_line_7 : _GEN_470; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4658 = 6'h2b == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4662 = 6'h2b == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_472 = 6'h2b == cacheLine & 3'h0 == io_addrs[4:2] ? cache_43_line_0 : _GEN_471; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_473 = 6'h2b == cacheLine & 3'h1 == io_addrs[4:2] ? cache_43_line_1 : _GEN_472; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_474 = 6'h2b == cacheLine & 3'h2 == io_addrs[4:2] ? cache_43_line_2 : _GEN_473; // @[Cache.scala 41:{18,18}]
@@ -2866,7 +2893,7 @@ module L1(
   wire [31:0] _GEN_477 = 6'h2b == cacheLine & 3'h5 == io_addrs[4:2] ? cache_43_line_5 : _GEN_476; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_478 = 6'h2b == cacheLine & 3'h6 == io_addrs[4:2] ? cache_43_line_6 : _GEN_477; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_479 = 6'h2b == cacheLine & 3'h7 == io_addrs[4:2] ? cache_43_line_7 : _GEN_478; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4674 = 6'h2c == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4678 = 6'h2c == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_480 = 6'h2c == cacheLine & 3'h0 == io_addrs[4:2] ? cache_44_line_0 : _GEN_479; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_481 = 6'h2c == cacheLine & 3'h1 == io_addrs[4:2] ? cache_44_line_1 : _GEN_480; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_482 = 6'h2c == cacheLine & 3'h2 == io_addrs[4:2] ? cache_44_line_2 : _GEN_481; // @[Cache.scala 41:{18,18}]
@@ -2875,7 +2902,7 @@ module L1(
   wire [31:0] _GEN_485 = 6'h2c == cacheLine & 3'h5 == io_addrs[4:2] ? cache_44_line_5 : _GEN_484; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_486 = 6'h2c == cacheLine & 3'h6 == io_addrs[4:2] ? cache_44_line_6 : _GEN_485; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_487 = 6'h2c == cacheLine & 3'h7 == io_addrs[4:2] ? cache_44_line_7 : _GEN_486; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4690 = 6'h2d == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4694 = 6'h2d == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_488 = 6'h2d == cacheLine & 3'h0 == io_addrs[4:2] ? cache_45_line_0 : _GEN_487; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_489 = 6'h2d == cacheLine & 3'h1 == io_addrs[4:2] ? cache_45_line_1 : _GEN_488; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_490 = 6'h2d == cacheLine & 3'h2 == io_addrs[4:2] ? cache_45_line_2 : _GEN_489; // @[Cache.scala 41:{18,18}]
@@ -2884,7 +2911,7 @@ module L1(
   wire [31:0] _GEN_493 = 6'h2d == cacheLine & 3'h5 == io_addrs[4:2] ? cache_45_line_5 : _GEN_492; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_494 = 6'h2d == cacheLine & 3'h6 == io_addrs[4:2] ? cache_45_line_6 : _GEN_493; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_495 = 6'h2d == cacheLine & 3'h7 == io_addrs[4:2] ? cache_45_line_7 : _GEN_494; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4706 = 6'h2e == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4710 = 6'h2e == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_496 = 6'h2e == cacheLine & 3'h0 == io_addrs[4:2] ? cache_46_line_0 : _GEN_495; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_497 = 6'h2e == cacheLine & 3'h1 == io_addrs[4:2] ? cache_46_line_1 : _GEN_496; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_498 = 6'h2e == cacheLine & 3'h2 == io_addrs[4:2] ? cache_46_line_2 : _GEN_497; // @[Cache.scala 41:{18,18}]
@@ -2893,7 +2920,7 @@ module L1(
   wire [31:0] _GEN_501 = 6'h2e == cacheLine & 3'h5 == io_addrs[4:2] ? cache_46_line_5 : _GEN_500; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_502 = 6'h2e == cacheLine & 3'h6 == io_addrs[4:2] ? cache_46_line_6 : _GEN_501; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_503 = 6'h2e == cacheLine & 3'h7 == io_addrs[4:2] ? cache_46_line_7 : _GEN_502; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4722 = 6'h2f == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4726 = 6'h2f == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_504 = 6'h2f == cacheLine & 3'h0 == io_addrs[4:2] ? cache_47_line_0 : _GEN_503; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_505 = 6'h2f == cacheLine & 3'h1 == io_addrs[4:2] ? cache_47_line_1 : _GEN_504; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_506 = 6'h2f == cacheLine & 3'h2 == io_addrs[4:2] ? cache_47_line_2 : _GEN_505; // @[Cache.scala 41:{18,18}]
@@ -2902,7 +2929,7 @@ module L1(
   wire [31:0] _GEN_509 = 6'h2f == cacheLine & 3'h5 == io_addrs[4:2] ? cache_47_line_5 : _GEN_508; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_510 = 6'h2f == cacheLine & 3'h6 == io_addrs[4:2] ? cache_47_line_6 : _GEN_509; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_511 = 6'h2f == cacheLine & 3'h7 == io_addrs[4:2] ? cache_47_line_7 : _GEN_510; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4738 = 6'h30 == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4742 = 6'h30 == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_512 = 6'h30 == cacheLine & 3'h0 == io_addrs[4:2] ? cache_48_line_0 : _GEN_511; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_513 = 6'h30 == cacheLine & 3'h1 == io_addrs[4:2] ? cache_48_line_1 : _GEN_512; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_514 = 6'h30 == cacheLine & 3'h2 == io_addrs[4:2] ? cache_48_line_2 : _GEN_513; // @[Cache.scala 41:{18,18}]
@@ -2911,7 +2938,7 @@ module L1(
   wire [31:0] _GEN_517 = 6'h30 == cacheLine & 3'h5 == io_addrs[4:2] ? cache_48_line_5 : _GEN_516; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_518 = 6'h30 == cacheLine & 3'h6 == io_addrs[4:2] ? cache_48_line_6 : _GEN_517; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_519 = 6'h30 == cacheLine & 3'h7 == io_addrs[4:2] ? cache_48_line_7 : _GEN_518; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4754 = 6'h31 == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4758 = 6'h31 == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_520 = 6'h31 == cacheLine & 3'h0 == io_addrs[4:2] ? cache_49_line_0 : _GEN_519; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_521 = 6'h31 == cacheLine & 3'h1 == io_addrs[4:2] ? cache_49_line_1 : _GEN_520; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_522 = 6'h31 == cacheLine & 3'h2 == io_addrs[4:2] ? cache_49_line_2 : _GEN_521; // @[Cache.scala 41:{18,18}]
@@ -2920,7 +2947,7 @@ module L1(
   wire [31:0] _GEN_525 = 6'h31 == cacheLine & 3'h5 == io_addrs[4:2] ? cache_49_line_5 : _GEN_524; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_526 = 6'h31 == cacheLine & 3'h6 == io_addrs[4:2] ? cache_49_line_6 : _GEN_525; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_527 = 6'h31 == cacheLine & 3'h7 == io_addrs[4:2] ? cache_49_line_7 : _GEN_526; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4770 = 6'h32 == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4774 = 6'h32 == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_528 = 6'h32 == cacheLine & 3'h0 == io_addrs[4:2] ? cache_50_line_0 : _GEN_527; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_529 = 6'h32 == cacheLine & 3'h1 == io_addrs[4:2] ? cache_50_line_1 : _GEN_528; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_530 = 6'h32 == cacheLine & 3'h2 == io_addrs[4:2] ? cache_50_line_2 : _GEN_529; // @[Cache.scala 41:{18,18}]
@@ -2929,7 +2956,7 @@ module L1(
   wire [31:0] _GEN_533 = 6'h32 == cacheLine & 3'h5 == io_addrs[4:2] ? cache_50_line_5 : _GEN_532; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_534 = 6'h32 == cacheLine & 3'h6 == io_addrs[4:2] ? cache_50_line_6 : _GEN_533; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_535 = 6'h32 == cacheLine & 3'h7 == io_addrs[4:2] ? cache_50_line_7 : _GEN_534; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4786 = 6'h33 == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4790 = 6'h33 == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_536 = 6'h33 == cacheLine & 3'h0 == io_addrs[4:2] ? cache_51_line_0 : _GEN_535; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_537 = 6'h33 == cacheLine & 3'h1 == io_addrs[4:2] ? cache_51_line_1 : _GEN_536; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_538 = 6'h33 == cacheLine & 3'h2 == io_addrs[4:2] ? cache_51_line_2 : _GEN_537; // @[Cache.scala 41:{18,18}]
@@ -2938,7 +2965,7 @@ module L1(
   wire [31:0] _GEN_541 = 6'h33 == cacheLine & 3'h5 == io_addrs[4:2] ? cache_51_line_5 : _GEN_540; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_542 = 6'h33 == cacheLine & 3'h6 == io_addrs[4:2] ? cache_51_line_6 : _GEN_541; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_543 = 6'h33 == cacheLine & 3'h7 == io_addrs[4:2] ? cache_51_line_7 : _GEN_542; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4802 = 6'h34 == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4806 = 6'h34 == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_544 = 6'h34 == cacheLine & 3'h0 == io_addrs[4:2] ? cache_52_line_0 : _GEN_543; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_545 = 6'h34 == cacheLine & 3'h1 == io_addrs[4:2] ? cache_52_line_1 : _GEN_544; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_546 = 6'h34 == cacheLine & 3'h2 == io_addrs[4:2] ? cache_52_line_2 : _GEN_545; // @[Cache.scala 41:{18,18}]
@@ -2947,7 +2974,7 @@ module L1(
   wire [31:0] _GEN_549 = 6'h34 == cacheLine & 3'h5 == io_addrs[4:2] ? cache_52_line_5 : _GEN_548; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_550 = 6'h34 == cacheLine & 3'h6 == io_addrs[4:2] ? cache_52_line_6 : _GEN_549; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_551 = 6'h34 == cacheLine & 3'h7 == io_addrs[4:2] ? cache_52_line_7 : _GEN_550; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4818 = 6'h35 == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4822 = 6'h35 == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_552 = 6'h35 == cacheLine & 3'h0 == io_addrs[4:2] ? cache_53_line_0 : _GEN_551; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_553 = 6'h35 == cacheLine & 3'h1 == io_addrs[4:2] ? cache_53_line_1 : _GEN_552; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_554 = 6'h35 == cacheLine & 3'h2 == io_addrs[4:2] ? cache_53_line_2 : _GEN_553; // @[Cache.scala 41:{18,18}]
@@ -2956,7 +2983,7 @@ module L1(
   wire [31:0] _GEN_557 = 6'h35 == cacheLine & 3'h5 == io_addrs[4:2] ? cache_53_line_5 : _GEN_556; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_558 = 6'h35 == cacheLine & 3'h6 == io_addrs[4:2] ? cache_53_line_6 : _GEN_557; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_559 = 6'h35 == cacheLine & 3'h7 == io_addrs[4:2] ? cache_53_line_7 : _GEN_558; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4834 = 6'h36 == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4838 = 6'h36 == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_560 = 6'h36 == cacheLine & 3'h0 == io_addrs[4:2] ? cache_54_line_0 : _GEN_559; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_561 = 6'h36 == cacheLine & 3'h1 == io_addrs[4:2] ? cache_54_line_1 : _GEN_560; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_562 = 6'h36 == cacheLine & 3'h2 == io_addrs[4:2] ? cache_54_line_2 : _GEN_561; // @[Cache.scala 41:{18,18}]
@@ -2965,7 +2992,7 @@ module L1(
   wire [31:0] _GEN_565 = 6'h36 == cacheLine & 3'h5 == io_addrs[4:2] ? cache_54_line_5 : _GEN_564; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_566 = 6'h36 == cacheLine & 3'h6 == io_addrs[4:2] ? cache_54_line_6 : _GEN_565; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_567 = 6'h36 == cacheLine & 3'h7 == io_addrs[4:2] ? cache_54_line_7 : _GEN_566; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4850 = 6'h37 == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4854 = 6'h37 == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_568 = 6'h37 == cacheLine & 3'h0 == io_addrs[4:2] ? cache_55_line_0 : _GEN_567; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_569 = 6'h37 == cacheLine & 3'h1 == io_addrs[4:2] ? cache_55_line_1 : _GEN_568; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_570 = 6'h37 == cacheLine & 3'h2 == io_addrs[4:2] ? cache_55_line_2 : _GEN_569; // @[Cache.scala 41:{18,18}]
@@ -2974,7 +3001,7 @@ module L1(
   wire [31:0] _GEN_573 = 6'h37 == cacheLine & 3'h5 == io_addrs[4:2] ? cache_55_line_5 : _GEN_572; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_574 = 6'h37 == cacheLine & 3'h6 == io_addrs[4:2] ? cache_55_line_6 : _GEN_573; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_575 = 6'h37 == cacheLine & 3'h7 == io_addrs[4:2] ? cache_55_line_7 : _GEN_574; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4866 = 6'h38 == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4870 = 6'h38 == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_576 = 6'h38 == cacheLine & 3'h0 == io_addrs[4:2] ? cache_56_line_0 : _GEN_575; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_577 = 6'h38 == cacheLine & 3'h1 == io_addrs[4:2] ? cache_56_line_1 : _GEN_576; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_578 = 6'h38 == cacheLine & 3'h2 == io_addrs[4:2] ? cache_56_line_2 : _GEN_577; // @[Cache.scala 41:{18,18}]
@@ -2983,7 +3010,7 @@ module L1(
   wire [31:0] _GEN_581 = 6'h38 == cacheLine & 3'h5 == io_addrs[4:2] ? cache_56_line_5 : _GEN_580; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_582 = 6'h38 == cacheLine & 3'h6 == io_addrs[4:2] ? cache_56_line_6 : _GEN_581; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_583 = 6'h38 == cacheLine & 3'h7 == io_addrs[4:2] ? cache_56_line_7 : _GEN_582; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4882 = 6'h39 == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4886 = 6'h39 == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_584 = 6'h39 == cacheLine & 3'h0 == io_addrs[4:2] ? cache_57_line_0 : _GEN_583; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_585 = 6'h39 == cacheLine & 3'h1 == io_addrs[4:2] ? cache_57_line_1 : _GEN_584; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_586 = 6'h39 == cacheLine & 3'h2 == io_addrs[4:2] ? cache_57_line_2 : _GEN_585; // @[Cache.scala 41:{18,18}]
@@ -2992,7 +3019,7 @@ module L1(
   wire [31:0] _GEN_589 = 6'h39 == cacheLine & 3'h5 == io_addrs[4:2] ? cache_57_line_5 : _GEN_588; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_590 = 6'h39 == cacheLine & 3'h6 == io_addrs[4:2] ? cache_57_line_6 : _GEN_589; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_591 = 6'h39 == cacheLine & 3'h7 == io_addrs[4:2] ? cache_57_line_7 : _GEN_590; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4898 = 6'h3a == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4902 = 6'h3a == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_592 = 6'h3a == cacheLine & 3'h0 == io_addrs[4:2] ? cache_58_line_0 : _GEN_591; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_593 = 6'h3a == cacheLine & 3'h1 == io_addrs[4:2] ? cache_58_line_1 : _GEN_592; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_594 = 6'h3a == cacheLine & 3'h2 == io_addrs[4:2] ? cache_58_line_2 : _GEN_593; // @[Cache.scala 41:{18,18}]
@@ -3001,7 +3028,7 @@ module L1(
   wire [31:0] _GEN_597 = 6'h3a == cacheLine & 3'h5 == io_addrs[4:2] ? cache_58_line_5 : _GEN_596; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_598 = 6'h3a == cacheLine & 3'h6 == io_addrs[4:2] ? cache_58_line_6 : _GEN_597; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_599 = 6'h3a == cacheLine & 3'h7 == io_addrs[4:2] ? cache_58_line_7 : _GEN_598; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4914 = 6'h3b == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4918 = 6'h3b == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_600 = 6'h3b == cacheLine & 3'h0 == io_addrs[4:2] ? cache_59_line_0 : _GEN_599; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_601 = 6'h3b == cacheLine & 3'h1 == io_addrs[4:2] ? cache_59_line_1 : _GEN_600; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_602 = 6'h3b == cacheLine & 3'h2 == io_addrs[4:2] ? cache_59_line_2 : _GEN_601; // @[Cache.scala 41:{18,18}]
@@ -3010,7 +3037,7 @@ module L1(
   wire [31:0] _GEN_605 = 6'h3b == cacheLine & 3'h5 == io_addrs[4:2] ? cache_59_line_5 : _GEN_604; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_606 = 6'h3b == cacheLine & 3'h6 == io_addrs[4:2] ? cache_59_line_6 : _GEN_605; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_607 = 6'h3b == cacheLine & 3'h7 == io_addrs[4:2] ? cache_59_line_7 : _GEN_606; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4930 = 6'h3c == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4934 = 6'h3c == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_608 = 6'h3c == cacheLine & 3'h0 == io_addrs[4:2] ? cache_60_line_0 : _GEN_607; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_609 = 6'h3c == cacheLine & 3'h1 == io_addrs[4:2] ? cache_60_line_1 : _GEN_608; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_610 = 6'h3c == cacheLine & 3'h2 == io_addrs[4:2] ? cache_60_line_2 : _GEN_609; // @[Cache.scala 41:{18,18}]
@@ -3019,7 +3046,7 @@ module L1(
   wire [31:0] _GEN_613 = 6'h3c == cacheLine & 3'h5 == io_addrs[4:2] ? cache_60_line_5 : _GEN_612; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_614 = 6'h3c == cacheLine & 3'h6 == io_addrs[4:2] ? cache_60_line_6 : _GEN_613; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_615 = 6'h3c == cacheLine & 3'h7 == io_addrs[4:2] ? cache_60_line_7 : _GEN_614; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4946 = 6'h3d == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4950 = 6'h3d == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_616 = 6'h3d == cacheLine & 3'h0 == io_addrs[4:2] ? cache_61_line_0 : _GEN_615; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_617 = 6'h3d == cacheLine & 3'h1 == io_addrs[4:2] ? cache_61_line_1 : _GEN_616; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_618 = 6'h3d == cacheLine & 3'h2 == io_addrs[4:2] ? cache_61_line_2 : _GEN_617; // @[Cache.scala 41:{18,18}]
@@ -3028,7 +3055,7 @@ module L1(
   wire [31:0] _GEN_621 = 6'h3d == cacheLine & 3'h5 == io_addrs[4:2] ? cache_61_line_5 : _GEN_620; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_622 = 6'h3d == cacheLine & 3'h6 == io_addrs[4:2] ? cache_61_line_6 : _GEN_621; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_623 = 6'h3d == cacheLine & 3'h7 == io_addrs[4:2] ? cache_61_line_7 : _GEN_622; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4962 = 6'h3e == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4966 = 6'h3e == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_624 = 6'h3e == cacheLine & 3'h0 == io_addrs[4:2] ? cache_62_line_0 : _GEN_623; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_625 = 6'h3e == cacheLine & 3'h1 == io_addrs[4:2] ? cache_62_line_1 : _GEN_624; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_626 = 6'h3e == cacheLine & 3'h2 == io_addrs[4:2] ? cache_62_line_2 : _GEN_625; // @[Cache.scala 41:{18,18}]
@@ -3037,7 +3064,7 @@ module L1(
   wire [31:0] _GEN_629 = 6'h3e == cacheLine & 3'h5 == io_addrs[4:2] ? cache_62_line_5 : _GEN_628; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_630 = 6'h3e == cacheLine & 3'h6 == io_addrs[4:2] ? cache_62_line_6 : _GEN_629; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_631 = 6'h3e == cacheLine & 3'h7 == io_addrs[4:2] ? cache_62_line_7 : _GEN_630; // @[Cache.scala 41:{18,18}]
-  wire  _GEN_4978 = 6'h3f == cacheLine; // @[Cache.scala 41:{18,18}]
+  wire  _GEN_4982 = 6'h3f == cacheLine; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_632 = 6'h3f == cacheLine & 3'h0 == io_addrs[4:2] ? cache_63_line_0 : _GEN_631; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_633 = 6'h3f == cacheLine & 3'h1 == io_addrs[4:2] ? cache_63_line_1 : _GEN_632; // @[Cache.scala 41:{18,18}]
   wire [31:0] _GEN_634 = 6'h3f == cacheLine & 3'h2 == io_addrs[4:2] ? cache_63_line_2 : _GEN_633; // @[Cache.scala 41:{18,18}]
@@ -3552,70 +3579,70 @@ module L1(
   wire [31:0] _GEN_1150 = 6'h3e == cacheLine ? cache_62_line_6 : _GEN_1149; // @[Cache.scala 47:{39,39}]
   wire [31:0] _GEN_1151 = 6'h3f == cacheLine ? cache_63_line_6 : _GEN_1150; // @[Cache.scala 47:{39,39}]
   wire [255:0] _dataBuffer_T = {_GEN_1087,_GEN_1151,_GEN_959,_GEN_1023,_GEN_831,_GEN_895,_GEN_703,_GEN_767}; // @[Cache.scala 47:39]
-  wire  _GEN_1152 = _GEN_3972 | cache_0_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1153 = _GEN_3986 | cache_1_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1154 = _GEN_4002 | cache_2_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1155 = _GEN_4018 | cache_3_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1156 = _GEN_4034 | cache_4_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1157 = _GEN_4050 | cache_5_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1158 = _GEN_4066 | cache_6_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1159 = _GEN_4082 | cache_7_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1160 = _GEN_4098 | cache_8_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1161 = _GEN_4114 | cache_9_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1162 = _GEN_4130 | cache_10_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1163 = _GEN_4146 | cache_11_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1164 = _GEN_4162 | cache_12_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1165 = _GEN_4178 | cache_13_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1166 = _GEN_4194 | cache_14_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1167 = _GEN_4210 | cache_15_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1168 = _GEN_4226 | cache_16_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1169 = _GEN_4242 | cache_17_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1170 = _GEN_4258 | cache_18_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1171 = _GEN_4274 | cache_19_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1172 = _GEN_4290 | cache_20_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1173 = _GEN_4306 | cache_21_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1174 = _GEN_4322 | cache_22_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1175 = _GEN_4338 | cache_23_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1176 = _GEN_4354 | cache_24_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1177 = _GEN_4370 | cache_25_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1178 = _GEN_4386 | cache_26_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1179 = _GEN_4402 | cache_27_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1180 = _GEN_4418 | cache_28_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1181 = _GEN_4434 | cache_29_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1182 = _GEN_4450 | cache_30_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1183 = _GEN_4466 | cache_31_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1184 = _GEN_4482 | cache_32_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1185 = _GEN_4498 | cache_33_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1186 = _GEN_4514 | cache_34_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1187 = _GEN_4530 | cache_35_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1188 = _GEN_4546 | cache_36_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1189 = _GEN_4562 | cache_37_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1190 = _GEN_4578 | cache_38_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1191 = _GEN_4594 | cache_39_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1192 = _GEN_4610 | cache_40_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1193 = _GEN_4626 | cache_41_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1194 = _GEN_4642 | cache_42_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1195 = _GEN_4658 | cache_43_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1196 = _GEN_4674 | cache_44_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1197 = _GEN_4690 | cache_45_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1198 = _GEN_4706 | cache_46_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1199 = _GEN_4722 | cache_47_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1200 = _GEN_4738 | cache_48_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1201 = _GEN_4754 | cache_49_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1202 = _GEN_4770 | cache_50_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1203 = _GEN_4786 | cache_51_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1204 = _GEN_4802 | cache_52_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1205 = _GEN_4818 | cache_53_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1206 = _GEN_4834 | cache_54_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1207 = _GEN_4850 | cache_55_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1208 = _GEN_4866 | cache_56_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1209 = _GEN_4882 | cache_57_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1210 = _GEN_4898 | cache_58_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1211 = _GEN_4914 | cache_59_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1212 = _GEN_4930 | cache_60_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1213 = _GEN_4946 | cache_61_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1214 = _GEN_4962 | cache_62_validBit; // @[Cache.scala 32:22 52:{31,31}]
-  wire  _GEN_1215 = _GEN_4978 | cache_63_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1152 = _GEN_3976 | cache_0_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1153 = _GEN_3990 | cache_1_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1154 = _GEN_4006 | cache_2_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1155 = _GEN_4022 | cache_3_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1156 = _GEN_4038 | cache_4_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1157 = _GEN_4054 | cache_5_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1158 = _GEN_4070 | cache_6_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1159 = _GEN_4086 | cache_7_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1160 = _GEN_4102 | cache_8_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1161 = _GEN_4118 | cache_9_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1162 = _GEN_4134 | cache_10_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1163 = _GEN_4150 | cache_11_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1164 = _GEN_4166 | cache_12_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1165 = _GEN_4182 | cache_13_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1166 = _GEN_4198 | cache_14_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1167 = _GEN_4214 | cache_15_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1168 = _GEN_4230 | cache_16_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1169 = _GEN_4246 | cache_17_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1170 = _GEN_4262 | cache_18_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1171 = _GEN_4278 | cache_19_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1172 = _GEN_4294 | cache_20_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1173 = _GEN_4310 | cache_21_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1174 = _GEN_4326 | cache_22_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1175 = _GEN_4342 | cache_23_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1176 = _GEN_4358 | cache_24_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1177 = _GEN_4374 | cache_25_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1178 = _GEN_4390 | cache_26_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1179 = _GEN_4406 | cache_27_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1180 = _GEN_4422 | cache_28_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1181 = _GEN_4438 | cache_29_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1182 = _GEN_4454 | cache_30_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1183 = _GEN_4470 | cache_31_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1184 = _GEN_4486 | cache_32_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1185 = _GEN_4502 | cache_33_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1186 = _GEN_4518 | cache_34_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1187 = _GEN_4534 | cache_35_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1188 = _GEN_4550 | cache_36_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1189 = _GEN_4566 | cache_37_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1190 = _GEN_4582 | cache_38_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1191 = _GEN_4598 | cache_39_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1192 = _GEN_4614 | cache_40_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1193 = _GEN_4630 | cache_41_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1194 = _GEN_4646 | cache_42_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1195 = _GEN_4662 | cache_43_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1196 = _GEN_4678 | cache_44_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1197 = _GEN_4694 | cache_45_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1198 = _GEN_4710 | cache_46_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1199 = _GEN_4726 | cache_47_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1200 = _GEN_4742 | cache_48_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1201 = _GEN_4758 | cache_49_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1202 = _GEN_4774 | cache_50_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1203 = _GEN_4790 | cache_51_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1204 = _GEN_4806 | cache_52_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1205 = _GEN_4822 | cache_53_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1206 = _GEN_4838 | cache_54_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1207 = _GEN_4854 | cache_55_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1208 = _GEN_4870 | cache_56_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1209 = _GEN_4886 | cache_57_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1210 = _GEN_4902 | cache_58_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1211 = _GEN_4918 | cache_59_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1212 = _GEN_4934 | cache_60_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1213 = _GEN_4950 | cache_61_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1214 = _GEN_4966 | cache_62_validBit; // @[Cache.scala 32:22 52:{31,31}]
+  wire  _GEN_1215 = _GEN_4982 | cache_63_validBit; // @[Cache.scala 32:22 52:{31,31}]
   wire [31:0] _GEN_1280 = 6'h0 == cacheLine ? io_writeBlock[31:0] : cache_0_line_0; // @[Cache.scala 32:22 55:{34,34}]
   wire [31:0] _GEN_1281 = 6'h1 == cacheLine ? io_writeBlock[31:0] : cache_1_line_0; // @[Cache.scala 32:22 55:{34,34}]
   wire [31:0] _GEN_1282 = 6'h2 == cacheLine ? io_writeBlock[31:0] : cache_2_line_0; // @[Cache.scala 32:22 55:{34,34}]
@@ -4640,11 +4667,20 @@ module L1(
   wire [31:0] _GEN_2429 = io_blockWriteEn ? _GEN_1789 : cache_61_line_7; // @[Cache.scala 32:22 51:25]
   wire [31:0] _GEN_2430 = io_blockWriteEn ? _GEN_1790 : cache_62_line_7; // @[Cache.scala 32:22 51:25]
   wire [31:0] _GEN_2431 = io_blockWriteEn ? _GEN_1791 : cache_63_line_7; // @[Cache.scala 32:22 51:25]
-  wire [31:0] _cacheData_T_2 = {_GEN_639[31:8],io_cpuWriteData[7:0]}; // @[Cache.scala 65:34]
-  wire [31:0] _cacheData_T_5 = {_GEN_639[31:16],io_cpuWriteData[15:0]}; // @[Cache.scala 68:35]
-  wire [31:0] _GEN_2944 = 2'h2 == io_storeType ? io_cpuWriteData : 32'h0; // @[Cache.scala 63:26 71:19 60:30]
-  wire [31:0] _GEN_2945 = 2'h1 == io_storeType ? _cacheData_T_5 : _GEN_2944; // @[Cache.scala 63:26 68:19]
-  wire [31:0] _GEN_2946 = 2'h0 == io_storeType ? _cacheData_T_2 : _GEN_2945; // @[Cache.scala 63:26 65:19]
+  wire [31:0] _cacheData_T_2 = {_GEN_639[31:8],io_cpuWriteData[7:0]}; // @[Cache.scala 66:49]
+  wire [31:0] _cacheData_T_7 = {_GEN_639[31:16],io_cpuWriteData[7:0],_GEN_639[7:0]}; // @[Cache.scala 67:75]
+  wire [31:0] _cacheData_T_12 = {_GEN_639[31:24],io_cpuWriteData[7:0],_GEN_639[15:0]}; // @[Cache.scala 68:75]
+  wire [31:0] _cacheData_T_15 = {io_cpuWriteData[7:0],_GEN_639[23:0]}; // @[Cache.scala 69:59]
+  wire [31:0] _GEN_2944 = 2'h3 == io_addrs[1:0] ? _cacheData_T_15 : 32'h0; // @[Cache.scala 60:30 65:31 69:34]
+  wire [31:0] _GEN_2945 = 2'h2 == io_addrs[1:0] ? _cacheData_T_12 : _GEN_2944; // @[Cache.scala 65:31 68:34]
+  wire [31:0] _GEN_2946 = 2'h1 == io_addrs[1:0] ? _cacheData_T_7 : _GEN_2945; // @[Cache.scala 65:31 67:34]
+  wire [31:0] _GEN_2947 = 2'h0 == io_addrs[1:0] ? _cacheData_T_2 : _GEN_2946; // @[Cache.scala 65:31 66:34]
+  wire [31:0] _cacheData_T_20 = {_GEN_639[31:16],io_cpuWriteData[15:0]}; // @[Cache.scala 73:58]
+  wire [31:0] _cacheData_T_23 = {io_cpuWriteData[15:0],_GEN_639[15:0]}; // @[Cache.scala 73:108]
+  wire [31:0] _cacheData_T_24 = ~io_addrs[1] ? _cacheData_T_20 : _cacheData_T_23; // @[Cache.scala 73:25]
+  wire [31:0] _GEN_2948 = 2'h2 == io_storeType ? io_cpuWriteData : 32'h0; // @[Cache.scala 63:26 76:19 60:30]
+  wire [31:0] _GEN_2949 = 2'h1 == io_storeType ? _cacheData_T_24 : _GEN_2948; // @[Cache.scala 63:26 73:19]
+  wire [31:0] _GEN_2950 = 2'h0 == io_storeType ? _GEN_2947 : _GEN_2949; // @[Cache.scala 63:26]
   assign io_cpuReadData = 6'h3f == cacheLine & 3'h7 == io_addrs[4:2] ? cache_63_line_7 : _GEN_638; // @[Cache.scala 41:{18,18}]
   assign io_bufferAddrs = addrsBuffer; // @[Cache.scala 43:18]
   assign io_readBlock = dataBuffer; // @[Cache.scala 42:16]
@@ -4666,9 +4702,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_0_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_3972 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_3976 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_0_line_0 <= _GEN_2946;
+          cache_0_line_0 <= _GEN_2950;
         end else begin
           cache_0_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -4681,9 +4717,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_0_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_3972 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_3976 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_0_line_1 <= _GEN_2946;
+          cache_0_line_1 <= _GEN_2950;
         end else begin
           cache_0_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -4696,9 +4732,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_0_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_3972 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_3976 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_0_line_2 <= _GEN_2946;
+          cache_0_line_2 <= _GEN_2950;
         end else begin
           cache_0_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -4711,9 +4747,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_0_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_3972 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_3976 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_0_line_3 <= _GEN_2946;
+          cache_0_line_3 <= _GEN_2950;
         end else begin
           cache_0_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -4726,9 +4762,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_0_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_3972 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_3976 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_0_line_4 <= _GEN_2946;
+          cache_0_line_4 <= _GEN_2950;
         end else begin
           cache_0_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -4741,9 +4777,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_0_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_3972 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_3976 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_0_line_5 <= _GEN_2946;
+          cache_0_line_5 <= _GEN_2950;
         end else begin
           cache_0_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -4756,9 +4792,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_0_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_3972 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_3976 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_0_line_6 <= _GEN_2946;
+          cache_0_line_6 <= _GEN_2950;
         end else begin
           cache_0_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -4771,9 +4807,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_0_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_3972 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_3976 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_0_line_7 <= _GEN_2946;
+          cache_0_line_7 <= _GEN_2950;
         end else begin
           cache_0_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -4798,9 +4834,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_1_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_3986 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_3990 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_1_line_0 <= _GEN_2946;
+          cache_1_line_0 <= _GEN_2950;
         end else begin
           cache_1_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -4813,9 +4849,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_1_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_3986 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_3990 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_1_line_1 <= _GEN_2946;
+          cache_1_line_1 <= _GEN_2950;
         end else begin
           cache_1_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -4828,9 +4864,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_1_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_3986 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_3990 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_1_line_2 <= _GEN_2946;
+          cache_1_line_2 <= _GEN_2950;
         end else begin
           cache_1_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -4843,9 +4879,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_1_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_3986 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_3990 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_1_line_3 <= _GEN_2946;
+          cache_1_line_3 <= _GEN_2950;
         end else begin
           cache_1_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -4858,9 +4894,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_1_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_3986 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_3990 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_1_line_4 <= _GEN_2946;
+          cache_1_line_4 <= _GEN_2950;
         end else begin
           cache_1_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -4873,9 +4909,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_1_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_3986 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_3990 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_1_line_5 <= _GEN_2946;
+          cache_1_line_5 <= _GEN_2950;
         end else begin
           cache_1_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -4888,9 +4924,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_1_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_3986 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_3990 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_1_line_6 <= _GEN_2946;
+          cache_1_line_6 <= _GEN_2950;
         end else begin
           cache_1_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -4903,9 +4939,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_1_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_3986 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_3990 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_1_line_7 <= _GEN_2946;
+          cache_1_line_7 <= _GEN_2950;
         end else begin
           cache_1_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -4930,9 +4966,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_2_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4002 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4006 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_2_line_0 <= _GEN_2946;
+          cache_2_line_0 <= _GEN_2950;
         end else begin
           cache_2_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -4945,9 +4981,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_2_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4002 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4006 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_2_line_1 <= _GEN_2946;
+          cache_2_line_1 <= _GEN_2950;
         end else begin
           cache_2_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -4960,9 +4996,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_2_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4002 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4006 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_2_line_2 <= _GEN_2946;
+          cache_2_line_2 <= _GEN_2950;
         end else begin
           cache_2_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -4975,9 +5011,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_2_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4002 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4006 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_2_line_3 <= _GEN_2946;
+          cache_2_line_3 <= _GEN_2950;
         end else begin
           cache_2_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -4990,9 +5026,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_2_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4002 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4006 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_2_line_4 <= _GEN_2946;
+          cache_2_line_4 <= _GEN_2950;
         end else begin
           cache_2_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5005,9 +5041,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_2_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4002 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4006 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_2_line_5 <= _GEN_2946;
+          cache_2_line_5 <= _GEN_2950;
         end else begin
           cache_2_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5020,9 +5056,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_2_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4002 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4006 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_2_line_6 <= _GEN_2946;
+          cache_2_line_6 <= _GEN_2950;
         end else begin
           cache_2_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5035,9 +5071,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_2_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4002 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4006 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_2_line_7 <= _GEN_2946;
+          cache_2_line_7 <= _GEN_2950;
         end else begin
           cache_2_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5062,9 +5098,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_3_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4018 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4022 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_3_line_0 <= _GEN_2946;
+          cache_3_line_0 <= _GEN_2950;
         end else begin
           cache_3_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5077,9 +5113,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_3_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4018 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4022 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_3_line_1 <= _GEN_2946;
+          cache_3_line_1 <= _GEN_2950;
         end else begin
           cache_3_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5092,9 +5128,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_3_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4018 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4022 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_3_line_2 <= _GEN_2946;
+          cache_3_line_2 <= _GEN_2950;
         end else begin
           cache_3_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5107,9 +5143,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_3_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4018 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4022 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_3_line_3 <= _GEN_2946;
+          cache_3_line_3 <= _GEN_2950;
         end else begin
           cache_3_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5122,9 +5158,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_3_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4018 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4022 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_3_line_4 <= _GEN_2946;
+          cache_3_line_4 <= _GEN_2950;
         end else begin
           cache_3_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5137,9 +5173,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_3_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4018 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4022 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_3_line_5 <= _GEN_2946;
+          cache_3_line_5 <= _GEN_2950;
         end else begin
           cache_3_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5152,9 +5188,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_3_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4018 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4022 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_3_line_6 <= _GEN_2946;
+          cache_3_line_6 <= _GEN_2950;
         end else begin
           cache_3_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5167,9 +5203,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_3_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4018 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4022 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_3_line_7 <= _GEN_2946;
+          cache_3_line_7 <= _GEN_2950;
         end else begin
           cache_3_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5194,9 +5230,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_4_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4034 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4038 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_4_line_0 <= _GEN_2946;
+          cache_4_line_0 <= _GEN_2950;
         end else begin
           cache_4_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5209,9 +5245,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_4_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4034 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4038 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_4_line_1 <= _GEN_2946;
+          cache_4_line_1 <= _GEN_2950;
         end else begin
           cache_4_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5224,9 +5260,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_4_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4034 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4038 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_4_line_2 <= _GEN_2946;
+          cache_4_line_2 <= _GEN_2950;
         end else begin
           cache_4_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5239,9 +5275,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_4_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4034 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4038 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_4_line_3 <= _GEN_2946;
+          cache_4_line_3 <= _GEN_2950;
         end else begin
           cache_4_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5254,9 +5290,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_4_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4034 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4038 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_4_line_4 <= _GEN_2946;
+          cache_4_line_4 <= _GEN_2950;
         end else begin
           cache_4_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5269,9 +5305,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_4_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4034 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4038 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_4_line_5 <= _GEN_2946;
+          cache_4_line_5 <= _GEN_2950;
         end else begin
           cache_4_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5284,9 +5320,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_4_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4034 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4038 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_4_line_6 <= _GEN_2946;
+          cache_4_line_6 <= _GEN_2950;
         end else begin
           cache_4_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5299,9 +5335,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_4_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4034 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4038 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_4_line_7 <= _GEN_2946;
+          cache_4_line_7 <= _GEN_2950;
         end else begin
           cache_4_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5326,9 +5362,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_5_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4050 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4054 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_5_line_0 <= _GEN_2946;
+          cache_5_line_0 <= _GEN_2950;
         end else begin
           cache_5_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5341,9 +5377,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_5_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4050 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4054 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_5_line_1 <= _GEN_2946;
+          cache_5_line_1 <= _GEN_2950;
         end else begin
           cache_5_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5356,9 +5392,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_5_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4050 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4054 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_5_line_2 <= _GEN_2946;
+          cache_5_line_2 <= _GEN_2950;
         end else begin
           cache_5_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5371,9 +5407,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_5_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4050 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4054 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_5_line_3 <= _GEN_2946;
+          cache_5_line_3 <= _GEN_2950;
         end else begin
           cache_5_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5386,9 +5422,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_5_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4050 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4054 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_5_line_4 <= _GEN_2946;
+          cache_5_line_4 <= _GEN_2950;
         end else begin
           cache_5_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5401,9 +5437,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_5_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4050 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4054 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_5_line_5 <= _GEN_2946;
+          cache_5_line_5 <= _GEN_2950;
         end else begin
           cache_5_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5416,9 +5452,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_5_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4050 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4054 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_5_line_6 <= _GEN_2946;
+          cache_5_line_6 <= _GEN_2950;
         end else begin
           cache_5_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5431,9 +5467,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_5_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4050 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4054 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_5_line_7 <= _GEN_2946;
+          cache_5_line_7 <= _GEN_2950;
         end else begin
           cache_5_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5458,9 +5494,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_6_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4066 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4070 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_6_line_0 <= _GEN_2946;
+          cache_6_line_0 <= _GEN_2950;
         end else begin
           cache_6_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5473,9 +5509,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_6_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4066 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4070 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_6_line_1 <= _GEN_2946;
+          cache_6_line_1 <= _GEN_2950;
         end else begin
           cache_6_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5488,9 +5524,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_6_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4066 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4070 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_6_line_2 <= _GEN_2946;
+          cache_6_line_2 <= _GEN_2950;
         end else begin
           cache_6_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5503,9 +5539,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_6_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4066 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4070 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_6_line_3 <= _GEN_2946;
+          cache_6_line_3 <= _GEN_2950;
         end else begin
           cache_6_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5518,9 +5554,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_6_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4066 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4070 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_6_line_4 <= _GEN_2946;
+          cache_6_line_4 <= _GEN_2950;
         end else begin
           cache_6_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5533,9 +5569,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_6_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4066 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4070 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_6_line_5 <= _GEN_2946;
+          cache_6_line_5 <= _GEN_2950;
         end else begin
           cache_6_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5548,9 +5584,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_6_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4066 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4070 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_6_line_6 <= _GEN_2946;
+          cache_6_line_6 <= _GEN_2950;
         end else begin
           cache_6_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5563,9 +5599,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_6_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4066 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4070 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_6_line_7 <= _GEN_2946;
+          cache_6_line_7 <= _GEN_2950;
         end else begin
           cache_6_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5590,9 +5626,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_7_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4082 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4086 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_7_line_0 <= _GEN_2946;
+          cache_7_line_0 <= _GEN_2950;
         end else begin
           cache_7_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5605,9 +5641,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_7_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4082 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4086 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_7_line_1 <= _GEN_2946;
+          cache_7_line_1 <= _GEN_2950;
         end else begin
           cache_7_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5620,9 +5656,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_7_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4082 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4086 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_7_line_2 <= _GEN_2946;
+          cache_7_line_2 <= _GEN_2950;
         end else begin
           cache_7_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5635,9 +5671,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_7_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4082 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4086 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_7_line_3 <= _GEN_2946;
+          cache_7_line_3 <= _GEN_2950;
         end else begin
           cache_7_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5650,9 +5686,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_7_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4082 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4086 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_7_line_4 <= _GEN_2946;
+          cache_7_line_4 <= _GEN_2950;
         end else begin
           cache_7_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5665,9 +5701,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_7_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4082 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4086 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_7_line_5 <= _GEN_2946;
+          cache_7_line_5 <= _GEN_2950;
         end else begin
           cache_7_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5680,9 +5716,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_7_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4082 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4086 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_7_line_6 <= _GEN_2946;
+          cache_7_line_6 <= _GEN_2950;
         end else begin
           cache_7_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5695,9 +5731,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_7_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4082 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4086 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_7_line_7 <= _GEN_2946;
+          cache_7_line_7 <= _GEN_2950;
         end else begin
           cache_7_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5722,9 +5758,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_8_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4098 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4102 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_8_line_0 <= _GEN_2946;
+          cache_8_line_0 <= _GEN_2950;
         end else begin
           cache_8_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5737,9 +5773,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_8_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4098 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4102 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_8_line_1 <= _GEN_2946;
+          cache_8_line_1 <= _GEN_2950;
         end else begin
           cache_8_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5752,9 +5788,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_8_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4098 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4102 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_8_line_2 <= _GEN_2946;
+          cache_8_line_2 <= _GEN_2950;
         end else begin
           cache_8_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5767,9 +5803,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_8_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4098 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4102 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_8_line_3 <= _GEN_2946;
+          cache_8_line_3 <= _GEN_2950;
         end else begin
           cache_8_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5782,9 +5818,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_8_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4098 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4102 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_8_line_4 <= _GEN_2946;
+          cache_8_line_4 <= _GEN_2950;
         end else begin
           cache_8_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5797,9 +5833,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_8_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4098 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4102 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_8_line_5 <= _GEN_2946;
+          cache_8_line_5 <= _GEN_2950;
         end else begin
           cache_8_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5812,9 +5848,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_8_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4098 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4102 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_8_line_6 <= _GEN_2946;
+          cache_8_line_6 <= _GEN_2950;
         end else begin
           cache_8_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5827,9 +5863,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_8_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4098 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4102 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_8_line_7 <= _GEN_2946;
+          cache_8_line_7 <= _GEN_2950;
         end else begin
           cache_8_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5854,9 +5890,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_9_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4114 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4118 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_9_line_0 <= _GEN_2946;
+          cache_9_line_0 <= _GEN_2950;
         end else begin
           cache_9_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5869,9 +5905,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_9_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4114 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4118 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_9_line_1 <= _GEN_2946;
+          cache_9_line_1 <= _GEN_2950;
         end else begin
           cache_9_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5884,9 +5920,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_9_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4114 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4118 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_9_line_2 <= _GEN_2946;
+          cache_9_line_2 <= _GEN_2950;
         end else begin
           cache_9_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5899,9 +5935,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_9_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4114 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4118 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_9_line_3 <= _GEN_2946;
+          cache_9_line_3 <= _GEN_2950;
         end else begin
           cache_9_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5914,9 +5950,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_9_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4114 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4118 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_9_line_4 <= _GEN_2946;
+          cache_9_line_4 <= _GEN_2950;
         end else begin
           cache_9_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5929,9 +5965,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_9_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4114 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4118 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_9_line_5 <= _GEN_2946;
+          cache_9_line_5 <= _GEN_2950;
         end else begin
           cache_9_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5944,9 +5980,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_9_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4114 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4118 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_9_line_6 <= _GEN_2946;
+          cache_9_line_6 <= _GEN_2950;
         end else begin
           cache_9_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5959,9 +5995,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_9_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4114 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4118 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_9_line_7 <= _GEN_2946;
+          cache_9_line_7 <= _GEN_2950;
         end else begin
           cache_9_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -5986,9 +6022,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_10_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4130 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4134 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_10_line_0 <= _GEN_2946;
+          cache_10_line_0 <= _GEN_2950;
         end else begin
           cache_10_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6001,9 +6037,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_10_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4130 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4134 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_10_line_1 <= _GEN_2946;
+          cache_10_line_1 <= _GEN_2950;
         end else begin
           cache_10_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6016,9 +6052,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_10_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4130 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4134 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_10_line_2 <= _GEN_2946;
+          cache_10_line_2 <= _GEN_2950;
         end else begin
           cache_10_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6031,9 +6067,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_10_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4130 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4134 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_10_line_3 <= _GEN_2946;
+          cache_10_line_3 <= _GEN_2950;
         end else begin
           cache_10_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6046,9 +6082,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_10_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4130 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4134 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_10_line_4 <= _GEN_2946;
+          cache_10_line_4 <= _GEN_2950;
         end else begin
           cache_10_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6061,9 +6097,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_10_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4130 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4134 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_10_line_5 <= _GEN_2946;
+          cache_10_line_5 <= _GEN_2950;
         end else begin
           cache_10_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6076,9 +6112,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_10_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4130 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4134 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_10_line_6 <= _GEN_2946;
+          cache_10_line_6 <= _GEN_2950;
         end else begin
           cache_10_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6091,9 +6127,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_10_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4130 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4134 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_10_line_7 <= _GEN_2946;
+          cache_10_line_7 <= _GEN_2950;
         end else begin
           cache_10_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6118,9 +6154,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_11_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4146 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4150 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_11_line_0 <= _GEN_2946;
+          cache_11_line_0 <= _GEN_2950;
         end else begin
           cache_11_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6133,9 +6169,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_11_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4146 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4150 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_11_line_1 <= _GEN_2946;
+          cache_11_line_1 <= _GEN_2950;
         end else begin
           cache_11_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6148,9 +6184,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_11_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4146 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4150 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_11_line_2 <= _GEN_2946;
+          cache_11_line_2 <= _GEN_2950;
         end else begin
           cache_11_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6163,9 +6199,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_11_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4146 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4150 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_11_line_3 <= _GEN_2946;
+          cache_11_line_3 <= _GEN_2950;
         end else begin
           cache_11_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6178,9 +6214,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_11_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4146 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4150 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_11_line_4 <= _GEN_2946;
+          cache_11_line_4 <= _GEN_2950;
         end else begin
           cache_11_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6193,9 +6229,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_11_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4146 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4150 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_11_line_5 <= _GEN_2946;
+          cache_11_line_5 <= _GEN_2950;
         end else begin
           cache_11_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6208,9 +6244,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_11_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4146 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4150 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_11_line_6 <= _GEN_2946;
+          cache_11_line_6 <= _GEN_2950;
         end else begin
           cache_11_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6223,9 +6259,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_11_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4146 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4150 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_11_line_7 <= _GEN_2946;
+          cache_11_line_7 <= _GEN_2950;
         end else begin
           cache_11_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6250,9 +6286,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_12_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4162 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4166 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_12_line_0 <= _GEN_2946;
+          cache_12_line_0 <= _GEN_2950;
         end else begin
           cache_12_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6265,9 +6301,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_12_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4162 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4166 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_12_line_1 <= _GEN_2946;
+          cache_12_line_1 <= _GEN_2950;
         end else begin
           cache_12_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6280,9 +6316,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_12_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4162 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4166 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_12_line_2 <= _GEN_2946;
+          cache_12_line_2 <= _GEN_2950;
         end else begin
           cache_12_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6295,9 +6331,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_12_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4162 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4166 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_12_line_3 <= _GEN_2946;
+          cache_12_line_3 <= _GEN_2950;
         end else begin
           cache_12_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6310,9 +6346,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_12_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4162 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4166 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_12_line_4 <= _GEN_2946;
+          cache_12_line_4 <= _GEN_2950;
         end else begin
           cache_12_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6325,9 +6361,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_12_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4162 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4166 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_12_line_5 <= _GEN_2946;
+          cache_12_line_5 <= _GEN_2950;
         end else begin
           cache_12_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6340,9 +6376,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_12_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4162 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4166 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_12_line_6 <= _GEN_2946;
+          cache_12_line_6 <= _GEN_2950;
         end else begin
           cache_12_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6355,9 +6391,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_12_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4162 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4166 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_12_line_7 <= _GEN_2946;
+          cache_12_line_7 <= _GEN_2950;
         end else begin
           cache_12_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6382,9 +6418,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_13_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4178 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4182 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_13_line_0 <= _GEN_2946;
+          cache_13_line_0 <= _GEN_2950;
         end else begin
           cache_13_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6397,9 +6433,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_13_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4178 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4182 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_13_line_1 <= _GEN_2946;
+          cache_13_line_1 <= _GEN_2950;
         end else begin
           cache_13_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6412,9 +6448,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_13_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4178 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4182 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_13_line_2 <= _GEN_2946;
+          cache_13_line_2 <= _GEN_2950;
         end else begin
           cache_13_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6427,9 +6463,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_13_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4178 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4182 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_13_line_3 <= _GEN_2946;
+          cache_13_line_3 <= _GEN_2950;
         end else begin
           cache_13_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6442,9 +6478,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_13_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4178 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4182 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_13_line_4 <= _GEN_2946;
+          cache_13_line_4 <= _GEN_2950;
         end else begin
           cache_13_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6457,9 +6493,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_13_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4178 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4182 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_13_line_5 <= _GEN_2946;
+          cache_13_line_5 <= _GEN_2950;
         end else begin
           cache_13_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6472,9 +6508,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_13_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4178 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4182 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_13_line_6 <= _GEN_2946;
+          cache_13_line_6 <= _GEN_2950;
         end else begin
           cache_13_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6487,9 +6523,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_13_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4178 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4182 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_13_line_7 <= _GEN_2946;
+          cache_13_line_7 <= _GEN_2950;
         end else begin
           cache_13_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6514,9 +6550,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_14_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4194 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4198 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_14_line_0 <= _GEN_2946;
+          cache_14_line_0 <= _GEN_2950;
         end else begin
           cache_14_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6529,9 +6565,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_14_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4194 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4198 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_14_line_1 <= _GEN_2946;
+          cache_14_line_1 <= _GEN_2950;
         end else begin
           cache_14_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6544,9 +6580,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_14_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4194 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4198 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_14_line_2 <= _GEN_2946;
+          cache_14_line_2 <= _GEN_2950;
         end else begin
           cache_14_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6559,9 +6595,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_14_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4194 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4198 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_14_line_3 <= _GEN_2946;
+          cache_14_line_3 <= _GEN_2950;
         end else begin
           cache_14_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6574,9 +6610,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_14_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4194 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4198 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_14_line_4 <= _GEN_2946;
+          cache_14_line_4 <= _GEN_2950;
         end else begin
           cache_14_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6589,9 +6625,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_14_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4194 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4198 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_14_line_5 <= _GEN_2946;
+          cache_14_line_5 <= _GEN_2950;
         end else begin
           cache_14_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6604,9 +6640,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_14_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4194 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4198 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_14_line_6 <= _GEN_2946;
+          cache_14_line_6 <= _GEN_2950;
         end else begin
           cache_14_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6619,9 +6655,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_14_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4194 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4198 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_14_line_7 <= _GEN_2946;
+          cache_14_line_7 <= _GEN_2950;
         end else begin
           cache_14_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6646,9 +6682,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_15_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4210 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4214 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_15_line_0 <= _GEN_2946;
+          cache_15_line_0 <= _GEN_2950;
         end else begin
           cache_15_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6661,9 +6697,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_15_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4210 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4214 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_15_line_1 <= _GEN_2946;
+          cache_15_line_1 <= _GEN_2950;
         end else begin
           cache_15_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6676,9 +6712,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_15_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4210 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4214 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_15_line_2 <= _GEN_2946;
+          cache_15_line_2 <= _GEN_2950;
         end else begin
           cache_15_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6691,9 +6727,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_15_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4210 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4214 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_15_line_3 <= _GEN_2946;
+          cache_15_line_3 <= _GEN_2950;
         end else begin
           cache_15_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6706,9 +6742,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_15_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4210 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4214 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_15_line_4 <= _GEN_2946;
+          cache_15_line_4 <= _GEN_2950;
         end else begin
           cache_15_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6721,9 +6757,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_15_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4210 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4214 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_15_line_5 <= _GEN_2946;
+          cache_15_line_5 <= _GEN_2950;
         end else begin
           cache_15_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6736,9 +6772,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_15_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4210 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4214 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_15_line_6 <= _GEN_2946;
+          cache_15_line_6 <= _GEN_2950;
         end else begin
           cache_15_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6751,9 +6787,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_15_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4210 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4214 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_15_line_7 <= _GEN_2946;
+          cache_15_line_7 <= _GEN_2950;
         end else begin
           cache_15_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6778,9 +6814,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_16_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4226 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4230 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_16_line_0 <= _GEN_2946;
+          cache_16_line_0 <= _GEN_2950;
         end else begin
           cache_16_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6793,9 +6829,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_16_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4226 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4230 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_16_line_1 <= _GEN_2946;
+          cache_16_line_1 <= _GEN_2950;
         end else begin
           cache_16_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6808,9 +6844,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_16_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4226 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4230 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_16_line_2 <= _GEN_2946;
+          cache_16_line_2 <= _GEN_2950;
         end else begin
           cache_16_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6823,9 +6859,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_16_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4226 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4230 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_16_line_3 <= _GEN_2946;
+          cache_16_line_3 <= _GEN_2950;
         end else begin
           cache_16_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6838,9 +6874,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_16_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4226 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4230 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_16_line_4 <= _GEN_2946;
+          cache_16_line_4 <= _GEN_2950;
         end else begin
           cache_16_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6853,9 +6889,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_16_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4226 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4230 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_16_line_5 <= _GEN_2946;
+          cache_16_line_5 <= _GEN_2950;
         end else begin
           cache_16_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6868,9 +6904,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_16_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4226 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4230 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_16_line_6 <= _GEN_2946;
+          cache_16_line_6 <= _GEN_2950;
         end else begin
           cache_16_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6883,9 +6919,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_16_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4226 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4230 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_16_line_7 <= _GEN_2946;
+          cache_16_line_7 <= _GEN_2950;
         end else begin
           cache_16_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6910,9 +6946,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_17_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4242 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4246 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_17_line_0 <= _GEN_2946;
+          cache_17_line_0 <= _GEN_2950;
         end else begin
           cache_17_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6925,9 +6961,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_17_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4242 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4246 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_17_line_1 <= _GEN_2946;
+          cache_17_line_1 <= _GEN_2950;
         end else begin
           cache_17_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6940,9 +6976,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_17_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4242 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4246 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_17_line_2 <= _GEN_2946;
+          cache_17_line_2 <= _GEN_2950;
         end else begin
           cache_17_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6955,9 +6991,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_17_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4242 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4246 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_17_line_3 <= _GEN_2946;
+          cache_17_line_3 <= _GEN_2950;
         end else begin
           cache_17_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6970,9 +7006,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_17_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4242 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4246 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_17_line_4 <= _GEN_2946;
+          cache_17_line_4 <= _GEN_2950;
         end else begin
           cache_17_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -6985,9 +7021,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_17_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4242 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4246 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_17_line_5 <= _GEN_2946;
+          cache_17_line_5 <= _GEN_2950;
         end else begin
           cache_17_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7000,9 +7036,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_17_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4242 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4246 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_17_line_6 <= _GEN_2946;
+          cache_17_line_6 <= _GEN_2950;
         end else begin
           cache_17_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7015,9 +7051,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_17_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4242 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4246 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_17_line_7 <= _GEN_2946;
+          cache_17_line_7 <= _GEN_2950;
         end else begin
           cache_17_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7042,9 +7078,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_18_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4258 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4262 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_18_line_0 <= _GEN_2946;
+          cache_18_line_0 <= _GEN_2950;
         end else begin
           cache_18_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7057,9 +7093,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_18_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4258 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4262 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_18_line_1 <= _GEN_2946;
+          cache_18_line_1 <= _GEN_2950;
         end else begin
           cache_18_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7072,9 +7108,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_18_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4258 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4262 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_18_line_2 <= _GEN_2946;
+          cache_18_line_2 <= _GEN_2950;
         end else begin
           cache_18_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7087,9 +7123,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_18_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4258 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4262 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_18_line_3 <= _GEN_2946;
+          cache_18_line_3 <= _GEN_2950;
         end else begin
           cache_18_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7102,9 +7138,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_18_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4258 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4262 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_18_line_4 <= _GEN_2946;
+          cache_18_line_4 <= _GEN_2950;
         end else begin
           cache_18_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7117,9 +7153,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_18_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4258 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4262 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_18_line_5 <= _GEN_2946;
+          cache_18_line_5 <= _GEN_2950;
         end else begin
           cache_18_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7132,9 +7168,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_18_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4258 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4262 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_18_line_6 <= _GEN_2946;
+          cache_18_line_6 <= _GEN_2950;
         end else begin
           cache_18_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7147,9 +7183,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_18_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4258 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4262 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_18_line_7 <= _GEN_2946;
+          cache_18_line_7 <= _GEN_2950;
         end else begin
           cache_18_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7174,9 +7210,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_19_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4274 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4278 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_19_line_0 <= _GEN_2946;
+          cache_19_line_0 <= _GEN_2950;
         end else begin
           cache_19_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7189,9 +7225,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_19_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4274 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4278 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_19_line_1 <= _GEN_2946;
+          cache_19_line_1 <= _GEN_2950;
         end else begin
           cache_19_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7204,9 +7240,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_19_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4274 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4278 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_19_line_2 <= _GEN_2946;
+          cache_19_line_2 <= _GEN_2950;
         end else begin
           cache_19_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7219,9 +7255,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_19_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4274 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4278 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_19_line_3 <= _GEN_2946;
+          cache_19_line_3 <= _GEN_2950;
         end else begin
           cache_19_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7234,9 +7270,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_19_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4274 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4278 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_19_line_4 <= _GEN_2946;
+          cache_19_line_4 <= _GEN_2950;
         end else begin
           cache_19_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7249,9 +7285,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_19_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4274 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4278 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_19_line_5 <= _GEN_2946;
+          cache_19_line_5 <= _GEN_2950;
         end else begin
           cache_19_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7264,9 +7300,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_19_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4274 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4278 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_19_line_6 <= _GEN_2946;
+          cache_19_line_6 <= _GEN_2950;
         end else begin
           cache_19_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7279,9 +7315,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_19_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4274 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4278 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_19_line_7 <= _GEN_2946;
+          cache_19_line_7 <= _GEN_2950;
         end else begin
           cache_19_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7306,9 +7342,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_20_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4290 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4294 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_20_line_0 <= _GEN_2946;
+          cache_20_line_0 <= _GEN_2950;
         end else begin
           cache_20_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7321,9 +7357,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_20_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4290 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4294 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_20_line_1 <= _GEN_2946;
+          cache_20_line_1 <= _GEN_2950;
         end else begin
           cache_20_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7336,9 +7372,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_20_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4290 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4294 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_20_line_2 <= _GEN_2946;
+          cache_20_line_2 <= _GEN_2950;
         end else begin
           cache_20_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7351,9 +7387,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_20_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4290 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4294 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_20_line_3 <= _GEN_2946;
+          cache_20_line_3 <= _GEN_2950;
         end else begin
           cache_20_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7366,9 +7402,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_20_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4290 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4294 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_20_line_4 <= _GEN_2946;
+          cache_20_line_4 <= _GEN_2950;
         end else begin
           cache_20_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7381,9 +7417,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_20_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4290 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4294 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_20_line_5 <= _GEN_2946;
+          cache_20_line_5 <= _GEN_2950;
         end else begin
           cache_20_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7396,9 +7432,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_20_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4290 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4294 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_20_line_6 <= _GEN_2946;
+          cache_20_line_6 <= _GEN_2950;
         end else begin
           cache_20_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7411,9 +7447,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_20_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4290 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4294 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_20_line_7 <= _GEN_2946;
+          cache_20_line_7 <= _GEN_2950;
         end else begin
           cache_20_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7438,9 +7474,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_21_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4306 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4310 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_21_line_0 <= _GEN_2946;
+          cache_21_line_0 <= _GEN_2950;
         end else begin
           cache_21_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7453,9 +7489,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_21_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4306 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4310 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_21_line_1 <= _GEN_2946;
+          cache_21_line_1 <= _GEN_2950;
         end else begin
           cache_21_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7468,9 +7504,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_21_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4306 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4310 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_21_line_2 <= _GEN_2946;
+          cache_21_line_2 <= _GEN_2950;
         end else begin
           cache_21_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7483,9 +7519,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_21_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4306 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4310 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_21_line_3 <= _GEN_2946;
+          cache_21_line_3 <= _GEN_2950;
         end else begin
           cache_21_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7498,9 +7534,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_21_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4306 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4310 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_21_line_4 <= _GEN_2946;
+          cache_21_line_4 <= _GEN_2950;
         end else begin
           cache_21_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7513,9 +7549,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_21_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4306 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4310 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_21_line_5 <= _GEN_2946;
+          cache_21_line_5 <= _GEN_2950;
         end else begin
           cache_21_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7528,9 +7564,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_21_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4306 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4310 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_21_line_6 <= _GEN_2946;
+          cache_21_line_6 <= _GEN_2950;
         end else begin
           cache_21_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7543,9 +7579,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_21_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4306 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4310 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_21_line_7 <= _GEN_2946;
+          cache_21_line_7 <= _GEN_2950;
         end else begin
           cache_21_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7570,9 +7606,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_22_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4322 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4326 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_22_line_0 <= _GEN_2946;
+          cache_22_line_0 <= _GEN_2950;
         end else begin
           cache_22_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7585,9 +7621,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_22_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4322 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4326 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_22_line_1 <= _GEN_2946;
+          cache_22_line_1 <= _GEN_2950;
         end else begin
           cache_22_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7600,9 +7636,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_22_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4322 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4326 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_22_line_2 <= _GEN_2946;
+          cache_22_line_2 <= _GEN_2950;
         end else begin
           cache_22_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7615,9 +7651,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_22_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4322 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4326 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_22_line_3 <= _GEN_2946;
+          cache_22_line_3 <= _GEN_2950;
         end else begin
           cache_22_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7630,9 +7666,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_22_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4322 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4326 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_22_line_4 <= _GEN_2946;
+          cache_22_line_4 <= _GEN_2950;
         end else begin
           cache_22_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7645,9 +7681,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_22_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4322 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4326 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_22_line_5 <= _GEN_2946;
+          cache_22_line_5 <= _GEN_2950;
         end else begin
           cache_22_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7660,9 +7696,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_22_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4322 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4326 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_22_line_6 <= _GEN_2946;
+          cache_22_line_6 <= _GEN_2950;
         end else begin
           cache_22_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7675,9 +7711,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_22_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4322 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4326 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_22_line_7 <= _GEN_2946;
+          cache_22_line_7 <= _GEN_2950;
         end else begin
           cache_22_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7702,9 +7738,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_23_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4338 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4342 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_23_line_0 <= _GEN_2946;
+          cache_23_line_0 <= _GEN_2950;
         end else begin
           cache_23_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7717,9 +7753,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_23_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4338 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4342 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_23_line_1 <= _GEN_2946;
+          cache_23_line_1 <= _GEN_2950;
         end else begin
           cache_23_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7732,9 +7768,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_23_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4338 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4342 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_23_line_2 <= _GEN_2946;
+          cache_23_line_2 <= _GEN_2950;
         end else begin
           cache_23_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7747,9 +7783,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_23_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4338 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4342 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_23_line_3 <= _GEN_2946;
+          cache_23_line_3 <= _GEN_2950;
         end else begin
           cache_23_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7762,9 +7798,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_23_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4338 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4342 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_23_line_4 <= _GEN_2946;
+          cache_23_line_4 <= _GEN_2950;
         end else begin
           cache_23_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7777,9 +7813,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_23_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4338 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4342 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_23_line_5 <= _GEN_2946;
+          cache_23_line_5 <= _GEN_2950;
         end else begin
           cache_23_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7792,9 +7828,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_23_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4338 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4342 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_23_line_6 <= _GEN_2946;
+          cache_23_line_6 <= _GEN_2950;
         end else begin
           cache_23_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7807,9 +7843,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_23_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4338 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4342 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_23_line_7 <= _GEN_2946;
+          cache_23_line_7 <= _GEN_2950;
         end else begin
           cache_23_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7834,9 +7870,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_24_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4354 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4358 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_24_line_0 <= _GEN_2946;
+          cache_24_line_0 <= _GEN_2950;
         end else begin
           cache_24_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7849,9 +7885,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_24_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4354 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4358 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_24_line_1 <= _GEN_2946;
+          cache_24_line_1 <= _GEN_2950;
         end else begin
           cache_24_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7864,9 +7900,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_24_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4354 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4358 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_24_line_2 <= _GEN_2946;
+          cache_24_line_2 <= _GEN_2950;
         end else begin
           cache_24_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7879,9 +7915,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_24_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4354 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4358 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_24_line_3 <= _GEN_2946;
+          cache_24_line_3 <= _GEN_2950;
         end else begin
           cache_24_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7894,9 +7930,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_24_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4354 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4358 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_24_line_4 <= _GEN_2946;
+          cache_24_line_4 <= _GEN_2950;
         end else begin
           cache_24_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7909,9 +7945,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_24_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4354 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4358 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_24_line_5 <= _GEN_2946;
+          cache_24_line_5 <= _GEN_2950;
         end else begin
           cache_24_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7924,9 +7960,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_24_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4354 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4358 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_24_line_6 <= _GEN_2946;
+          cache_24_line_6 <= _GEN_2950;
         end else begin
           cache_24_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7939,9 +7975,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_24_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4354 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4358 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_24_line_7 <= _GEN_2946;
+          cache_24_line_7 <= _GEN_2950;
         end else begin
           cache_24_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7966,9 +8002,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_25_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4370 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4374 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_25_line_0 <= _GEN_2946;
+          cache_25_line_0 <= _GEN_2950;
         end else begin
           cache_25_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7981,9 +8017,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_25_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4370 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4374 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_25_line_1 <= _GEN_2946;
+          cache_25_line_1 <= _GEN_2950;
         end else begin
           cache_25_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -7996,9 +8032,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_25_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4370 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4374 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_25_line_2 <= _GEN_2946;
+          cache_25_line_2 <= _GEN_2950;
         end else begin
           cache_25_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8011,9 +8047,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_25_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4370 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4374 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_25_line_3 <= _GEN_2946;
+          cache_25_line_3 <= _GEN_2950;
         end else begin
           cache_25_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8026,9 +8062,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_25_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4370 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4374 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_25_line_4 <= _GEN_2946;
+          cache_25_line_4 <= _GEN_2950;
         end else begin
           cache_25_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8041,9 +8077,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_25_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4370 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4374 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_25_line_5 <= _GEN_2946;
+          cache_25_line_5 <= _GEN_2950;
         end else begin
           cache_25_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8056,9 +8092,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_25_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4370 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4374 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_25_line_6 <= _GEN_2946;
+          cache_25_line_6 <= _GEN_2950;
         end else begin
           cache_25_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8071,9 +8107,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_25_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4370 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4374 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_25_line_7 <= _GEN_2946;
+          cache_25_line_7 <= _GEN_2950;
         end else begin
           cache_25_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8098,9 +8134,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_26_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4386 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4390 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_26_line_0 <= _GEN_2946;
+          cache_26_line_0 <= _GEN_2950;
         end else begin
           cache_26_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8113,9 +8149,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_26_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4386 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4390 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_26_line_1 <= _GEN_2946;
+          cache_26_line_1 <= _GEN_2950;
         end else begin
           cache_26_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8128,9 +8164,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_26_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4386 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4390 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_26_line_2 <= _GEN_2946;
+          cache_26_line_2 <= _GEN_2950;
         end else begin
           cache_26_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8143,9 +8179,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_26_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4386 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4390 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_26_line_3 <= _GEN_2946;
+          cache_26_line_3 <= _GEN_2950;
         end else begin
           cache_26_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8158,9 +8194,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_26_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4386 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4390 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_26_line_4 <= _GEN_2946;
+          cache_26_line_4 <= _GEN_2950;
         end else begin
           cache_26_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8173,9 +8209,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_26_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4386 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4390 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_26_line_5 <= _GEN_2946;
+          cache_26_line_5 <= _GEN_2950;
         end else begin
           cache_26_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8188,9 +8224,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_26_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4386 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4390 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_26_line_6 <= _GEN_2946;
+          cache_26_line_6 <= _GEN_2950;
         end else begin
           cache_26_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8203,9 +8239,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_26_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4386 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4390 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_26_line_7 <= _GEN_2946;
+          cache_26_line_7 <= _GEN_2950;
         end else begin
           cache_26_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8230,9 +8266,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_27_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4402 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4406 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_27_line_0 <= _GEN_2946;
+          cache_27_line_0 <= _GEN_2950;
         end else begin
           cache_27_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8245,9 +8281,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_27_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4402 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4406 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_27_line_1 <= _GEN_2946;
+          cache_27_line_1 <= _GEN_2950;
         end else begin
           cache_27_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8260,9 +8296,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_27_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4402 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4406 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_27_line_2 <= _GEN_2946;
+          cache_27_line_2 <= _GEN_2950;
         end else begin
           cache_27_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8275,9 +8311,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_27_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4402 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4406 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_27_line_3 <= _GEN_2946;
+          cache_27_line_3 <= _GEN_2950;
         end else begin
           cache_27_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8290,9 +8326,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_27_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4402 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4406 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_27_line_4 <= _GEN_2946;
+          cache_27_line_4 <= _GEN_2950;
         end else begin
           cache_27_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8305,9 +8341,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_27_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4402 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4406 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_27_line_5 <= _GEN_2946;
+          cache_27_line_5 <= _GEN_2950;
         end else begin
           cache_27_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8320,9 +8356,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_27_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4402 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4406 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_27_line_6 <= _GEN_2946;
+          cache_27_line_6 <= _GEN_2950;
         end else begin
           cache_27_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8335,9 +8371,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_27_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4402 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4406 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_27_line_7 <= _GEN_2946;
+          cache_27_line_7 <= _GEN_2950;
         end else begin
           cache_27_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8362,9 +8398,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_28_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4418 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4422 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_28_line_0 <= _GEN_2946;
+          cache_28_line_0 <= _GEN_2950;
         end else begin
           cache_28_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8377,9 +8413,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_28_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4418 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4422 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_28_line_1 <= _GEN_2946;
+          cache_28_line_1 <= _GEN_2950;
         end else begin
           cache_28_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8392,9 +8428,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_28_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4418 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4422 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_28_line_2 <= _GEN_2946;
+          cache_28_line_2 <= _GEN_2950;
         end else begin
           cache_28_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8407,9 +8443,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_28_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4418 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4422 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_28_line_3 <= _GEN_2946;
+          cache_28_line_3 <= _GEN_2950;
         end else begin
           cache_28_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8422,9 +8458,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_28_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4418 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4422 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_28_line_4 <= _GEN_2946;
+          cache_28_line_4 <= _GEN_2950;
         end else begin
           cache_28_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8437,9 +8473,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_28_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4418 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4422 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_28_line_5 <= _GEN_2946;
+          cache_28_line_5 <= _GEN_2950;
         end else begin
           cache_28_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8452,9 +8488,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_28_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4418 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4422 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_28_line_6 <= _GEN_2946;
+          cache_28_line_6 <= _GEN_2950;
         end else begin
           cache_28_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8467,9 +8503,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_28_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4418 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4422 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_28_line_7 <= _GEN_2946;
+          cache_28_line_7 <= _GEN_2950;
         end else begin
           cache_28_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8494,9 +8530,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_29_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4434 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4438 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_29_line_0 <= _GEN_2946;
+          cache_29_line_0 <= _GEN_2950;
         end else begin
           cache_29_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8509,9 +8545,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_29_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4434 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4438 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_29_line_1 <= _GEN_2946;
+          cache_29_line_1 <= _GEN_2950;
         end else begin
           cache_29_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8524,9 +8560,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_29_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4434 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4438 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_29_line_2 <= _GEN_2946;
+          cache_29_line_2 <= _GEN_2950;
         end else begin
           cache_29_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8539,9 +8575,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_29_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4434 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4438 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_29_line_3 <= _GEN_2946;
+          cache_29_line_3 <= _GEN_2950;
         end else begin
           cache_29_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8554,9 +8590,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_29_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4434 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4438 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_29_line_4 <= _GEN_2946;
+          cache_29_line_4 <= _GEN_2950;
         end else begin
           cache_29_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8569,9 +8605,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_29_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4434 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4438 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_29_line_5 <= _GEN_2946;
+          cache_29_line_5 <= _GEN_2950;
         end else begin
           cache_29_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8584,9 +8620,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_29_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4434 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4438 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_29_line_6 <= _GEN_2946;
+          cache_29_line_6 <= _GEN_2950;
         end else begin
           cache_29_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8599,9 +8635,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_29_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4434 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4438 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_29_line_7 <= _GEN_2946;
+          cache_29_line_7 <= _GEN_2950;
         end else begin
           cache_29_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8626,9 +8662,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_30_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4450 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4454 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_30_line_0 <= _GEN_2946;
+          cache_30_line_0 <= _GEN_2950;
         end else begin
           cache_30_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8641,9 +8677,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_30_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4450 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4454 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_30_line_1 <= _GEN_2946;
+          cache_30_line_1 <= _GEN_2950;
         end else begin
           cache_30_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8656,9 +8692,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_30_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4450 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4454 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_30_line_2 <= _GEN_2946;
+          cache_30_line_2 <= _GEN_2950;
         end else begin
           cache_30_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8671,9 +8707,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_30_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4450 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4454 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_30_line_3 <= _GEN_2946;
+          cache_30_line_3 <= _GEN_2950;
         end else begin
           cache_30_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8686,9 +8722,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_30_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4450 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4454 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_30_line_4 <= _GEN_2946;
+          cache_30_line_4 <= _GEN_2950;
         end else begin
           cache_30_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8701,9 +8737,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_30_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4450 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4454 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_30_line_5 <= _GEN_2946;
+          cache_30_line_5 <= _GEN_2950;
         end else begin
           cache_30_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8716,9 +8752,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_30_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4450 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4454 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_30_line_6 <= _GEN_2946;
+          cache_30_line_6 <= _GEN_2950;
         end else begin
           cache_30_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8731,9 +8767,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_30_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4450 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4454 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_30_line_7 <= _GEN_2946;
+          cache_30_line_7 <= _GEN_2950;
         end else begin
           cache_30_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8758,9 +8794,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_31_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4466 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4470 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_31_line_0 <= _GEN_2946;
+          cache_31_line_0 <= _GEN_2950;
         end else begin
           cache_31_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8773,9 +8809,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_31_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4466 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4470 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_31_line_1 <= _GEN_2946;
+          cache_31_line_1 <= _GEN_2950;
         end else begin
           cache_31_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8788,9 +8824,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_31_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4466 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4470 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_31_line_2 <= _GEN_2946;
+          cache_31_line_2 <= _GEN_2950;
         end else begin
           cache_31_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8803,9 +8839,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_31_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4466 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4470 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_31_line_3 <= _GEN_2946;
+          cache_31_line_3 <= _GEN_2950;
         end else begin
           cache_31_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8818,9 +8854,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_31_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4466 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4470 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_31_line_4 <= _GEN_2946;
+          cache_31_line_4 <= _GEN_2950;
         end else begin
           cache_31_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8833,9 +8869,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_31_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4466 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4470 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_31_line_5 <= _GEN_2946;
+          cache_31_line_5 <= _GEN_2950;
         end else begin
           cache_31_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8848,9 +8884,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_31_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4466 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4470 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_31_line_6 <= _GEN_2946;
+          cache_31_line_6 <= _GEN_2950;
         end else begin
           cache_31_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8863,9 +8899,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_31_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4466 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4470 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_31_line_7 <= _GEN_2946;
+          cache_31_line_7 <= _GEN_2950;
         end else begin
           cache_31_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8890,9 +8926,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_32_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4482 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4486 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_32_line_0 <= _GEN_2946;
+          cache_32_line_0 <= _GEN_2950;
         end else begin
           cache_32_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8905,9 +8941,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_32_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4482 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4486 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_32_line_1 <= _GEN_2946;
+          cache_32_line_1 <= _GEN_2950;
         end else begin
           cache_32_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8920,9 +8956,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_32_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4482 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4486 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_32_line_2 <= _GEN_2946;
+          cache_32_line_2 <= _GEN_2950;
         end else begin
           cache_32_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8935,9 +8971,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_32_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4482 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4486 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_32_line_3 <= _GEN_2946;
+          cache_32_line_3 <= _GEN_2950;
         end else begin
           cache_32_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8950,9 +8986,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_32_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4482 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4486 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_32_line_4 <= _GEN_2946;
+          cache_32_line_4 <= _GEN_2950;
         end else begin
           cache_32_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8965,9 +9001,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_32_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4482 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4486 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_32_line_5 <= _GEN_2946;
+          cache_32_line_5 <= _GEN_2950;
         end else begin
           cache_32_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8980,9 +9016,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_32_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4482 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4486 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_32_line_6 <= _GEN_2946;
+          cache_32_line_6 <= _GEN_2950;
         end else begin
           cache_32_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -8995,9 +9031,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_32_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4482 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4486 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_32_line_7 <= _GEN_2946;
+          cache_32_line_7 <= _GEN_2950;
         end else begin
           cache_32_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9022,9 +9058,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_33_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4498 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4502 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_33_line_0 <= _GEN_2946;
+          cache_33_line_0 <= _GEN_2950;
         end else begin
           cache_33_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9037,9 +9073,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_33_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4498 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4502 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_33_line_1 <= _GEN_2946;
+          cache_33_line_1 <= _GEN_2950;
         end else begin
           cache_33_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9052,9 +9088,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_33_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4498 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4502 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_33_line_2 <= _GEN_2946;
+          cache_33_line_2 <= _GEN_2950;
         end else begin
           cache_33_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9067,9 +9103,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_33_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4498 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4502 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_33_line_3 <= _GEN_2946;
+          cache_33_line_3 <= _GEN_2950;
         end else begin
           cache_33_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9082,9 +9118,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_33_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4498 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4502 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_33_line_4 <= _GEN_2946;
+          cache_33_line_4 <= _GEN_2950;
         end else begin
           cache_33_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9097,9 +9133,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_33_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4498 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4502 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_33_line_5 <= _GEN_2946;
+          cache_33_line_5 <= _GEN_2950;
         end else begin
           cache_33_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9112,9 +9148,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_33_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4498 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4502 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_33_line_6 <= _GEN_2946;
+          cache_33_line_6 <= _GEN_2950;
         end else begin
           cache_33_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9127,9 +9163,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_33_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4498 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4502 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_33_line_7 <= _GEN_2946;
+          cache_33_line_7 <= _GEN_2950;
         end else begin
           cache_33_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9154,9 +9190,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_34_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4514 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4518 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_34_line_0 <= _GEN_2946;
+          cache_34_line_0 <= _GEN_2950;
         end else begin
           cache_34_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9169,9 +9205,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_34_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4514 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4518 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_34_line_1 <= _GEN_2946;
+          cache_34_line_1 <= _GEN_2950;
         end else begin
           cache_34_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9184,9 +9220,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_34_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4514 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4518 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_34_line_2 <= _GEN_2946;
+          cache_34_line_2 <= _GEN_2950;
         end else begin
           cache_34_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9199,9 +9235,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_34_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4514 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4518 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_34_line_3 <= _GEN_2946;
+          cache_34_line_3 <= _GEN_2950;
         end else begin
           cache_34_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9214,9 +9250,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_34_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4514 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4518 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_34_line_4 <= _GEN_2946;
+          cache_34_line_4 <= _GEN_2950;
         end else begin
           cache_34_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9229,9 +9265,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_34_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4514 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4518 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_34_line_5 <= _GEN_2946;
+          cache_34_line_5 <= _GEN_2950;
         end else begin
           cache_34_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9244,9 +9280,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_34_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4514 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4518 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_34_line_6 <= _GEN_2946;
+          cache_34_line_6 <= _GEN_2950;
         end else begin
           cache_34_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9259,9 +9295,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_34_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4514 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4518 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_34_line_7 <= _GEN_2946;
+          cache_34_line_7 <= _GEN_2950;
         end else begin
           cache_34_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9286,9 +9322,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_35_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4530 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4534 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_35_line_0 <= _GEN_2946;
+          cache_35_line_0 <= _GEN_2950;
         end else begin
           cache_35_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9301,9 +9337,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_35_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4530 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4534 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_35_line_1 <= _GEN_2946;
+          cache_35_line_1 <= _GEN_2950;
         end else begin
           cache_35_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9316,9 +9352,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_35_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4530 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4534 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_35_line_2 <= _GEN_2946;
+          cache_35_line_2 <= _GEN_2950;
         end else begin
           cache_35_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9331,9 +9367,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_35_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4530 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4534 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_35_line_3 <= _GEN_2946;
+          cache_35_line_3 <= _GEN_2950;
         end else begin
           cache_35_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9346,9 +9382,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_35_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4530 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4534 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_35_line_4 <= _GEN_2946;
+          cache_35_line_4 <= _GEN_2950;
         end else begin
           cache_35_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9361,9 +9397,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_35_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4530 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4534 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_35_line_5 <= _GEN_2946;
+          cache_35_line_5 <= _GEN_2950;
         end else begin
           cache_35_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9376,9 +9412,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_35_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4530 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4534 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_35_line_6 <= _GEN_2946;
+          cache_35_line_6 <= _GEN_2950;
         end else begin
           cache_35_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9391,9 +9427,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_35_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4530 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4534 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_35_line_7 <= _GEN_2946;
+          cache_35_line_7 <= _GEN_2950;
         end else begin
           cache_35_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9418,9 +9454,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_36_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4546 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4550 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_36_line_0 <= _GEN_2946;
+          cache_36_line_0 <= _GEN_2950;
         end else begin
           cache_36_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9433,9 +9469,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_36_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4546 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4550 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_36_line_1 <= _GEN_2946;
+          cache_36_line_1 <= _GEN_2950;
         end else begin
           cache_36_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9448,9 +9484,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_36_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4546 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4550 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_36_line_2 <= _GEN_2946;
+          cache_36_line_2 <= _GEN_2950;
         end else begin
           cache_36_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9463,9 +9499,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_36_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4546 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4550 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_36_line_3 <= _GEN_2946;
+          cache_36_line_3 <= _GEN_2950;
         end else begin
           cache_36_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9478,9 +9514,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_36_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4546 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4550 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_36_line_4 <= _GEN_2946;
+          cache_36_line_4 <= _GEN_2950;
         end else begin
           cache_36_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9493,9 +9529,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_36_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4546 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4550 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_36_line_5 <= _GEN_2946;
+          cache_36_line_5 <= _GEN_2950;
         end else begin
           cache_36_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9508,9 +9544,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_36_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4546 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4550 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_36_line_6 <= _GEN_2946;
+          cache_36_line_6 <= _GEN_2950;
         end else begin
           cache_36_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9523,9 +9559,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_36_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4546 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4550 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_36_line_7 <= _GEN_2946;
+          cache_36_line_7 <= _GEN_2950;
         end else begin
           cache_36_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9550,9 +9586,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_37_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4562 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4566 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_37_line_0 <= _GEN_2946;
+          cache_37_line_0 <= _GEN_2950;
         end else begin
           cache_37_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9565,9 +9601,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_37_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4562 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4566 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_37_line_1 <= _GEN_2946;
+          cache_37_line_1 <= _GEN_2950;
         end else begin
           cache_37_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9580,9 +9616,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_37_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4562 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4566 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_37_line_2 <= _GEN_2946;
+          cache_37_line_2 <= _GEN_2950;
         end else begin
           cache_37_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9595,9 +9631,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_37_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4562 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4566 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_37_line_3 <= _GEN_2946;
+          cache_37_line_3 <= _GEN_2950;
         end else begin
           cache_37_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9610,9 +9646,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_37_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4562 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4566 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_37_line_4 <= _GEN_2946;
+          cache_37_line_4 <= _GEN_2950;
         end else begin
           cache_37_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9625,9 +9661,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_37_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4562 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4566 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_37_line_5 <= _GEN_2946;
+          cache_37_line_5 <= _GEN_2950;
         end else begin
           cache_37_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9640,9 +9676,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_37_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4562 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4566 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_37_line_6 <= _GEN_2946;
+          cache_37_line_6 <= _GEN_2950;
         end else begin
           cache_37_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9655,9 +9691,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_37_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4562 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4566 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_37_line_7 <= _GEN_2946;
+          cache_37_line_7 <= _GEN_2950;
         end else begin
           cache_37_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9682,9 +9718,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_38_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4578 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4582 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_38_line_0 <= _GEN_2946;
+          cache_38_line_0 <= _GEN_2950;
         end else begin
           cache_38_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9697,9 +9733,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_38_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4578 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4582 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_38_line_1 <= _GEN_2946;
+          cache_38_line_1 <= _GEN_2950;
         end else begin
           cache_38_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9712,9 +9748,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_38_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4578 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4582 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_38_line_2 <= _GEN_2946;
+          cache_38_line_2 <= _GEN_2950;
         end else begin
           cache_38_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9727,9 +9763,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_38_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4578 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4582 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_38_line_3 <= _GEN_2946;
+          cache_38_line_3 <= _GEN_2950;
         end else begin
           cache_38_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9742,9 +9778,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_38_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4578 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4582 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_38_line_4 <= _GEN_2946;
+          cache_38_line_4 <= _GEN_2950;
         end else begin
           cache_38_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9757,9 +9793,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_38_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4578 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4582 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_38_line_5 <= _GEN_2946;
+          cache_38_line_5 <= _GEN_2950;
         end else begin
           cache_38_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9772,9 +9808,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_38_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4578 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4582 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_38_line_6 <= _GEN_2946;
+          cache_38_line_6 <= _GEN_2950;
         end else begin
           cache_38_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9787,9 +9823,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_38_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4578 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4582 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_38_line_7 <= _GEN_2946;
+          cache_38_line_7 <= _GEN_2950;
         end else begin
           cache_38_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9814,9 +9850,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_39_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4594 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4598 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_39_line_0 <= _GEN_2946;
+          cache_39_line_0 <= _GEN_2950;
         end else begin
           cache_39_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9829,9 +9865,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_39_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4594 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4598 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_39_line_1 <= _GEN_2946;
+          cache_39_line_1 <= _GEN_2950;
         end else begin
           cache_39_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9844,9 +9880,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_39_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4594 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4598 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_39_line_2 <= _GEN_2946;
+          cache_39_line_2 <= _GEN_2950;
         end else begin
           cache_39_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9859,9 +9895,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_39_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4594 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4598 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_39_line_3 <= _GEN_2946;
+          cache_39_line_3 <= _GEN_2950;
         end else begin
           cache_39_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9874,9 +9910,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_39_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4594 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4598 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_39_line_4 <= _GEN_2946;
+          cache_39_line_4 <= _GEN_2950;
         end else begin
           cache_39_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9889,9 +9925,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_39_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4594 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4598 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_39_line_5 <= _GEN_2946;
+          cache_39_line_5 <= _GEN_2950;
         end else begin
           cache_39_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9904,9 +9940,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_39_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4594 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4598 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_39_line_6 <= _GEN_2946;
+          cache_39_line_6 <= _GEN_2950;
         end else begin
           cache_39_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9919,9 +9955,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_39_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4594 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4598 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_39_line_7 <= _GEN_2946;
+          cache_39_line_7 <= _GEN_2950;
         end else begin
           cache_39_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9946,9 +9982,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_40_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4610 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4614 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_40_line_0 <= _GEN_2946;
+          cache_40_line_0 <= _GEN_2950;
         end else begin
           cache_40_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9961,9 +9997,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_40_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4610 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4614 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_40_line_1 <= _GEN_2946;
+          cache_40_line_1 <= _GEN_2950;
         end else begin
           cache_40_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9976,9 +10012,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_40_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4610 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4614 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_40_line_2 <= _GEN_2946;
+          cache_40_line_2 <= _GEN_2950;
         end else begin
           cache_40_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -9991,9 +10027,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_40_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4610 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4614 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_40_line_3 <= _GEN_2946;
+          cache_40_line_3 <= _GEN_2950;
         end else begin
           cache_40_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10006,9 +10042,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_40_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4610 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4614 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_40_line_4 <= _GEN_2946;
+          cache_40_line_4 <= _GEN_2950;
         end else begin
           cache_40_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10021,9 +10057,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_40_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4610 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4614 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_40_line_5 <= _GEN_2946;
+          cache_40_line_5 <= _GEN_2950;
         end else begin
           cache_40_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10036,9 +10072,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_40_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4610 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4614 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_40_line_6 <= _GEN_2946;
+          cache_40_line_6 <= _GEN_2950;
         end else begin
           cache_40_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10051,9 +10087,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_40_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4610 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4614 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_40_line_7 <= _GEN_2946;
+          cache_40_line_7 <= _GEN_2950;
         end else begin
           cache_40_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10078,9 +10114,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_41_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4626 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4630 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_41_line_0 <= _GEN_2946;
+          cache_41_line_0 <= _GEN_2950;
         end else begin
           cache_41_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10093,9 +10129,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_41_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4626 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4630 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_41_line_1 <= _GEN_2946;
+          cache_41_line_1 <= _GEN_2950;
         end else begin
           cache_41_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10108,9 +10144,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_41_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4626 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4630 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_41_line_2 <= _GEN_2946;
+          cache_41_line_2 <= _GEN_2950;
         end else begin
           cache_41_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10123,9 +10159,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_41_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4626 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4630 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_41_line_3 <= _GEN_2946;
+          cache_41_line_3 <= _GEN_2950;
         end else begin
           cache_41_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10138,9 +10174,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_41_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4626 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4630 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_41_line_4 <= _GEN_2946;
+          cache_41_line_4 <= _GEN_2950;
         end else begin
           cache_41_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10153,9 +10189,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_41_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4626 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4630 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_41_line_5 <= _GEN_2946;
+          cache_41_line_5 <= _GEN_2950;
         end else begin
           cache_41_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10168,9 +10204,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_41_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4626 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4630 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_41_line_6 <= _GEN_2946;
+          cache_41_line_6 <= _GEN_2950;
         end else begin
           cache_41_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10183,9 +10219,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_41_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4626 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4630 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_41_line_7 <= _GEN_2946;
+          cache_41_line_7 <= _GEN_2950;
         end else begin
           cache_41_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10210,9 +10246,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_42_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4642 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4646 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_42_line_0 <= _GEN_2946;
+          cache_42_line_0 <= _GEN_2950;
         end else begin
           cache_42_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10225,9 +10261,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_42_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4642 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4646 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_42_line_1 <= _GEN_2946;
+          cache_42_line_1 <= _GEN_2950;
         end else begin
           cache_42_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10240,9 +10276,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_42_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4642 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4646 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_42_line_2 <= _GEN_2946;
+          cache_42_line_2 <= _GEN_2950;
         end else begin
           cache_42_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10255,9 +10291,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_42_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4642 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4646 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_42_line_3 <= _GEN_2946;
+          cache_42_line_3 <= _GEN_2950;
         end else begin
           cache_42_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10270,9 +10306,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_42_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4642 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4646 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_42_line_4 <= _GEN_2946;
+          cache_42_line_4 <= _GEN_2950;
         end else begin
           cache_42_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10285,9 +10321,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_42_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4642 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4646 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_42_line_5 <= _GEN_2946;
+          cache_42_line_5 <= _GEN_2950;
         end else begin
           cache_42_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10300,9 +10336,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_42_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4642 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4646 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_42_line_6 <= _GEN_2946;
+          cache_42_line_6 <= _GEN_2950;
         end else begin
           cache_42_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10315,9 +10351,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_42_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4642 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4646 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_42_line_7 <= _GEN_2946;
+          cache_42_line_7 <= _GEN_2950;
         end else begin
           cache_42_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10342,9 +10378,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_43_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4658 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4662 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_43_line_0 <= _GEN_2946;
+          cache_43_line_0 <= _GEN_2950;
         end else begin
           cache_43_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10357,9 +10393,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_43_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4658 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4662 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_43_line_1 <= _GEN_2946;
+          cache_43_line_1 <= _GEN_2950;
         end else begin
           cache_43_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10372,9 +10408,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_43_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4658 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4662 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_43_line_2 <= _GEN_2946;
+          cache_43_line_2 <= _GEN_2950;
         end else begin
           cache_43_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10387,9 +10423,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_43_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4658 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4662 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_43_line_3 <= _GEN_2946;
+          cache_43_line_3 <= _GEN_2950;
         end else begin
           cache_43_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10402,9 +10438,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_43_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4658 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4662 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_43_line_4 <= _GEN_2946;
+          cache_43_line_4 <= _GEN_2950;
         end else begin
           cache_43_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10417,9 +10453,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_43_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4658 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4662 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_43_line_5 <= _GEN_2946;
+          cache_43_line_5 <= _GEN_2950;
         end else begin
           cache_43_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10432,9 +10468,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_43_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4658 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4662 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_43_line_6 <= _GEN_2946;
+          cache_43_line_6 <= _GEN_2950;
         end else begin
           cache_43_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10447,9 +10483,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_43_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4658 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4662 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_43_line_7 <= _GEN_2946;
+          cache_43_line_7 <= _GEN_2950;
         end else begin
           cache_43_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10474,9 +10510,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_44_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4674 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4678 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_44_line_0 <= _GEN_2946;
+          cache_44_line_0 <= _GEN_2950;
         end else begin
           cache_44_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10489,9 +10525,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_44_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4674 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4678 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_44_line_1 <= _GEN_2946;
+          cache_44_line_1 <= _GEN_2950;
         end else begin
           cache_44_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10504,9 +10540,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_44_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4674 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4678 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_44_line_2 <= _GEN_2946;
+          cache_44_line_2 <= _GEN_2950;
         end else begin
           cache_44_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10519,9 +10555,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_44_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4674 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4678 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_44_line_3 <= _GEN_2946;
+          cache_44_line_3 <= _GEN_2950;
         end else begin
           cache_44_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10534,9 +10570,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_44_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4674 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4678 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_44_line_4 <= _GEN_2946;
+          cache_44_line_4 <= _GEN_2950;
         end else begin
           cache_44_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10549,9 +10585,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_44_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4674 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4678 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_44_line_5 <= _GEN_2946;
+          cache_44_line_5 <= _GEN_2950;
         end else begin
           cache_44_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10564,9 +10600,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_44_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4674 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4678 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_44_line_6 <= _GEN_2946;
+          cache_44_line_6 <= _GEN_2950;
         end else begin
           cache_44_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10579,9 +10615,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_44_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4674 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4678 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_44_line_7 <= _GEN_2946;
+          cache_44_line_7 <= _GEN_2950;
         end else begin
           cache_44_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10606,9 +10642,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_45_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4690 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4694 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_45_line_0 <= _GEN_2946;
+          cache_45_line_0 <= _GEN_2950;
         end else begin
           cache_45_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10621,9 +10657,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_45_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4690 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4694 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_45_line_1 <= _GEN_2946;
+          cache_45_line_1 <= _GEN_2950;
         end else begin
           cache_45_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10636,9 +10672,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_45_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4690 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4694 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_45_line_2 <= _GEN_2946;
+          cache_45_line_2 <= _GEN_2950;
         end else begin
           cache_45_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10651,9 +10687,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_45_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4690 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4694 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_45_line_3 <= _GEN_2946;
+          cache_45_line_3 <= _GEN_2950;
         end else begin
           cache_45_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10666,9 +10702,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_45_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4690 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4694 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_45_line_4 <= _GEN_2946;
+          cache_45_line_4 <= _GEN_2950;
         end else begin
           cache_45_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10681,9 +10717,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_45_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4690 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4694 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_45_line_5 <= _GEN_2946;
+          cache_45_line_5 <= _GEN_2950;
         end else begin
           cache_45_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10696,9 +10732,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_45_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4690 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4694 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_45_line_6 <= _GEN_2946;
+          cache_45_line_6 <= _GEN_2950;
         end else begin
           cache_45_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10711,9 +10747,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_45_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4690 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4694 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_45_line_7 <= _GEN_2946;
+          cache_45_line_7 <= _GEN_2950;
         end else begin
           cache_45_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10738,9 +10774,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_46_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4706 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4710 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_46_line_0 <= _GEN_2946;
+          cache_46_line_0 <= _GEN_2950;
         end else begin
           cache_46_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10753,9 +10789,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_46_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4706 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4710 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_46_line_1 <= _GEN_2946;
+          cache_46_line_1 <= _GEN_2950;
         end else begin
           cache_46_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10768,9 +10804,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_46_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4706 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4710 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_46_line_2 <= _GEN_2946;
+          cache_46_line_2 <= _GEN_2950;
         end else begin
           cache_46_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10783,9 +10819,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_46_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4706 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4710 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_46_line_3 <= _GEN_2946;
+          cache_46_line_3 <= _GEN_2950;
         end else begin
           cache_46_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10798,9 +10834,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_46_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4706 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4710 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_46_line_4 <= _GEN_2946;
+          cache_46_line_4 <= _GEN_2950;
         end else begin
           cache_46_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10813,9 +10849,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_46_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4706 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4710 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_46_line_5 <= _GEN_2946;
+          cache_46_line_5 <= _GEN_2950;
         end else begin
           cache_46_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10828,9 +10864,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_46_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4706 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4710 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_46_line_6 <= _GEN_2946;
+          cache_46_line_6 <= _GEN_2950;
         end else begin
           cache_46_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10843,9 +10879,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_46_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4706 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4710 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_46_line_7 <= _GEN_2946;
+          cache_46_line_7 <= _GEN_2950;
         end else begin
           cache_46_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10870,9 +10906,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_47_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4722 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4726 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_47_line_0 <= _GEN_2946;
+          cache_47_line_0 <= _GEN_2950;
         end else begin
           cache_47_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10885,9 +10921,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_47_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4722 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4726 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_47_line_1 <= _GEN_2946;
+          cache_47_line_1 <= _GEN_2950;
         end else begin
           cache_47_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10900,9 +10936,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_47_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4722 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4726 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_47_line_2 <= _GEN_2946;
+          cache_47_line_2 <= _GEN_2950;
         end else begin
           cache_47_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10915,9 +10951,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_47_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4722 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4726 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_47_line_3 <= _GEN_2946;
+          cache_47_line_3 <= _GEN_2950;
         end else begin
           cache_47_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10930,9 +10966,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_47_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4722 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4726 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_47_line_4 <= _GEN_2946;
+          cache_47_line_4 <= _GEN_2950;
         end else begin
           cache_47_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10945,9 +10981,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_47_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4722 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4726 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_47_line_5 <= _GEN_2946;
+          cache_47_line_5 <= _GEN_2950;
         end else begin
           cache_47_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10960,9 +10996,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_47_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4722 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4726 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_47_line_6 <= _GEN_2946;
+          cache_47_line_6 <= _GEN_2950;
         end else begin
           cache_47_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -10975,9 +11011,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_47_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4722 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4726 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_47_line_7 <= _GEN_2946;
+          cache_47_line_7 <= _GEN_2950;
         end else begin
           cache_47_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11002,9 +11038,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_48_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4738 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4742 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_48_line_0 <= _GEN_2946;
+          cache_48_line_0 <= _GEN_2950;
         end else begin
           cache_48_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11017,9 +11053,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_48_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4738 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4742 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_48_line_1 <= _GEN_2946;
+          cache_48_line_1 <= _GEN_2950;
         end else begin
           cache_48_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11032,9 +11068,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_48_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4738 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4742 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_48_line_2 <= _GEN_2946;
+          cache_48_line_2 <= _GEN_2950;
         end else begin
           cache_48_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11047,9 +11083,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_48_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4738 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4742 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_48_line_3 <= _GEN_2946;
+          cache_48_line_3 <= _GEN_2950;
         end else begin
           cache_48_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11062,9 +11098,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_48_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4738 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4742 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_48_line_4 <= _GEN_2946;
+          cache_48_line_4 <= _GEN_2950;
         end else begin
           cache_48_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11077,9 +11113,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_48_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4738 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4742 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_48_line_5 <= _GEN_2946;
+          cache_48_line_5 <= _GEN_2950;
         end else begin
           cache_48_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11092,9 +11128,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_48_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4738 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4742 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_48_line_6 <= _GEN_2946;
+          cache_48_line_6 <= _GEN_2950;
         end else begin
           cache_48_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11107,9 +11143,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_48_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4738 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4742 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_48_line_7 <= _GEN_2946;
+          cache_48_line_7 <= _GEN_2950;
         end else begin
           cache_48_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11134,9 +11170,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_49_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4754 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4758 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_49_line_0 <= _GEN_2946;
+          cache_49_line_0 <= _GEN_2950;
         end else begin
           cache_49_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11149,9 +11185,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_49_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4754 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4758 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_49_line_1 <= _GEN_2946;
+          cache_49_line_1 <= _GEN_2950;
         end else begin
           cache_49_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11164,9 +11200,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_49_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4754 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4758 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_49_line_2 <= _GEN_2946;
+          cache_49_line_2 <= _GEN_2950;
         end else begin
           cache_49_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11179,9 +11215,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_49_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4754 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4758 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_49_line_3 <= _GEN_2946;
+          cache_49_line_3 <= _GEN_2950;
         end else begin
           cache_49_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11194,9 +11230,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_49_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4754 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4758 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_49_line_4 <= _GEN_2946;
+          cache_49_line_4 <= _GEN_2950;
         end else begin
           cache_49_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11209,9 +11245,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_49_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4754 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4758 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_49_line_5 <= _GEN_2946;
+          cache_49_line_5 <= _GEN_2950;
         end else begin
           cache_49_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11224,9 +11260,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_49_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4754 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4758 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_49_line_6 <= _GEN_2946;
+          cache_49_line_6 <= _GEN_2950;
         end else begin
           cache_49_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11239,9 +11275,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_49_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4754 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4758 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_49_line_7 <= _GEN_2946;
+          cache_49_line_7 <= _GEN_2950;
         end else begin
           cache_49_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11266,9 +11302,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_50_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4770 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4774 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_50_line_0 <= _GEN_2946;
+          cache_50_line_0 <= _GEN_2950;
         end else begin
           cache_50_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11281,9 +11317,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_50_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4770 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4774 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_50_line_1 <= _GEN_2946;
+          cache_50_line_1 <= _GEN_2950;
         end else begin
           cache_50_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11296,9 +11332,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_50_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4770 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4774 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_50_line_2 <= _GEN_2946;
+          cache_50_line_2 <= _GEN_2950;
         end else begin
           cache_50_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11311,9 +11347,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_50_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4770 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4774 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_50_line_3 <= _GEN_2946;
+          cache_50_line_3 <= _GEN_2950;
         end else begin
           cache_50_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11326,9 +11362,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_50_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4770 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4774 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_50_line_4 <= _GEN_2946;
+          cache_50_line_4 <= _GEN_2950;
         end else begin
           cache_50_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11341,9 +11377,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_50_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4770 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4774 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_50_line_5 <= _GEN_2946;
+          cache_50_line_5 <= _GEN_2950;
         end else begin
           cache_50_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11356,9 +11392,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_50_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4770 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4774 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_50_line_6 <= _GEN_2946;
+          cache_50_line_6 <= _GEN_2950;
         end else begin
           cache_50_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11371,9 +11407,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_50_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4770 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4774 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_50_line_7 <= _GEN_2946;
+          cache_50_line_7 <= _GEN_2950;
         end else begin
           cache_50_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11398,9 +11434,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_51_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4786 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4790 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_51_line_0 <= _GEN_2946;
+          cache_51_line_0 <= _GEN_2950;
         end else begin
           cache_51_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11413,9 +11449,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_51_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4786 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4790 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_51_line_1 <= _GEN_2946;
+          cache_51_line_1 <= _GEN_2950;
         end else begin
           cache_51_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11428,9 +11464,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_51_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4786 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4790 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_51_line_2 <= _GEN_2946;
+          cache_51_line_2 <= _GEN_2950;
         end else begin
           cache_51_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11443,9 +11479,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_51_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4786 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4790 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_51_line_3 <= _GEN_2946;
+          cache_51_line_3 <= _GEN_2950;
         end else begin
           cache_51_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11458,9 +11494,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_51_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4786 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4790 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_51_line_4 <= _GEN_2946;
+          cache_51_line_4 <= _GEN_2950;
         end else begin
           cache_51_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11473,9 +11509,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_51_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4786 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4790 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_51_line_5 <= _GEN_2946;
+          cache_51_line_5 <= _GEN_2950;
         end else begin
           cache_51_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11488,9 +11524,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_51_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4786 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4790 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_51_line_6 <= _GEN_2946;
+          cache_51_line_6 <= _GEN_2950;
         end else begin
           cache_51_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11503,9 +11539,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_51_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4786 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4790 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_51_line_7 <= _GEN_2946;
+          cache_51_line_7 <= _GEN_2950;
         end else begin
           cache_51_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11530,9 +11566,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_52_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4802 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4806 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_52_line_0 <= _GEN_2946;
+          cache_52_line_0 <= _GEN_2950;
         end else begin
           cache_52_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11545,9 +11581,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_52_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4802 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4806 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_52_line_1 <= _GEN_2946;
+          cache_52_line_1 <= _GEN_2950;
         end else begin
           cache_52_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11560,9 +11596,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_52_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4802 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4806 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_52_line_2 <= _GEN_2946;
+          cache_52_line_2 <= _GEN_2950;
         end else begin
           cache_52_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11575,9 +11611,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_52_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4802 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4806 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_52_line_3 <= _GEN_2946;
+          cache_52_line_3 <= _GEN_2950;
         end else begin
           cache_52_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11590,9 +11626,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_52_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4802 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4806 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_52_line_4 <= _GEN_2946;
+          cache_52_line_4 <= _GEN_2950;
         end else begin
           cache_52_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11605,9 +11641,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_52_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4802 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4806 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_52_line_5 <= _GEN_2946;
+          cache_52_line_5 <= _GEN_2950;
         end else begin
           cache_52_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11620,9 +11656,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_52_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4802 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4806 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_52_line_6 <= _GEN_2946;
+          cache_52_line_6 <= _GEN_2950;
         end else begin
           cache_52_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11635,9 +11671,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_52_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4802 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4806 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_52_line_7 <= _GEN_2946;
+          cache_52_line_7 <= _GEN_2950;
         end else begin
           cache_52_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11662,9 +11698,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_53_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4818 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4822 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_53_line_0 <= _GEN_2946;
+          cache_53_line_0 <= _GEN_2950;
         end else begin
           cache_53_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11677,9 +11713,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_53_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4818 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4822 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_53_line_1 <= _GEN_2946;
+          cache_53_line_1 <= _GEN_2950;
         end else begin
           cache_53_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11692,9 +11728,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_53_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4818 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4822 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_53_line_2 <= _GEN_2946;
+          cache_53_line_2 <= _GEN_2950;
         end else begin
           cache_53_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11707,9 +11743,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_53_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4818 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4822 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_53_line_3 <= _GEN_2946;
+          cache_53_line_3 <= _GEN_2950;
         end else begin
           cache_53_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11722,9 +11758,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_53_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4818 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4822 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_53_line_4 <= _GEN_2946;
+          cache_53_line_4 <= _GEN_2950;
         end else begin
           cache_53_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11737,9 +11773,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_53_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4818 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4822 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_53_line_5 <= _GEN_2946;
+          cache_53_line_5 <= _GEN_2950;
         end else begin
           cache_53_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11752,9 +11788,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_53_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4818 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4822 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_53_line_6 <= _GEN_2946;
+          cache_53_line_6 <= _GEN_2950;
         end else begin
           cache_53_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11767,9 +11803,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_53_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4818 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4822 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_53_line_7 <= _GEN_2946;
+          cache_53_line_7 <= _GEN_2950;
         end else begin
           cache_53_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11794,9 +11830,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_54_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4834 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4838 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_54_line_0 <= _GEN_2946;
+          cache_54_line_0 <= _GEN_2950;
         end else begin
           cache_54_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11809,9 +11845,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_54_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4834 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4838 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_54_line_1 <= _GEN_2946;
+          cache_54_line_1 <= _GEN_2950;
         end else begin
           cache_54_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11824,9 +11860,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_54_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4834 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4838 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_54_line_2 <= _GEN_2946;
+          cache_54_line_2 <= _GEN_2950;
         end else begin
           cache_54_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11839,9 +11875,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_54_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4834 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4838 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_54_line_3 <= _GEN_2946;
+          cache_54_line_3 <= _GEN_2950;
         end else begin
           cache_54_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11854,9 +11890,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_54_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4834 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4838 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_54_line_4 <= _GEN_2946;
+          cache_54_line_4 <= _GEN_2950;
         end else begin
           cache_54_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11869,9 +11905,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_54_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4834 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4838 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_54_line_5 <= _GEN_2946;
+          cache_54_line_5 <= _GEN_2950;
         end else begin
           cache_54_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11884,9 +11920,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_54_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4834 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4838 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_54_line_6 <= _GEN_2946;
+          cache_54_line_6 <= _GEN_2950;
         end else begin
           cache_54_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11899,9 +11935,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_54_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4834 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4838 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_54_line_7 <= _GEN_2946;
+          cache_54_line_7 <= _GEN_2950;
         end else begin
           cache_54_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11926,9 +11962,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_55_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4850 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4854 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_55_line_0 <= _GEN_2946;
+          cache_55_line_0 <= _GEN_2950;
         end else begin
           cache_55_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11941,9 +11977,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_55_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4850 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4854 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_55_line_1 <= _GEN_2946;
+          cache_55_line_1 <= _GEN_2950;
         end else begin
           cache_55_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11956,9 +11992,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_55_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4850 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4854 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_55_line_2 <= _GEN_2946;
+          cache_55_line_2 <= _GEN_2950;
         end else begin
           cache_55_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11971,9 +12007,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_55_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4850 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4854 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_55_line_3 <= _GEN_2946;
+          cache_55_line_3 <= _GEN_2950;
         end else begin
           cache_55_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -11986,9 +12022,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_55_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4850 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4854 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_55_line_4 <= _GEN_2946;
+          cache_55_line_4 <= _GEN_2950;
         end else begin
           cache_55_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12001,9 +12037,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_55_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4850 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4854 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_55_line_5 <= _GEN_2946;
+          cache_55_line_5 <= _GEN_2950;
         end else begin
           cache_55_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12016,9 +12052,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_55_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4850 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4854 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_55_line_6 <= _GEN_2946;
+          cache_55_line_6 <= _GEN_2950;
         end else begin
           cache_55_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12031,9 +12067,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_55_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4850 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4854 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_55_line_7 <= _GEN_2946;
+          cache_55_line_7 <= _GEN_2950;
         end else begin
           cache_55_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12058,9 +12094,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_56_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4866 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4870 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_56_line_0 <= _GEN_2946;
+          cache_56_line_0 <= _GEN_2950;
         end else begin
           cache_56_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12073,9 +12109,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_56_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4866 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4870 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_56_line_1 <= _GEN_2946;
+          cache_56_line_1 <= _GEN_2950;
         end else begin
           cache_56_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12088,9 +12124,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_56_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4866 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4870 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_56_line_2 <= _GEN_2946;
+          cache_56_line_2 <= _GEN_2950;
         end else begin
           cache_56_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12103,9 +12139,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_56_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4866 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4870 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_56_line_3 <= _GEN_2946;
+          cache_56_line_3 <= _GEN_2950;
         end else begin
           cache_56_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12118,9 +12154,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_56_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4866 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4870 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_56_line_4 <= _GEN_2946;
+          cache_56_line_4 <= _GEN_2950;
         end else begin
           cache_56_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12133,9 +12169,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_56_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4866 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4870 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_56_line_5 <= _GEN_2946;
+          cache_56_line_5 <= _GEN_2950;
         end else begin
           cache_56_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12148,9 +12184,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_56_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4866 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4870 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_56_line_6 <= _GEN_2946;
+          cache_56_line_6 <= _GEN_2950;
         end else begin
           cache_56_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12163,9 +12199,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_56_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4866 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4870 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_56_line_7 <= _GEN_2946;
+          cache_56_line_7 <= _GEN_2950;
         end else begin
           cache_56_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12190,9 +12226,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_57_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4882 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4886 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_57_line_0 <= _GEN_2946;
+          cache_57_line_0 <= _GEN_2950;
         end else begin
           cache_57_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12205,9 +12241,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_57_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4882 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4886 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_57_line_1 <= _GEN_2946;
+          cache_57_line_1 <= _GEN_2950;
         end else begin
           cache_57_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12220,9 +12256,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_57_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4882 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4886 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_57_line_2 <= _GEN_2946;
+          cache_57_line_2 <= _GEN_2950;
         end else begin
           cache_57_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12235,9 +12271,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_57_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4882 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4886 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_57_line_3 <= _GEN_2946;
+          cache_57_line_3 <= _GEN_2950;
         end else begin
           cache_57_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12250,9 +12286,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_57_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4882 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4886 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_57_line_4 <= _GEN_2946;
+          cache_57_line_4 <= _GEN_2950;
         end else begin
           cache_57_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12265,9 +12301,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_57_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4882 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4886 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_57_line_5 <= _GEN_2946;
+          cache_57_line_5 <= _GEN_2950;
         end else begin
           cache_57_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12280,9 +12316,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_57_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4882 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4886 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_57_line_6 <= _GEN_2946;
+          cache_57_line_6 <= _GEN_2950;
         end else begin
           cache_57_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12295,9 +12331,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_57_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4882 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4886 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_57_line_7 <= _GEN_2946;
+          cache_57_line_7 <= _GEN_2950;
         end else begin
           cache_57_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12322,9 +12358,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_58_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4898 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4902 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_58_line_0 <= _GEN_2946;
+          cache_58_line_0 <= _GEN_2950;
         end else begin
           cache_58_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12337,9 +12373,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_58_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4898 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4902 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_58_line_1 <= _GEN_2946;
+          cache_58_line_1 <= _GEN_2950;
         end else begin
           cache_58_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12352,9 +12388,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_58_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4898 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4902 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_58_line_2 <= _GEN_2946;
+          cache_58_line_2 <= _GEN_2950;
         end else begin
           cache_58_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12367,9 +12403,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_58_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4898 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4902 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_58_line_3 <= _GEN_2946;
+          cache_58_line_3 <= _GEN_2950;
         end else begin
           cache_58_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12382,9 +12418,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_58_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4898 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4902 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_58_line_4 <= _GEN_2946;
+          cache_58_line_4 <= _GEN_2950;
         end else begin
           cache_58_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12397,9 +12433,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_58_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4898 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4902 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_58_line_5 <= _GEN_2946;
+          cache_58_line_5 <= _GEN_2950;
         end else begin
           cache_58_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12412,9 +12448,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_58_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4898 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4902 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_58_line_6 <= _GEN_2946;
+          cache_58_line_6 <= _GEN_2950;
         end else begin
           cache_58_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12427,9 +12463,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_58_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4898 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4902 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_58_line_7 <= _GEN_2946;
+          cache_58_line_7 <= _GEN_2950;
         end else begin
           cache_58_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12454,9 +12490,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_59_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4914 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4918 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_59_line_0 <= _GEN_2946;
+          cache_59_line_0 <= _GEN_2950;
         end else begin
           cache_59_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12469,9 +12505,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_59_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4914 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4918 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_59_line_1 <= _GEN_2946;
+          cache_59_line_1 <= _GEN_2950;
         end else begin
           cache_59_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12484,9 +12520,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_59_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4914 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4918 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_59_line_2 <= _GEN_2946;
+          cache_59_line_2 <= _GEN_2950;
         end else begin
           cache_59_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12499,9 +12535,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_59_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4914 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4918 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_59_line_3 <= _GEN_2946;
+          cache_59_line_3 <= _GEN_2950;
         end else begin
           cache_59_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12514,9 +12550,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_59_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4914 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4918 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_59_line_4 <= _GEN_2946;
+          cache_59_line_4 <= _GEN_2950;
         end else begin
           cache_59_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12529,9 +12565,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_59_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4914 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4918 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_59_line_5 <= _GEN_2946;
+          cache_59_line_5 <= _GEN_2950;
         end else begin
           cache_59_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12544,9 +12580,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_59_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4914 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4918 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_59_line_6 <= _GEN_2946;
+          cache_59_line_6 <= _GEN_2950;
         end else begin
           cache_59_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12559,9 +12595,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_59_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4914 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4918 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_59_line_7 <= _GEN_2946;
+          cache_59_line_7 <= _GEN_2950;
         end else begin
           cache_59_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12586,9 +12622,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_60_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4930 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4934 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_60_line_0 <= _GEN_2946;
+          cache_60_line_0 <= _GEN_2950;
         end else begin
           cache_60_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12601,9 +12637,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_60_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4930 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4934 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_60_line_1 <= _GEN_2946;
+          cache_60_line_1 <= _GEN_2950;
         end else begin
           cache_60_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12616,9 +12652,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_60_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4930 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4934 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_60_line_2 <= _GEN_2946;
+          cache_60_line_2 <= _GEN_2950;
         end else begin
           cache_60_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12631,9 +12667,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_60_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4930 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4934 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_60_line_3 <= _GEN_2946;
+          cache_60_line_3 <= _GEN_2950;
         end else begin
           cache_60_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12646,9 +12682,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_60_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4930 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4934 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_60_line_4 <= _GEN_2946;
+          cache_60_line_4 <= _GEN_2950;
         end else begin
           cache_60_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12661,9 +12697,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_60_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4930 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4934 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_60_line_5 <= _GEN_2946;
+          cache_60_line_5 <= _GEN_2950;
         end else begin
           cache_60_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12676,9 +12712,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_60_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4930 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4934 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_60_line_6 <= _GEN_2946;
+          cache_60_line_6 <= _GEN_2950;
         end else begin
           cache_60_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12691,9 +12727,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_60_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4930 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4934 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_60_line_7 <= _GEN_2946;
+          cache_60_line_7 <= _GEN_2950;
         end else begin
           cache_60_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12718,9 +12754,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_61_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4946 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4950 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_61_line_0 <= _GEN_2946;
+          cache_61_line_0 <= _GEN_2950;
         end else begin
           cache_61_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12733,9 +12769,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_61_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4946 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4950 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_61_line_1 <= _GEN_2946;
+          cache_61_line_1 <= _GEN_2950;
         end else begin
           cache_61_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12748,9 +12784,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_61_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4946 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4950 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_61_line_2 <= _GEN_2946;
+          cache_61_line_2 <= _GEN_2950;
         end else begin
           cache_61_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12763,9 +12799,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_61_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4946 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4950 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_61_line_3 <= _GEN_2946;
+          cache_61_line_3 <= _GEN_2950;
         end else begin
           cache_61_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12778,9 +12814,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_61_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4946 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4950 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_61_line_4 <= _GEN_2946;
+          cache_61_line_4 <= _GEN_2950;
         end else begin
           cache_61_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12793,9 +12829,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_61_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4946 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4950 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_61_line_5 <= _GEN_2946;
+          cache_61_line_5 <= _GEN_2950;
         end else begin
           cache_61_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12808,9 +12844,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_61_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4946 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4950 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_61_line_6 <= _GEN_2946;
+          cache_61_line_6 <= _GEN_2950;
         end else begin
           cache_61_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12823,9 +12859,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_61_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4946 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4950 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_61_line_7 <= _GEN_2946;
+          cache_61_line_7 <= _GEN_2950;
         end else begin
           cache_61_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12850,9 +12886,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_62_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4962 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4966 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_62_line_0 <= _GEN_2946;
+          cache_62_line_0 <= _GEN_2950;
         end else begin
           cache_62_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12865,9 +12901,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_62_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4962 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4966 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_62_line_1 <= _GEN_2946;
+          cache_62_line_1 <= _GEN_2950;
         end else begin
           cache_62_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12880,9 +12916,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_62_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4962 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4966 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_62_line_2 <= _GEN_2946;
+          cache_62_line_2 <= _GEN_2950;
         end else begin
           cache_62_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12895,9 +12931,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_62_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4962 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4966 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_62_line_3 <= _GEN_2946;
+          cache_62_line_3 <= _GEN_2950;
         end else begin
           cache_62_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12910,9 +12946,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_62_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4962 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4966 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_62_line_4 <= _GEN_2946;
+          cache_62_line_4 <= _GEN_2950;
         end else begin
           cache_62_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12925,9 +12961,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_62_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4962 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4966 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_62_line_5 <= _GEN_2946;
+          cache_62_line_5 <= _GEN_2950;
         end else begin
           cache_62_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12940,9 +12976,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_62_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4962 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4966 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_62_line_6 <= _GEN_2946;
+          cache_62_line_6 <= _GEN_2950;
         end else begin
           cache_62_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12955,9 +12991,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_62_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4962 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4966 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_62_line_7 <= _GEN_2946;
+          cache_62_line_7 <= _GEN_2950;
         end else begin
           cache_62_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12982,9 +13018,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_63_line_0 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4978 & _GEN_3987) begin // @[Cache.scala 74:43]
+      if (_GEN_4982 & _GEN_3991) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_63_line_0 <= _GEN_2946;
+          cache_63_line_0 <= _GEN_2950;
         end else begin
           cache_63_line_0 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -12997,9 +13033,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_63_line_1 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4978 & _GEN_3973) begin // @[Cache.scala 74:43]
+      if (_GEN_4982 & _GEN_3977) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_63_line_1 <= _GEN_2946;
+          cache_63_line_1 <= _GEN_2950;
         end else begin
           cache_63_line_1 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -13012,9 +13048,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_63_line_2 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4978 & _GEN_3975) begin // @[Cache.scala 74:43]
+      if (_GEN_4982 & _GEN_3979) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_63_line_2 <= _GEN_2946;
+          cache_63_line_2 <= _GEN_2950;
         end else begin
           cache_63_line_2 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -13027,9 +13063,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_63_line_3 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4978 & _GEN_3977) begin // @[Cache.scala 74:43]
+      if (_GEN_4982 & _GEN_3981) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_63_line_3 <= _GEN_2946;
+          cache_63_line_3 <= _GEN_2950;
         end else begin
           cache_63_line_3 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -13042,9 +13078,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_63_line_4 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4978 & _GEN_3979) begin // @[Cache.scala 74:43]
+      if (_GEN_4982 & _GEN_3983) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_63_line_4 <= _GEN_2946;
+          cache_63_line_4 <= _GEN_2950;
         end else begin
           cache_63_line_4 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -13057,9 +13093,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_63_line_5 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4978 & _GEN_3981) begin // @[Cache.scala 74:43]
+      if (_GEN_4982 & _GEN_3985) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_63_line_5 <= _GEN_2946;
+          cache_63_line_5 <= _GEN_2950;
         end else begin
           cache_63_line_5 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -13072,9 +13108,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_63_line_6 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4978 & _GEN_3983) begin // @[Cache.scala 74:43]
+      if (_GEN_4982 & _GEN_3987) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_63_line_6 <= _GEN_2946;
+          cache_63_line_6 <= _GEN_2950;
         end else begin
           cache_63_line_6 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -13087,9 +13123,9 @@ module L1(
     if (reset) begin // @[Cache.scala 32:22]
       cache_63_line_7 <= 32'h0; // @[Cache.scala 32:22]
     end else if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-      if (_GEN_4978 & _GEN_3985) begin // @[Cache.scala 74:43]
+      if (_GEN_4982 & _GEN_3989) begin // @[Cache.scala 79:43]
         if (io_cpuWriteEn & hit) begin // @[Cache.scala 62:29]
-          cache_63_line_7 <= _GEN_2946;
+          cache_63_line_7 <= _GEN_2950;
         end else begin
           cache_63_line_7 <= 32'h0; // @[Cache.scala 60:30]
         end
@@ -15404,7 +15440,7 @@ module AddresSelector(
   input  [10:0] io_bufferAddrs,
   output [10:0] io_out
 );
-  assign io_out = io_sel ? io_bufferAddrs : io_addrs; // @[Cache.scala 144:16]
+  assign io_out = io_sel ? io_bufferAddrs : io_addrs; // @[Cache.scala 149:16]
 endmodule
 module Cache(
   input          clock,
@@ -15422,52 +15458,52 @@ module Cache(
   output         io_outMemWrite,
   output [10:0]  io_outAddrs
 );
-  wire  cache_clock; // @[Cache.scala 95:21]
-  wire  cache_reset; // @[Cache.scala 95:21]
-  wire [15:0] cache_io_addrs; // @[Cache.scala 95:21]
-  wire [31:0] cache_io_cpuWriteData; // @[Cache.scala 95:21]
-  wire [31:0] cache_io_cpuReadData; // @[Cache.scala 95:21]
-  wire [1:0] cache_io_storeType; // @[Cache.scala 95:21]
-  wire  cache_io_cpuWriteEn; // @[Cache.scala 95:21]
-  wire [10:0] cache_io_bufferAddrs; // @[Cache.scala 95:21]
-  wire [255:0] cache_io_readBlock; // @[Cache.scala 95:21]
-  wire [255:0] cache_io_writeBlock; // @[Cache.scala 95:21]
-  wire  cache_io_blockWriteEn; // @[Cache.scala 95:21]
-  wire  cache_io_hit; // @[Cache.scala 95:21]
-  wire  cache_io_outValid; // @[Cache.scala 95:21]
-  wire  vc_clock; // @[Cache.scala 96:18]
-  wire  vc_reset; // @[Cache.scala 96:18]
-  wire [255:0] vc_io_inData; // @[Cache.scala 96:18]
-  wire [15:0] vc_io_inAddrs; // @[Cache.scala 96:18]
-  wire [10:0] vc_io_storeAddrs; // @[Cache.scala 96:18]
-  wire  vc_io_inValid; // @[Cache.scala 96:18]
-  wire [255:0] vc_io_outData; // @[Cache.scala 96:18]
-  wire [10:0] vc_io_outAddrs; // @[Cache.scala 96:18]
-  wire  vc_io_vhit; // @[Cache.scala 96:18]
-  wire  vc_io_en; // @[Cache.scala 96:18]
-  wire  cacheControl_clock; // @[Cache.scala 97:28]
-  wire  cacheControl_reset; // @[Cache.scala 97:28]
-  wire  cacheControl_io_inMemRead; // @[Cache.scala 97:28]
-  wire  cacheControl_io_inMemWrite; // @[Cache.scala 97:28]
-  wire  cacheControl_io_hit; // @[Cache.scala 97:28]
-  wire  cacheControl_io_vhit; // @[Cache.scala 97:28]
-  wire  cacheControl_io_valid; // @[Cache.scala 97:28]
-  wire  cacheControl_io_cacheEn; // @[Cache.scala 97:28]
-  wire  cacheControl_io_blockWriteEn; // @[Cache.scala 97:28]
-  wire  cacheControl_io_outMemRead; // @[Cache.scala 97:28]
-  wire  cacheControl_io_outMemWrite; // @[Cache.scala 97:28]
-  wire  cacheControl_io_sel; // @[Cache.scala 97:28]
-  wire  cacheControl_io_vcEn; // @[Cache.scala 97:28]
-  wire  cacheControl_io_dataSel; // @[Cache.scala 97:28]
-  wire  selector_io_sel; // @[Cache.scala 98:24]
-  wire [10:0] selector_io_addrs; // @[Cache.scala 98:24]
-  wire [10:0] selector_io_bufferAddrs; // @[Cache.scala 98:24]
-  wire [10:0] selector_io_out; // @[Cache.scala 98:24]
-  wire  dataSelector_io_sel; // @[Cache.scala 99:28]
-  wire [10:0] dataSelector_io_addrs; // @[Cache.scala 99:28]
-  wire [10:0] dataSelector_io_bufferAddrs; // @[Cache.scala 99:28]
-  wire [10:0] dataSelector_io_out; // @[Cache.scala 99:28]
-  L1 cache ( // @[Cache.scala 95:21]
+  wire  cache_clock; // @[Cache.scala 100:21]
+  wire  cache_reset; // @[Cache.scala 100:21]
+  wire [15:0] cache_io_addrs; // @[Cache.scala 100:21]
+  wire [31:0] cache_io_cpuWriteData; // @[Cache.scala 100:21]
+  wire [31:0] cache_io_cpuReadData; // @[Cache.scala 100:21]
+  wire [1:0] cache_io_storeType; // @[Cache.scala 100:21]
+  wire  cache_io_cpuWriteEn; // @[Cache.scala 100:21]
+  wire [10:0] cache_io_bufferAddrs; // @[Cache.scala 100:21]
+  wire [255:0] cache_io_readBlock; // @[Cache.scala 100:21]
+  wire [255:0] cache_io_writeBlock; // @[Cache.scala 100:21]
+  wire  cache_io_blockWriteEn; // @[Cache.scala 100:21]
+  wire  cache_io_hit; // @[Cache.scala 100:21]
+  wire  cache_io_outValid; // @[Cache.scala 100:21]
+  wire  vc_clock; // @[Cache.scala 101:18]
+  wire  vc_reset; // @[Cache.scala 101:18]
+  wire [255:0] vc_io_inData; // @[Cache.scala 101:18]
+  wire [15:0] vc_io_inAddrs; // @[Cache.scala 101:18]
+  wire [10:0] vc_io_storeAddrs; // @[Cache.scala 101:18]
+  wire  vc_io_inValid; // @[Cache.scala 101:18]
+  wire [255:0] vc_io_outData; // @[Cache.scala 101:18]
+  wire [10:0] vc_io_outAddrs; // @[Cache.scala 101:18]
+  wire  vc_io_vhit; // @[Cache.scala 101:18]
+  wire  vc_io_en; // @[Cache.scala 101:18]
+  wire  cacheControl_clock; // @[Cache.scala 102:28]
+  wire  cacheControl_reset; // @[Cache.scala 102:28]
+  wire  cacheControl_io_inMemRead; // @[Cache.scala 102:28]
+  wire  cacheControl_io_inMemWrite; // @[Cache.scala 102:28]
+  wire  cacheControl_io_hit; // @[Cache.scala 102:28]
+  wire  cacheControl_io_vhit; // @[Cache.scala 102:28]
+  wire  cacheControl_io_valid; // @[Cache.scala 102:28]
+  wire  cacheControl_io_cacheEn; // @[Cache.scala 102:28]
+  wire  cacheControl_io_blockWriteEn; // @[Cache.scala 102:28]
+  wire  cacheControl_io_outMemRead; // @[Cache.scala 102:28]
+  wire  cacheControl_io_outMemWrite; // @[Cache.scala 102:28]
+  wire  cacheControl_io_sel; // @[Cache.scala 102:28]
+  wire  cacheControl_io_vcEn; // @[Cache.scala 102:28]
+  wire  cacheControl_io_dataSel; // @[Cache.scala 102:28]
+  wire  selector_io_sel; // @[Cache.scala 103:24]
+  wire [10:0] selector_io_addrs; // @[Cache.scala 103:24]
+  wire [10:0] selector_io_bufferAddrs; // @[Cache.scala 103:24]
+  wire [10:0] selector_io_out; // @[Cache.scala 103:24]
+  wire  dataSelector_io_sel; // @[Cache.scala 104:28]
+  wire [10:0] dataSelector_io_addrs; // @[Cache.scala 104:28]
+  wire [10:0] dataSelector_io_bufferAddrs; // @[Cache.scala 104:28]
+  wire [10:0] dataSelector_io_out; // @[Cache.scala 104:28]
+  L1 cache ( // @[Cache.scala 100:21]
     .clock(cache_clock),
     .reset(cache_reset),
     .io_addrs(cache_io_addrs),
@@ -15482,7 +15518,7 @@ module Cache(
     .io_hit(cache_io_hit),
     .io_outValid(cache_io_outValid)
   );
-  VictimCache vc ( // @[Cache.scala 96:18]
+  VictimCache vc ( // @[Cache.scala 101:18]
     .clock(vc_clock),
     .reset(vc_reset),
     .io_inData(vc_io_inData),
@@ -15494,7 +15530,7 @@ module Cache(
     .io_vhit(vc_io_vhit),
     .io_en(vc_io_en)
   );
-  CacheControl cacheControl ( // @[Cache.scala 97:28]
+  CacheControl cacheControl ( // @[Cache.scala 102:28]
     .clock(cacheControl_clock),
     .reset(cacheControl_reset),
     .io_inMemRead(cacheControl_io_inMemRead),
@@ -15510,51 +15546,51 @@ module Cache(
     .io_vcEn(cacheControl_io_vcEn),
     .io_dataSel(cacheControl_io_dataSel)
   );
-  AddresSelector selector ( // @[Cache.scala 98:24]
+  AddresSelector selector ( // @[Cache.scala 103:24]
     .io_sel(selector_io_sel),
     .io_addrs(selector_io_addrs),
     .io_bufferAddrs(selector_io_bufferAddrs),
     .io_out(selector_io_out)
   );
-  AddresSelector dataSelector ( // @[Cache.scala 99:28]
+  AddresSelector dataSelector ( // @[Cache.scala 104:28]
     .io_sel(dataSelector_io_sel),
     .io_addrs(dataSelector_io_addrs),
     .io_bufferAddrs(dataSelector_io_bufferAddrs),
     .io_out(dataSelector_io_out)
   );
-  assign io_cpuReadData = cache_io_cpuReadData; // @[Cache.scala 127:18]
-  assign io_valid = cacheControl_io_valid; // @[Cache.scala 128:12]
-  assign io_readBlock = vc_io_outData; // @[Cache.scala 129:16]
-  assign io_outMemRead = cacheControl_io_outMemRead; // @[Cache.scala 130:17]
-  assign io_outMemWrite = cacheControl_io_outMemWrite; // @[Cache.scala 131:18]
-  assign io_outAddrs = selector_io_out; // @[Cache.scala 132:15]
+  assign io_cpuReadData = cache_io_cpuReadData; // @[Cache.scala 132:18]
+  assign io_valid = cacheControl_io_valid; // @[Cache.scala 133:12]
+  assign io_readBlock = vc_io_outData; // @[Cache.scala 134:16]
+  assign io_outMemRead = cacheControl_io_outMemRead; // @[Cache.scala 135:17]
+  assign io_outMemWrite = cacheControl_io_outMemWrite; // @[Cache.scala 136:18]
+  assign io_outAddrs = selector_io_out; // @[Cache.scala 137:15]
   assign cache_clock = clock;
   assign cache_reset = reset;
-  assign cache_io_addrs = io_addrs; // @[Cache.scala 101:18]
-  assign cache_io_cpuWriteData = io_cpuWriteData; // @[Cache.scala 102:25]
-  assign cache_io_storeType = io_storeType; // @[Cache.scala 103:22]
-  assign cache_io_cpuWriteEn = cacheControl_io_cacheEn; // @[Cache.scala 104:23]
-  assign cache_io_writeBlock = {{245'd0}, dataSelector_io_out}; // @[Cache.scala 105:23]
-  assign cache_io_blockWriteEn = cacheControl_io_blockWriteEn; // @[Cache.scala 106:25]
+  assign cache_io_addrs = io_addrs; // @[Cache.scala 106:18]
+  assign cache_io_cpuWriteData = io_cpuWriteData; // @[Cache.scala 107:25]
+  assign cache_io_storeType = io_storeType; // @[Cache.scala 108:22]
+  assign cache_io_cpuWriteEn = cacheControl_io_cacheEn; // @[Cache.scala 109:23]
+  assign cache_io_writeBlock = {{245'd0}, dataSelector_io_out}; // @[Cache.scala 110:23]
+  assign cache_io_blockWriteEn = cacheControl_io_blockWriteEn; // @[Cache.scala 111:25]
   assign vc_clock = clock;
   assign vc_reset = reset;
-  assign vc_io_inData = cache_io_readBlock; // @[Cache.scala 119:16]
-  assign vc_io_inAddrs = io_addrs; // @[Cache.scala 117:17]
-  assign vc_io_storeAddrs = cache_io_bufferAddrs; // @[Cache.scala 118:20]
-  assign vc_io_inValid = cache_io_outValid; // @[Cache.scala 121:17]
-  assign vc_io_en = cacheControl_io_vcEn; // @[Cache.scala 120:12]
+  assign vc_io_inData = cache_io_readBlock; // @[Cache.scala 124:16]
+  assign vc_io_inAddrs = io_addrs; // @[Cache.scala 122:17]
+  assign vc_io_storeAddrs = cache_io_bufferAddrs; // @[Cache.scala 123:20]
+  assign vc_io_inValid = cache_io_outValid; // @[Cache.scala 126:17]
+  assign vc_io_en = cacheControl_io_vcEn; // @[Cache.scala 125:12]
   assign cacheControl_clock = clock;
   assign cacheControl_reset = reset;
-  assign cacheControl_io_inMemRead = io_inMemRead; // @[Cache.scala 108:29]
-  assign cacheControl_io_inMemWrite = io_inMemWrite; // @[Cache.scala 109:30]
-  assign cacheControl_io_hit = cache_io_hit; // @[Cache.scala 110:23]
-  assign cacheControl_io_vhit = vc_io_vhit; // @[Cache.scala 111:24]
-  assign selector_io_sel = cacheControl_io_sel; // @[Cache.scala 113:19]
-  assign selector_io_addrs = io_addrs[15:5]; // @[Cache.scala 114:32]
-  assign selector_io_bufferAddrs = vc_io_outAddrs; // @[Cache.scala 115:27]
-  assign dataSelector_io_sel = cacheControl_io_dataSel; // @[Cache.scala 123:27]
-  assign dataSelector_io_addrs = vc_io_outData[10:0]; // @[Cache.scala 125:22]
-  assign dataSelector_io_bufferAddrs = io_writeBlock[10:0]; // @[Cache.scala 124:23]
+  assign cacheControl_io_inMemRead = io_inMemRead; // @[Cache.scala 113:29]
+  assign cacheControl_io_inMemWrite = io_inMemWrite; // @[Cache.scala 114:30]
+  assign cacheControl_io_hit = cache_io_hit; // @[Cache.scala 115:23]
+  assign cacheControl_io_vhit = vc_io_vhit; // @[Cache.scala 116:24]
+  assign selector_io_sel = cacheControl_io_sel; // @[Cache.scala 118:19]
+  assign selector_io_addrs = io_addrs[15:5]; // @[Cache.scala 119:32]
+  assign selector_io_bufferAddrs = vc_io_outAddrs; // @[Cache.scala 120:27]
+  assign dataSelector_io_sel = cacheControl_io_dataSel; // @[Cache.scala 128:27]
+  assign dataSelector_io_addrs = vc_io_outData[10:0]; // @[Cache.scala 130:22]
+  assign dataSelector_io_bufferAddrs = io_writeBlock[10:0]; // @[Cache.scala 129:23]
 endmodule
 module Processor(
   input          clock,

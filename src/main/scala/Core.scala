@@ -90,6 +90,7 @@ class Core extends Module {
   pcStall.io.next := aluBranchMux.io.out
 
   loadSelector.io.func3 := io.instr(14, 12)
+  loadSelector.io.byteSel := alu.io.ALUOut(1,0)
   loadSelector.io.inData := io.memReadData
 
   io.memRead := controlUnit.io.memRead

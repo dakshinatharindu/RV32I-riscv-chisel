@@ -62,10 +62,15 @@ class L1 extends Module {
   when(io.cpuWriteEn & hit) {
     switch(io.storeType) {
       is("b00".U) {
-        cacheData := temp(31, 8) ## io.cpuWriteData(7, 0)
+        switch(io.addrs(1, 0)){
+          is("b00".U) {cacheData := temp(31, 8) ## io.cpuWriteData(7, 0)}
+          is("b01".U) {cacheData := temp(31, 16) ## io.cpuWriteData(7, 0) ## temp(7, 0)}
+          is("b10".U) {cacheData := temp(31, 24) ## io.cpuWriteData(7, 0) ## temp(15, 0)}
+          is("b11".U) {cacheData := io.cpuWriteData(7, 0) ## temp(23, 0)}
+        }
       }
       is("b01".U) {
-        cacheData := temp(31, 16) ## io.cpuWriteData(15, 0)
+        cacheData := Mux(io.addrs(1)===0.U, temp(31, 16) ## io.cpuWriteData(15, 0), io.cpuWriteData(15, 0) ## temp(15, 0))
       }
       is("b10".U) {
         cacheData := io.cpuWriteData
