@@ -1,15 +1,25 @@
 #include <stdlib.h>
+#include <verilated_vcd_c.h>
+
 #include <bitset>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
 #include <vector>
+
 #include "VProcessor.h"
 #include "verilated.h"
+
+vluint64_t sim_time = 0;
 
 int main(int argc, char **argv) {
     Verilated::commandArgs(argc, argv);
     VProcessor *tb = new VProcessor;
+
+    Verilated::traceEverOn(true);
+    VerilatedVcdC *m_trace = new VerilatedVcdC;
+    tb->trace(m_trace, 5);
+    m_trace->open("waveform.vcd");
 
     const char *filename = "verilatorInstr.txt";
     std::fstream assemblyFile;
@@ -50,24 +60,49 @@ int main(int argc, char **argv) {
         tb->io_instr = instructions[instrAddrs];
         tb->clock = 0;
         tb->eval();
-
+        sim_time++;
+        m_trace->dump(sim_time);
         printf("clock count :%d\n", clockCount);
         printf("Instr. Addrs. :%d\n", tb->io_instrAddrs);
         printf("\n");
-        printf("ALUCTRL :%d\n", tb->Processor__DOT__core__DOT__controlUnit_io_ALUCtrl);
-        printf("ALUOUT/cacheAddrs :%d\n", tb->Processor__DOT__core__DOT__alu__DOT___GEN_11);
+        printf("ALUCTRL :%d\n",
+               tb->Processor__DOT__core__DOT__controlUnit_io_ALUCtrl);
+        printf("ALUOUT/cacheAddrs :%d\n",
+               tb->Processor__DOT__core__DOT__alu__DOT___GEN_11);
         printf("ALU equal :%d\n", tb->Processor__DOT__core__DOT__alu_io_eq);
-        printf("ALU greaterThanEqual :%d\n", tb->Processor__DOT__core__DOT__alu_io_ge);
-        printf("ALU greaterThanEqualUnsigned :%d\n", tb->Processor__DOT__core__DOT__alu_io_geu);
+        printf("ALU greaterThanEqual :%d\n",
+               tb->Processor__DOT__core__DOT__alu_io_ge);
+        printf("ALU greaterThanEqualUnsigned :%d\n",
+               tb->Processor__DOT__core__DOT__alu_io_geu);
         printf("\n");
-        printf("Immediate :%d\n", (int)(std::bitset<32>(tb->Processor__DOT__core__DOT__immGen_io_out)).to_ulong());
-        printf("RegWrite Data :%d\n", (int)(std::bitset<32>(tb->Processor__DOT__core__DOT__pcAluMemMux_io_out)).to_ulong());
-        printf("RegRead Data1 :%d\n", (int)(std::bitset<32>(tb->Processor__DOT__core__DOT__registerFile_io_readData1)).to_ulong());
-        printf("RegRead Data2 :%d\n", (int)(std::bitset<32>(tb->Processor__DOT__core__DOT__registerFile_io_readData2)).to_ulong());
+        printf(
+            "Immediate :%d\n",
+            (int)(std::bitset<32>(tb->Processor__DOT__core__DOT__immGen_io_out))
+                .to_ulong());
+        printf("RegWrite Data :%d\n",
+               (int)(std::bitset<32>(
+                         tb->Processor__DOT__core__DOT__pcAluMemMux_io_out))
+                   .to_ulong());
+        printf(
+            "RegRead Data1 :%d\n",
+            (int)(std::bitset<32>(
+                      tb->Processor__DOT__core__DOT__registerFile_io_readData1))
+                .to_ulong());
+        printf(
+            "RegRead Data2 :%d\n",
+            (int)(std::bitset<32>(
+                      tb->Processor__DOT__core__DOT__registerFile_io_readData2))
+                .to_ulong());
         printf("\n");
-        printf("CacheRead Data :%d\n", (int)(std::bitset<32>(tb->Processor__DOT__cacheCore__DOT__cache_io_cpuReadData)).to_ulong());
-        printf("cacheRead :%d\n", tb->Processor__DOT__core__DOT__controlUnit_io_memRead);
-        printf("cacheWrite :%d\n", tb->Processor__DOT__core__DOT__controlUnit_io_memWrite);
+        printf(
+            "CacheRead Data :%d\n",
+            (int)(std::bitset<32>(
+                      tb->Processor__DOT__cacheCore__DOT__cache_io_cpuReadData))
+                .to_ulong());
+        printf("cacheRead :%d\n",
+               tb->Processor__DOT__core__DOT__controlUnit_io_memRead);
+        printf("cacheWrite :%d\n",
+               tb->Processor__DOT__core__DOT__controlUnit_io_memWrite);
         printf("\n");
         printf("mainMemAdrrs :%d\n", tb->io_memAdrrs);
         printf("mainMemRead :%d\n", tb->io_memRead);
@@ -2129,7 +2164,8 @@ int main(int argc, char **argv) {
             } else
                 finished = true;
         }
-        printf("\n----------------------------------------------------------\n");
+        printf(
+            "\n----------------------------------------------------------\n");
         printf("\n\n");
 
         tb->clock = 1;
@@ -2143,15 +2179,16 @@ int main(int argc, char **argv) {
                 for (int i = 0; i < 8; i++) {
                     printf("%d\t", cache[j][i]);
                 }
-                std::cout <<std::endl;
-                
+                std::cout << std::endl;
             }
-            printf("----------------------------------------------------------\n");
+            printf(
+                "----------------------------------------------------------\n");
             break;
         }
         instrAddrs = tb->io_instrAddrs;
         // usleep(20);
     }
+    m_trace->close();
     delete tb;
     exit(EXIT_SUCCESS);
 }
