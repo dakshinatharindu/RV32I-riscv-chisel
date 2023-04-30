@@ -103,7 +103,7 @@ class Core extends Module {
 }
 
 object Core extends App {
-  val myverilog = (new ChiselStage).emitVerilog(
+  val myverilog = (new ChiselStage).emitSystemVerilog(
     new Core,
     Array("--target-dir", "verilog/")
   )

@@ -3,10 +3,10 @@ import sys
 
 filename = str(sys.argv[1])
 print(filename)
-flag = '/opt/riscv/bin/riscv32-unknown-elf-'
+flag = '/home/daksh/Programs/riscv-multilib-gnu-toolchain/bin/riscv64-unknown-elf-'
 os.system(flag+'gcc '+filename +
-          ' -s -o K_1.elf -nostartfiles -march=rv32ia -mabi=ilp32 -fPIC')
-os.system(flag+'objcopy K_1.elf  -O verilog g.hex')
+          ' -s -o K_1.elf -nostartfiles -march=rv32i -mabi=ilp32 -fPIC')
+# os.system(flag+'objcopy K_1.elf  -O verilog g.hex')
 os.system(flag+'objdump  K_1.elf -d >  assembly.txt')
 
 assembly = open("assembly.txt", 'r')
@@ -78,10 +78,10 @@ verilatorAssemblyInstr.write("jal 0 0\n")  # jal 0 0
 
 i = 0
 for i, line in enumerate(assembly):
-    if i < 8:
+    if i < 7:
         continue
     instr = line.strip().split()
-    mem.write(hex(i+9)[2:] + " : " + instr[1] + ";\n")
+    mem.write(hex(i+10)[2:] + " : " + instr[1] + ";\n")
     verilatorInstr.write(instr[1] + "\n")
     verilatorAssemblyInstr.write(" ".join(instr[2:]) + "\n")
 
