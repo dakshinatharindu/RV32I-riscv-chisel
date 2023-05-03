@@ -6,7 +6,7 @@ print(filename)
 flag = '/home/daksh/Programs/riscv-multilib-gnu-toolchain/bin/riscv64-unknown-elf-'
 os.system(flag+'gcc '+filename +
           ' -s -o K_1.elf -nostartfiles -march=rv32i -mabi=ilp32 -fPIC')
-# os.system(flag+'objcopy K_1.elf  -O verilog g.hex')
+os.system(flag+'objcopy K_1.elf  -O verilog g.hex')
 os.system(flag+'objdump  K_1.elf -d >  assembly.txt')
 
 assembly = open("assembly.txt", 'r')
